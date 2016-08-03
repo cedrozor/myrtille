@@ -1,0 +1,5 @@
+Here goes the myrtille websockets server SSL certificate.
+
+The installer creates a self-signed certificate for myrtille (so you can use it at https://yourserver/myrtille), but you can set your own certificate (if you wish) as follow:
+- export your SSL certificate in .PFX format, with the private key
+- save it into the myrtille "ssl" folder with the name "PKCS12Cert.pfx"

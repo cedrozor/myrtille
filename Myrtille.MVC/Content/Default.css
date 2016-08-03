@@ -1,0 +1,161 @@
+﻿/*
+    Myrtille: A native HTML4/5 Remote Desktop Protocol client.
+
+    Copyright(c) 2014-2016 Cedric Coste
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* user controls */
+
+#mainForm
+{
+    height: 65px;
+}
+
+/* background fader */
+
+#bgfDiv
+{
+    position: fixed;
+    visibility: hidden;
+    display: none;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    filter: alpha(opacity=70);
+    opacity: .70;
+    -moz-opacity: 0.7;
+    background-color: black;
+    z-index: 300;
+}
+
+/* modal popup */
+
+.modalPopup
+{
+    position: fixed;
+    left: 10%;
+    top: 10%;
+    width: 35%;
+    height: 35%;
+    background-color: silver;
+    z-index: 400;
+}
+
+/* virtual keyboard popup */
+
+#virtualKeyboardPopup
+{
+    width: 450px;
+    height: 200px;
+    background-color: transparent;
+}
+
+#toSendText
+{
+    width: 425px;
+	height: 150px;
+	padding-left: 2px;
+	padding-right: 2px;
+    filter: alpha(opacity=70);
+    opacity: .70;
+    -moz-opacity: 0.7;
+}
+
+/* file storage popup */
+
+#fileStoragePopup
+{
+    width: 450px;
+    height: 100px;
+}
+
+/* remote session display */
+
+#displayDiv
+{
+    position: absolute;
+    z-index: 100;
+}
+
+/* remote session display: canvas */
+
+canvas
+{
+	position: absolute;
+    z-index: 100;
+}
+
+/* remote session display: divs */
+
+.imageDiv
+{
+	position: absolute;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	z-index: 100;
+}
+
+/* remote session helpers */
+
+#statDiv
+{
+    position: absolute;
+    visibility: hidden;
+	display: none;
+	float: left;
+	font-size: 10px;
+	border: none;
+	background-color: black;
+	color: lightgrey;
+	z-index: 200;
+}
+
+#debugDiv
+{
+	position: absolute;
+    visibility: hidden;
+    display: none;
+	font-size: 12px;
+	background-color: lightgrey;
+    color: black;
+	z-index: 200;
+}
+
+#msgDiv
+{
+	position: absolute;
+	visibility: hidden;
+    display: none;
+	font-size: 18px;
+	font-weight: bold;
+    overflow: hidden;
+	background-color: red;
+	color: white;
+	z-index: 200;
+}
+
+#kbhDiv
+{
+	position: absolute;
+	visibility: hidden;
+	display: none;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: left;
+	background-color: #FAF8CC;
+	color: black;
+	z-index: 200;
+}
