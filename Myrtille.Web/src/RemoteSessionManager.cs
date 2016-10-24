@@ -94,6 +94,9 @@ namespace Myrtille.Web
 
                         // remote session is now connected
                         RemoteSession.State = RemoteSessionState.Connected;
+
+                        SendCommand(RemoteSessionCommand.SetImageEncoding, ((int)_imageEncoding).ToString());
+                        SendCommand(RemoteSessionCommand.SetImageQuality, _imageQuality.ToString());
                     }
                 }
                 // remote clipboard
@@ -401,11 +404,7 @@ namespace Myrtille.Web
             get { return _imageEncoding; }
             set
             {
-                if (_imageEncoding != value)
-                {
-                    _imageEncoding = value;
-                    SendCommand(RemoteSessionCommand.SetImageEncoding, ((int)_imageEncoding).ToString());
-                }
+                _imageEncoding = value;
             }
         }
 
@@ -415,11 +414,7 @@ namespace Myrtille.Web
             get { return _imageQuality; }
             set
             {
-                if (_imageQuality != value)
-                {
-                    _imageQuality = value;
-                    SendCommand(RemoteSessionCommand.SetImageQuality, _imageQuality.ToString());
-                }
+                _imageQuality = value;
             }
         }
 
