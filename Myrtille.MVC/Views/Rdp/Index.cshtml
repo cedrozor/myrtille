@@ -1,0 +1,146 @@
+﻿@model Myrtille.Mvc.Models.DefaultModel
+@{
+    var disabled = "";
+    var enabled = "disabled='disabled'";
+    if (Model.StartMyrtilleParams.RemoteSessionActive)
+    {
+        disabled = "disabled='disabled'";
+        enabled = "";
+    }
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- force IE out of compatibility mode -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="initial-scale=1.0" />
+    <title>Myrtille</title>
+
+    @Styles.Render("~/Content/css")
+
+    @Scripts.Render("~/bundles/myrtille")
+</head>
+<body onload="startMyrtille(
+    '@Model.StartMyrtilleParams.HttpSessionId',
+    @Model.StartMyrtilleParams.RemoteSessionActive.ToString().ToLower(),
+    @Model.StartMyrtilleParams.WebSocketPort,
+    @Model.StartMyrtilleParams.WebSocketPortSecured,
+    @Model.StartMyrtilleParams.StatEnabled.ToString().ToLower(),
+    @Model.StartMyrtilleParams.DebugEnabled.ToString().ToLower(),
+    false);">
+
+@using (Html.BeginForm("Connect","Rdp",FormMethod.Post))
+{
+        <div>
+            @* rdp connection settings *@
+            <input type="text" id="Server" name="Server" @Html.Raw(disabled) value="@Model.DefaultFormData.Server" title="server address"/>
+            <input type="text" id="Domain" name ="Domain" @Html.Raw(disabled) value="@Model.DefaultFormData.Domain" title="user domain"/>
+            <input type="text" id="User" name="User" @Html.Raw(disabled) value="@Model.DefaultFormData.User" title="user name"/>
+            <input type="password" id="Password" name="Password" @Html.Raw(disabled) title="user password. default myrtille password is /Passw1rd/"/>
+            <select id="Stat" name="Stat" @Html.Raw(disabled) title="display stats bar">
+                <option @if (Model.DefaultFormData.Stat == "Stat disabled") {<text>selected="selected"</text>}>Stat disabled</option>
+                <option @if (Model.DefaultFormData.Stat == "Stat enabled") {<text>selected="selected"</text>}>Stat enabled</option>
+            </select>
+            <select id="Debug" name="Debug" @Html.Raw(disabled) title="display (dev) or save session logs">
+                <option @if (Model.DefaultFormData.Debug == "Debug disabled") {<text>selected="selected"</text>}>Debug disabled</option>
+                <option @if (Model.DefaultFormData.Debug == "Debug enabled") {<text>selected="selected"</text>}>Debug enabled</option>
+            </select>
+            <input type="hidden" id="Width" name="Width"/>
+            <input type="hidden" id="Height" name="Height"/>
+            <input type="submit" name="command" @Html.Raw(disabled) value="Connect!" onclick="setClientResolution();" title="login"/>
+            <input type="submit" name="command" @Html.Raw(enabled) value="Disconnect" title="logout"/>
+
+            @* virtual keyboard. for use on devices without a physical keyboard as it will force the virtual keyboard to pop *@
+            <input type="button" id="keyboard" value="Keyboard" @Html.Raw(enabled) onclick="openPopup('virtualKeyboardPopup', '@Url.Action("VirtualKeyboard","Rdp")');" title="force virtual keyboard to pop up (useful when no physical keyboard is available)"/>
+
+            @* upload/download file(s). only enabled if the connected server is localhost or if a domain is specified (so file(s) can be accessed within the rdp session) *@
+            <input type="button" id="files" value="My Documents" @Html.Raw(enabled) onclick="
+openPopup('fileStoragePopup', '@Url.Action("FileStorage","Rdp")');" title="upload/download files to/from the user documents folder"/>
+
+            @* send ctrl+alt+del to the rdp session. may be useful to change the user password, for example *@
+            <input type="button" id="cad" value="Ctrl+Alt+Del" @Html.Raw(enabled) onclick="sendCtrlAltDel();" title="send Ctrl+Alt+Del to the remote session"/>
+        </div>
+
+        @* remote session display *@
+        <div id="displayDiv"></div>
+
+        @* remote session helpers *@
+        <div id="statDiv"></div>
+        <div id="debugDiv"></div>
+        <div id="msgDiv"></div>
+        <div id="kbhDiv"></div>
+        <div id="bgfDiv"></div>
+
+}
+
+		<script type="text/javascript" language="javascript" defer="defer">
+
+            var display = new Display();
+
+		    // browser size. default 1024x768
+		    function setClientResolution() {
+		        document.getElementById('Width').value = display.getBrowserWidth();
+		        document.getElementById('Height').value = display.getBrowserHeight();
+		    }
+
+		    var popup = null;
+
+            function openPopup(id, src)
+            {
+                // lock background
+                var bgfDiv = document.getElementById('bgfDiv');
+                if (bgfDiv != null)
+                {
+                    bgfDiv.style.visibility = 'visible';
+                    bgfDiv.style.display = 'block';
+                }
+
+                // add popup
+                popup = document.createElement('iframe');
+                popup.id = id;
+                popup.src = src;
+                popup.className = 'modalPopup';
+
+                document.body.appendChild(popup);
+            }
+
+            function closePopup()
+            {
+                // unlock background
+                var bgfDiv = document.getElementById('bgfDiv');
+                if (bgfDiv != null)
+                {
+                    bgfDiv.style.visibility = 'hidden';
+                    bgfDiv.style.display = 'none';
+                }
+
+                // remove popup
+                if (popup != null)
+                {
+                    document.body.removeChild(popup);
+                }
+            }
+
+            function sendCtrlAltDel()
+            {
+                // ctrl
+                sendKey(17, false);
+                window.setTimeout(function()
+                {
+                    // alt
+                    sendKey(18, false);
+                    window.setTimeout(function()
+                    {
+                        // del
+                        sendKey(46, false);
+                    }, 100);
+                }, 100);
+            }
+
+		</script>
+
+	</body>
+
+</html>
