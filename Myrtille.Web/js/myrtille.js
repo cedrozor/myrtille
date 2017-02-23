@@ -104,7 +104,12 @@ function startMyrtille(httpSessionId, remoteSessionActive, webSocketPort, webSoc
             }
         }
     
-        var httpServerUrl = window.location.protocol + '//' + window.location.hostname + '/' + pathname + '/';
+        var host = window.location.hostname;
+
+        if (window.location.port != 80 | window.location.port != 443)
+            host = host + ":" + window.location.port;
+
+        var httpServerUrl = window.location.protocol + '//' + host + '/' + pathname + '/';
         //alert('http server url: ' + httpServerUrl);
 
         /*
