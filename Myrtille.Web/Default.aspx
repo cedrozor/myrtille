@@ -1,4 +1,4 @@
-﻿<%--
+<%--
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
     Copyright (c) 2014-2016 Cedric Coste
@@ -24,7 +24,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-	
+
     <head>
         <!-- force IE out of compatibility mode -->
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -47,7 +47,7 @@
         <script language="javascript" type="text/javascript" src="js/user/mouse.js"></script>
         <script language="javascript" type="text/javascript" src="js/user/touchscreen.js"></script>
 	</head>
-	
+
     <body onload="startMyrtille(
        '<%=HttpContext.Current.Session.SessionID%>',
         <%=(RemoteSessionManager != null && (RemoteSessionManager.RemoteSession.State == RemoteSessionState.Connecting || RemoteSessionManager.RemoteSession.State == RemoteSessionState.Connected)).ToString(CultureInfo.InvariantCulture).ToLower()%>,
@@ -62,14 +62,52 @@
             <div runat="server" id="controlDiv" class="controlDiv">
 
                 <%-- connection settings --%>
-                <span runat="server" id="serverLabel" class="controlLabel">Server</span><input type="text" runat="server" id="server" class="serverText" title="server address"/>
-                <span runat="server" id="domainLabel" class="controlLabel">Domain (optional)</span><input type="text" runat="server" id="domain" class="domainText" title="user domain"/>
+                <%
+                if(!Boolean.Parse((ConfigurationSettings.AppSettings["HideServer"] == null ? "false" : ConfigurationSettings.AppSettings["HideServer"]))){
+                %>
+                  <span runat="server" id="serverLabel" class="controlLabel">Server</span><input type="text" runat="server" id="server" class="serverText" title="server address" value='<%$ AppSettings:DefaultServerName %>'/>
+                <%
+                }else{
+                %>
+                  <input type="hidden" runat="server" id="server2" class="serverText" title="server address" value='<%$ AppSettings:DefaultServerName %>'/>
+                <%
+                }
+                %>
+                <%
+                if(!Boolean.Parse((ConfigurationSettings.AppSettings["HideDomain"] == null ? "false" : ConfigurationSettings.AppSettings["HideDomain"]))){
+                %>
+                  <span runat="server" id="domainLabel" class="controlLabel">Domain (optional)</span><input type="text" runat="server" id="domain" class="domainText" title="user domain" value='<%$ AppSettings:DefaultDomainName %>'/>
+                <%
+                }else{
+                %>
+                  <input type="hidden" runat="server" id="domain2" class="domainText" title="user domain" value='<%$ AppSettings:DefaultDomainName %>'/>
+                <%
+                }
+                %>
                 <span runat="server" id="userLabel" class="controlLabel">User</span><input type="text" runat="server" id="user" class="userText" title="user name"/>
                 <span runat="server" id="passwordLabel" class="controlLabel">Password</span><input type="password" runat="server" id="password" class="passwordText" title="user password"/>
-                <span runat="server" id="statsLabel" class="controlLabel">Stats</span><select runat="server" id="stat" class="statSelect" title="display stats bar"><option selected="selected">Stat disabled</option><option>Stat enabled</option></select>
-                <span runat="server" id="debugLabel" class="controlLabel">Debug</span><select runat="server" id="debug" class="debugSelect" title="display debug info and save session logs"><option selected="selected">Debug disabled</option><option>Debug enabled</option></select>
+                <%
+                if(!Boolean.Parse((ConfigurationSettings.AppSettings["HideStats"] == null ? "false" : ConfigurationSettings.AppSettings["HideStats"]))){
+                %>
+                  <span runat="server" id="statsLabel" class="controlLabel">Stats</span><select runat="server" id="stat" class="statSelect" title="display stats bar"><option selected="selected">Stat disabled</option><option>Stat enabled</option></select>
+                <%
+                }
+                %>
+                <%
+                if(!Boolean.Parse((ConfigurationSettings.AppSettings["HideDebug"] == null ? "false" : ConfigurationSettings.AppSettings["HideDebug"]))){
+                %>
+                  <span runat="server" id="debugLabel" class="controlLabel">Debug</span><select runat="server" id="debug" class="debugSelect" title="display debug info and save session logs"><option selected="selected">Debug disabled</option><option>Debug enabled</option></select>
+                <%
+                }
+                %>
                 <span runat="server" id="browserLabel" class="controlLabel">Browser</span><select runat="server" id="browser" class="browserSelect" title="rendering mode"><option>HTML4</option><option selected="selected">HTML5</option></select>
-                <span runat="server" id="programLabel" class="controlLabel">Program to run (optional)</span><input type="text" runat="server" id="program" class="programText" title="executable path, name and parameters (double quotes must be escaped)"/>
+                <%
+                if(!Boolean.Parse((ConfigurationSettings.AppSettings["HideProgram"] == null ? "false" : ConfigurationSettings.AppSettings["HideProgram"]))){
+                %>
+                  <span runat="server" id="programLabel" class="controlLabel">Program to run (optional)</span><input type="text" runat="server" id="program" class="programText" title="executable path, name and parameters (double quotes must be escaped)"/>
+                <%
+                }
+                %>
                 <input type="hidden" runat="server" id="width"/>
                 <input type="hidden" runat="server" id="height"/>
                 <input type="submit" runat="server" id="connect" class="connectButton" value="Connect!" onclick="setClientResolution();" onserverclick="ConnectButtonClick" title="open session"/>
