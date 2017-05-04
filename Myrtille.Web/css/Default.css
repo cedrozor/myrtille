@@ -1,4 +1,4 @@
-﻿/*
+/*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
     Copyright(c) 2014-2016 Cedric Coste
@@ -15,6 +15,18 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
+/* Global Styles */
+
+*{
+  font-family:'Segoe UI';
+}
+
+body{
+    padding:0px;
+    margin:0px;
+    background-color:#34495e;
+}
 
 /* user controls: login screen (before connection) */
 
@@ -34,6 +46,7 @@
     float: left;
     width: 200px;
     margin-top: 2px;
+    color:#ecf0f1;
 }
 
 /* to customize a specific control, remove it below and redefine its css */
@@ -74,6 +87,10 @@
     */
     height: 28px;       /* fixed size */
     overflow: auto;     /* scroll on small displays */
+    position:fixed;
+    top:0px;
+    z-index:1000;
+    background-color:#2980b9;
 }
 
 /* shown info and control */
