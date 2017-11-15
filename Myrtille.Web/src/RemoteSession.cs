@@ -18,26 +18,35 @@
 
 namespace Myrtille.Web
 {
-    public class RemoteSession
+    public class RemoteSession : RemoteSessionDetails
     {
         public RemoteSessionManager Manager { get; private set; }
 
-        public int Id;
-        public RemoteSessionState State;
-        public string ServerAddress;
-        public string UserDomain;
-        public string UserName;
-        public string UserPassword;
-        public int ClientWidth;
-        public int ClientHeight;
-        public bool ScaleDisplay;
-        public ImageEncoding? ImageEncoding;            // provided by the client
-        public int? ImageQuality;                       // provided by the client
-        public int? ImageQuantity;                      // provided by the client
-        public bool StatMode;
-        public bool DebugMode;
-        public bool CompatibilityMode;
-        public string Program;
+        public RemoteSessionDetails RemoteSessionDetails
+        {
+            get
+            {
+                return new RemoteSessionDetails
+                {
+                    ClientHeight = this.ClientHeight,
+                    ClientWidth = this.ClientWidth,
+                    CompatibilityMode = this.CompatibilityMode,
+                    DebugMode = this.DebugMode,
+                    Id = this.Id,
+                    ImageEncoding = this.ImageEncoding,
+                    ImageQuality = this.ImageQuality,
+                    ImageQuantity = this.ImageQuantity,
+                    Program = this.Program,
+                    ScaleDisplay = this.ScaleDisplay,
+                    ServerAddress = this.ServerAddress,
+                    State = this.State,
+                    StatMode = this.StatMode,
+                    UserDomain = this.UserDomain,
+                    UserName = this.UserName,
+                    UserPassword = this.UserPassword
+                };
+            }
+        }
 
         public RemoteSession()
         {

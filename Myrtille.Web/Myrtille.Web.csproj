@@ -90,11 +90,30 @@
     <Compile Include="FileStorage.aspx.designer.cs">
       <DependentUpon>FileStorage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="models\AddHostHttpRequest.cs" />
+    <Compile Include="models\AddHostHttpResponse.cs" />
+    <Compile Include="models\AdditionalControls.cs" />
+    <Compile Include="models\CreateUserSessionHttpRequest.cs" />
+    <Compile Include="models\CreateUserSessionHttpResponse.cs" />
+    <Compile Include="models\DeleteHostHttpRequest.cs" />
+    <Compile Include="models\DeleteHostHttpResponse.cs" />
+    <Compile Include="models\EditHostHttpRequest.cs" />
+    <Compile Include="models\EditHostHttpResponse.cs" />
+    <Compile Include="models\LoginHttpRequest.cs" />
+    <Compile Include="models\LoginHttpResponse.cs" />
+    <Compile Include="models\LogoutHttpRequest.cs" />
+    <Compile Include="models\ServerConfiguration.cs" />
+    <Compile Include="models\StandardHttpResponse.cs" />
+    <Compile Include="models\StartSessionHttpRequest.cs" />
+    <Compile Include="models\StartSessionHttpResponse.cs" />
     <Compile Include="SocketHandler.ashx.cs">
       <DependentUpon>SocketHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="src\EnterpriseServiceClient.cs" />
+    <Compile Include="src\MFAAuthenticationClient.cs" />
     <Compile Include="src\RemoteSession.cs" />
     <Compile Include="src\RemoteSessionCommand.cs" />
+    <Compile Include="src\RemoteSessionDetails.cs" />
     <Compile Include="src\RemoteSessionImage.cs" />
     <Compile Include="src\RemoteSessionPipes.cs" />
     <Compile Include="src\RemoteSessionSocketHandler.cs" />
@@ -161,11 +180,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\Enterprise.css" />
+    <Content Include="css\Modal.css" />
     <Content Include="FileStorage.aspx" />
     <Content Include="img\bandwidthTest.png" />
     <Content Include="img\myrtille.png" />
     <Content Include="img\RemoteDesktop.png" />
     <Content Include="img\test.webp" />
+    <Content Include="js\app\enterprise.js" />
     <Content Include="js\config.js" />
     <Content Include="js\display\canvas.js" />
     <Content Include="js\display\divs.js" />
@@ -214,10 +236,6 @@
     <ProjectReference Include="..\Myrtille.Common\Myrtille.Common.csproj">
       <Project>{37630774-1321-4E6A-8661-4430A8946E9E}</Project>
       <Name>Myrtille.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Myrtille.Services.Contracts\Myrtille.Services.Contracts.csproj">
-      <Project>{010E1702-3045-4B13-BFB6-06FFC60B5CBB}</Project>
-      <Name>Myrtille.Services.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
