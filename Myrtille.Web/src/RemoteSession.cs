@@ -43,7 +43,8 @@ namespace Myrtille.Web
                     StatMode = this.StatMode,
                     UserDomain = this.UserDomain,
                     UserName = this.UserName,
-                    UserPassword = this.UserPassword
+                    UserPassword = this.UserPassword,
+                    AllowRemoteClipboard = this.AllowRemoteClipboard
                 };
             }
         }

@@ -85,7 +85,6 @@
                     <input type="text" id="domain" title="user domain (if applicable)"/>
                 </div>
             </div>
-
             <!-- user -->
             <div class="inputDiv">
                 <label id="userLabel" for="user">User</label>
@@ -144,10 +143,10 @@
             <input type="button" id="scale" value="Scale" onclick="toggleScaleDisplay();" title="dynamically scale the remote session display to the browser size (responsive design)"/>
 
             <!-- send right-click (on the last touched or left-clicked position) to the remote session. may be useful on touchpads or iOS devices -->
-            <input type="button" runat="server" id="mrc" value="Right-Click" onclick="sendRightClick();" title="send Right-Click (on the last touched or left-clicked position) to the remote session" disabled="disabled"/>
+            <input type="button" runat="server" id="mrc" value="Right-Click" onclick="sendRightClick();" title="send Right-Click (on the last touched or left-clicked position) to the remote session" />
 
             <!-- virtual keyboard. on devices without a physical keyboard, forces the device virtual keyboard to pop up -->
-            <input type="button" id="keyboard" value="Keyboard" onclick="openPopup('virtualKeyboardPopup', 'VirtualKeyboard.aspx');" title="send text to the remote session (tip: can be used to send the local clipboard content (text only))" disabled="disabled"/>
+            <input type="button" id="keyboard" value="Keyboard" onclick="openPopup('virtualKeyboardPopup', 'VirtualKeyboard.aspx');" title="send text to the remote session (tip: can be used to send the local clipboard content (text only))"/>
 
             <!-- remote clipboard. display the remote clipboard content and allow to copy it locally (text only) -->
             <input type="button" id="clipboard" value="Clipboard" onclick="requestRemoteClipboard();" title="retrieve the remote clipboard content (text only)" disabled="disabled"/>
@@ -224,7 +223,7 @@
                 </div>
                 <div>
                     <h5>Session URL:</h5>
-                    <label id="sessionURL"></label>
+                    <textarea  id="sessionURL" readonly="readonly" style="width:100%" rows="4" cols="2" ></textarea>
                 </div>
                 <br />
                 <br />

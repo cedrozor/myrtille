@@ -240,6 +240,7 @@ namespace Myrtille.Web
 
                     case RemoteSessionCommand.RequestRemoteClipboard:
                         Trace.TraceInformation("Requesting remote clipboard, remote session {0}", RemoteSession.Id);
+                        if (!RemoteSession.AllowRemoteClipboard) return false;
                         break;
 
                     case RemoteSessionCommand.ConnectRdpClient:

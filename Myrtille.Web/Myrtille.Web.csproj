@@ -219,6 +219,7 @@
     <Content Include="log\README" />
     <Content Include="packages.config" />
     <Content Include="SocketHandler.ashx" />
+    <None Include="Properties\PublishProfiles\LocalTest.pubxml" />
     <None Include="Web.Base.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -286,7 +287,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2323</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Myrtille</IISUrl>
+          <IISUrl>http://localhost/Myrtille.Debug</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

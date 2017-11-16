@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
 
+
     $.urlParam = function (name) {
         var results = new RegExp('[\?&]' + name + '=([^&#]*)')
                           .exec(window.location.search);
@@ -178,7 +179,8 @@
             if (addHostResponse.d.Success) {
                 if (hostID == null) {
                     addHost(addHostResponse.d.ServerId,
-                            addHostResponse.d.ServerName);
+                            addHostResponse.d.ServerName,
+                            true);
                 }
                 closeModal('popupHost');
             } else {
@@ -234,7 +236,7 @@
     });
 
     $('#createUserSession').click(function () {
-        if ($('#sessionURL').text() != '') return;
+        if ($('#sessionURL').val() != '') return;
 
         var hostID = $('#editHostID').val();
         var btn = $(this);
@@ -258,7 +260,7 @@
         })
         .done(function (createUserSessionHttpResponse) {
             if (createUserSessionHttpResponse.d.Success) {
-                $('#sessionURL').text(createUserSessionHttpResponse.d.SessionURL);
+                $('#sessionURL').val(createUserSessionHttpResponse.d.SessionURL);
             } else {
                 alert(createUserSessionHttpResponse.d.Message);
             }
@@ -396,6 +398,25 @@
         }catch(e){
 
         }
+    }
+
+    function getWebMethodBase(methodName)
+    {
+        var pathname = '';
+        var parts = new Array();
+        parts = window.location.pathname.split('/');
+        for (var i = 0; i < parts.length - 1; i++) {
+            if (parts[i] != '') {
+                if (pathname == '') {
+                    pathname = parts[i];
+                }
+                else {
+                    pathname += '/' + parts[i];
+                }
+            }
+        }
+
+        return "/" + pathname + "/Default.aspx/" + methodName;
     }
 });
 

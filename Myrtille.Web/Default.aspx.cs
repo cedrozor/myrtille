@@ -17,6 +17,7 @@
 */
 
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -332,6 +333,9 @@ namespace Myrtille.Web
                 var remoteSessionsCounter = (int)HttpContext.Current.Application[HttpApplicationStateVariables.RemoteSessionsCounter.ToString()];
                 remoteSessionsCounter++;
 
+                var allowClipboard = false;
+
+                bool.TryParse(ConfigurationManager.AppSettings["allowRemoteClipboard"], out allowClipboard);
                 // create the remote session
                 RemoteSession = new RemoteSession
                 {
@@ -343,7 +347,8 @@ namespace Myrtille.Web
                     UserPassword = loginPassword,
                     ClientWidth = startSessionRequest.Width,
                     ClientHeight = startSessionRequest.Height,
-                    Program = startSessionRequest.ProgramValue
+                    Program = startSessionRequest.ProgramValue,
+                    AllowRemoteClipboard = allowClipboard
                 };
 
                 // set the remote session for the current http session
@@ -541,7 +546,21 @@ namespace Myrtille.Web
                 {
                     Uri uri = HttpContext.Current.Request.Url;
 
-                    var sessionURL = uri.Scheme + Uri.SchemeDelimiter + uri.Host + (uri.Port == 443 || uri.Port == 80 ? "" : ":" + uri.Port) + "/Default.aspx" + result;
+                    string[] parts = uri.LocalPath.Split('/');
+
+                    var sessionURL = uri.Scheme + Uri.SchemeDelimiter + uri.Host + (uri.Port == 443 || uri.Port == 80 ? "" : ":" + uri.Port);
+                    foreach(var part in parts)
+                    {
+                        if (string.IsNullOrEmpty(part)) continue;
+
+                        sessionURL += '/' + part;
+
+                        if(part.ToLower() == "default.aspx")
+                        {
+                            sessionURL += result;
+                            break;
+                        }
+                    }
 
                     return new CreateUserSessionHttpResponse
                     {

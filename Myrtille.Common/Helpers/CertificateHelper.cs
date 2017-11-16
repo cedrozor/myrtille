@@ -19,7 +19,7 @@
 using System;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
-using CERTENROLLLib;
+using CertEnroll_Interop;
 
 namespace Myrtille.Helpers
 {

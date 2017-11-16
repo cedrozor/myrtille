@@ -23,5 +23,6 @@ namespace Myrtille.Web
         public bool DebugMode;
         public bool CompatibilityMode;
         public string Program;
+        public bool AllowRemoteClipboard;               // provided by the client to determine if remote access to clipboard is allowed
     }
 }
