@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OASIS.Integration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OASIS.Integration.1.0.0\lib\net45\OASIS.Integration.dll</HintPath>
+    <Reference Include="OASIS.Integration, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OASIS.Integration.1.1.0\lib\OASIS.Integration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

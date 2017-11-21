@@ -51,8 +51,8 @@ a img
     position: absolute;
     top: 50%;
     left: 50%;
+    margin-left: -225px;
     margin-top: -150px;
-    margin-left: -150px;
     width: 450px;
     height: 300px;
 }

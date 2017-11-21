@@ -220,16 +220,17 @@
                 <div>
                     <h5><label id="sessionPasswordLabel" for="sessionPassword">Password:</label></h5>
                     <input type="password" id="sessionPassword" name="sessionPassword" title="Password" />
+                    <input type="button" id="createUserSession" value="Create" />
                 </div>
                 <div>
                     <h5>Session URL:</h5>
                     <textarea  id="sessionURL" readonly="readonly" style="width:100%" rows="4" cols="2" ></textarea>
+                    <center><h5>Copy the URL and use how required, this URL can only be used once.</h5></center>
                 </div>
                 <br />
                 <br />
 
                 <div style="float: right">
-                    <input type="button" id="createUserSession" value="Create" />
                     <input type="button" id="closeSessionPopupButton" value="Close" onclick="closeModal('popupSession');"/>
                 </div>
             </div>

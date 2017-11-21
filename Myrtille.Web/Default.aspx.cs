@@ -317,7 +317,9 @@ namespace Myrtille.Web
 
                     if (enterpriseConnection == null)
                     {
-                        return new StartSessionHttpResponse { Success = false };
+                        return new StartSessionHttpResponse {
+                                Success = false,
+                                Message = "You are not authorised for this server"};
                     }
                     else
                     {

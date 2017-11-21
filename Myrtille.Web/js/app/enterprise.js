@@ -308,7 +308,8 @@
         .done(function (logoutResponse) {
             $('#enterpriseSessionID').val('');
             $('#enterpriseSessionKey').val('');
-
+            $('#newHost').hide();
+            $('#toolbar').hide();
             if (logoutResponse.d.Success) {
                 // display requried sections based on api return values
                 $('#enterpriseUser').val('');
@@ -331,7 +332,6 @@
             $(btn).prop('disabled', false);
         })
         .fail(function (error) {
-            alert("1.error");
             $(btn).prop('disabled', false);
         });
     }
@@ -507,6 +507,7 @@ $(document).on('click', '.rdpButton', function () {
                         sessionStartResponse.d.RemoteSessionDetails.ClientHeight);
         } else {
             alert(sessionStartResponse.d.Message);
+            $('.logout').click();
         }
 
         $(btn).prop('disabled', false);
