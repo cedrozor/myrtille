@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*
+    OASIS One time passcode service integration
+
+    Copyright(c) 2017 Cedric Coste/Olive Innovations
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+using System;
 using System.Data.SqlServerCe;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +43,12 @@ namespace Myrtille.Enterprise
             }
         }
 
+        /// <summary>
+        /// Add new host to the platform
+        /// </summary>
+        /// <param name="editHost"></param>
+        /// <param name="sessionID"></param>
+        /// <returns></returns>
         public long? AddHost(EnterpriseHostEdit editHost, string sessionID)
         {
             using (var db = new MyrtilleEnterpriseDBContext())
@@ -57,6 +81,12 @@ namespace Myrtille.Enterprise
             }
         }
 
+        /// <summary>
+        /// Update host information
+        /// </summary>
+        /// <param name="editHost"></param>
+        /// <param name="sessionID"></param>
+        /// <returns></returns>
         public bool UpdateHost(EnterpriseHostEdit editHost, string sessionID)
         {
             using (var db = new MyrtilleEnterpriseDBContext())
@@ -94,6 +124,12 @@ namespace Myrtille.Enterprise
             }
         }
 
+        /// <summary>
+        /// Get host information from ID and sesssion ID
+        /// </summary>
+        /// <param name="hostID"></param>
+        /// <param name="sessionID"></param>
+        /// <returns>Host information for connection or null if invalid hostid or sessionId specified</returns>
         public EnterpriseHostEdit GetHost(long hostID, string sessionID)
         {
             using (var db = new MyrtilleEnterpriseDBContext())
@@ -127,6 +163,12 @@ namespace Myrtille.Enterprise
             }
         }
 
+        /// <summary>
+        /// Delete host
+        /// </summary>
+        /// <param name="hostID"></param>
+        /// <param name="sessionID"></param>
+        /// <returns></returns>
         public bool DeleteHost(long hostID, string sessionID)
         {
             using (var db = new MyrtilleEnterpriseDBContext())
@@ -143,6 +185,14 @@ namespace Myrtille.Enterprise
             }
         }
         
+        /// <summary>
+        /// Authenticate user against an active directory
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="adminGroup"></param>
+        /// <param name="domain"></param>
+        /// <returns></returns>
         public EnterpriseSession Authenticate(string username, string password, string adminGroup, string domain)
         {
             try
@@ -202,6 +252,10 @@ namespace Myrtille.Enterprise
 
         }
 
+        /// <summary>
+        /// Delete user session
+        /// </summary>
+        /// <param name="sessionID"></param>
         public void Logout(string sessionID)
         {
             using (var db = new MyrtilleEnterpriseDBContext())
@@ -216,6 +270,11 @@ namespace Myrtille.Enterprise
             }
         }
 
+        /// <summary>
+        /// Get a list of active directory groups for a user
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
         private List<string> GetDirectoryGroups(DirectoryEntry entry)
         {
             var directoryGroups = new List<string>();
@@ -246,6 +305,11 @@ namespace Myrtille.Enterprise
             return directoryGroups;
         }
 
+        /// <summary>
+        /// Retrieve a list of hosts the user session is allowed to access
+        /// </summary>
+        /// <param name="sessionID"></param>
+        /// <returns></returns>
         public List<EnterpriseHost> SessionHosts(string sessionID)
         {
             using (var db = new MyrtilleEnterpriseDBContext())
@@ -298,6 +362,13 @@ namespace Myrtille.Enterprise
             }
         }
 
+        /// <summary>
+        /// Get the connection details for the session and host
+        /// </summary>
+        /// <param name="sessionID"></param>
+        /// <param name="hostID"></param>
+        /// <param name="sessionKey"></param>
+        /// <returns></returns>
         public EnterpriseConnectionDetails GetSessionConnectionDetails(string sessionID, long hostID, string sessionKey)
         {
             using (var db = new MyrtilleEnterpriseDBContext())
@@ -371,6 +442,14 @@ namespace Myrtille.Enterprise
             }
         }
 
+        /// <summary>
+        /// Create a session, the session URL returned can be given to external users to connect to a specific host using a URL
+        /// </summary>
+        /// <param name="sessionID"></param>
+        /// <param name="hostID"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public string CreateUserSession(string sessionID, long hostID, string username, string password)
         {
             using (var db = new MyrtilleEnterpriseDBContext())

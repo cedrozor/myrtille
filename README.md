@@ -65,6 +65,35 @@ The remote clipboard content can also be retrieved locally with the "Clipboard" 
 
 You can upload/download file(s) to/from the user documents folder with the "Files" button. Note that it requires the rdp server to be localhost (same machine as the http server) or a domain to be specified.
 
+## Enterprise Functions
+Enterprise functions work by first authenticating a user against an active directory (or similar). This allows the administrators to add hosts which the users are allowed to connect to. This is controlled by allowing certain active directory groups to access hosts only.
+
+To enable enterprise mode uncomment the Myrtille.Services app.config file where indicated
+
+EnterpriseAdapter - This configuration parameter can be changed to use another enterprise service adapter which can be created to work with other directories, this adapter must implement interface Myrtille.Common.Interfaces.IEnterpriseAdapter
+EnterpriseAdminGroup - This is the domain group allowed to add/edit hosts, and also create session link URLS to be privided to 3rd parties.
+EnterpriseDomain - The configuration parameter of the directory server to provide the authentication, this should be your FQDN or the IP address of a domain controller.
+
+## One Time Passcode authentication
+To add an additional layer of security Myrtille now supports one-time passcode authentication, enabling this option will 
+
+DISCLAMER: The contributor of the Myrtille.OASISOTPAdapter is the owner of a company providing a cloud based one-time passcode authentication service.
+The contributor ensured that the interfaces were written to allow for other authentication providers to be used in keeping with the open source contribution and to purposely ensure no tie in to the OASIS platform.
+
+To use the OASIS platform, visit https://oasis.oliveinnovations.com and register and follow the steps
+
+1) create a new User Group named for example Myrtille
+2) Create a new Application named for example MyrtilleRDP, once created tick to allow user group Myrtille
+3) Once application created, click button Application Key, this will give you an API Key, Application ID, Application Key, copy these values to the Myrtille.Service app.config in the appSettings, then uncomment app setting MFAAuthAdapter 
+4) Create a user, the username must be the same as the user who you wish to verify, tick the box to register via email and follow instructions sent via email.
+5) Once created ensure the user belongs to the user group created
+
+More information can be found at http://www.oliveinnovations.com
+
+If you are using a active directory for authentication Olive Innovations also provides a gateway and directory sync service to create users automatically from your domain services.
+
+NOTE: Olive Innovations created the OTP service, interfaces and adapter as they use Myrtille and wanted to share their implmentation. They also provided in Myrtille.Common.Intefaces an interface IMultiFactorAuthenticationAdapter, other adapters can be written and implement this interface to allow custom authentciation providers and even one that is not dependant on the OASIS service.
+
 ## Third-party
 Myrtille uses the following licensed software:
 - RDP client: FreeRDP (https://github.com/FreeRDP/FreeRDP), licensed under Apache 2.0 license. Myrtille uses a fork of FreeRDP (https://github.com/cedrozor/FreeRDP), to enforce a loose coupling architecture and always use the latest version of FreeRDP (the fork is periodically synchronized with the FreeRDP master branch).
@@ -72,6 +101,8 @@ Myrtille uses the following licensed software:
 - WebP encoding: libWebP 0.5.1 (https://developers.google.com/speed/webp/), licensed under BSD-style Open Source license. Copyright (c) 2010, Google Inc. All rights reserved.
 - HTML5 websockets: Microsoft.WebSockets 0.2.3.1 (https://www.nuget.org/packages/Microsoft.WebSockets/0.2.3.1), licensed under MIT license. Copyright (c) Microsoft 2012.
 - Logging: Log4net 2.0.8 (https://logging.apache.org/log4net/), licensed under Apache 2.0 license.
+## Option Third-party
+- OTP Adapter: OASIS.Integration 1.2.0.0 (https://www.nuget.org/packages/OASIS.Integration/), licensed under Apache 2.0 License.
 
 See DISCLAIMERS.md file.
 
