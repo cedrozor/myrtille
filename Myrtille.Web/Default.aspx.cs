@@ -547,10 +547,10 @@ namespace Myrtille.Web
                 else
                 {
                     Uri uri = HttpContext.Current.Request.Url;
-
+                    Uri uriReferrer = HttpContext.Current.Request.UrlReferrer;
                     string[] parts = uri.LocalPath.Split('/');
 
-                    var sessionURL = uri.Scheme + Uri.SchemeDelimiter + uri.Host + (uri.Port == 443 || uri.Port == 80 ? "" : ":" + uri.Port);
+                    var sessionURL = uriReferrer.Scheme + Uri.SchemeDelimiter + uriReferrer.Host + (uriReferrer.Port == 443 || uriReferrer.Port == 80 ? "" : ":" + uriReferrer.Port);
                     foreach(var part in parts)
                     {
                         if (string.IsNullOrEmpty(part)) continue;
@@ -563,7 +563,7 @@ namespace Myrtille.Web
                             break;
                         }
                     }
-
+                    
                     return new CreateUserSessionHttpResponse
                     {
                         Success = true,

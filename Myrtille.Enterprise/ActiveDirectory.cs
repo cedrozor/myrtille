@@ -201,7 +201,9 @@ namespace Myrtille.Enterprise
                 {
                     UserPrincipal user = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, username);
                     DirectoryEntry entry = (DirectoryEntry)user.GetUnderlyingObject();
-                    var directoryGroups = GetDirectoryGroups(entry);
+
+                    var directoryGroups = user.GetGroups().Select(m => m.Name).ToList<string>();
+                    //var directoryGroups = GetDirectoryGroups(entry);
 
                     bool isAdmin = directoryGroups.Any(m => m.Equals(adminGroup, StringComparison.InvariantCultureIgnoreCase));
 

@@ -12,8 +12,8 @@
 
 
     var partialView_ServerConnection =
-        '<div class="serverLink" id="server_{0}" style="width:80px;height:100px; text-align:center" data-serverid="{1}">' +
-            '<button class="rdpButton" id="connect" value=" " title="open session" />' +
+        '<div class="serverLink" id="server_{0}" style="width:120px;height:120px; text-align:center" data-serverid="{1}">' +
+            '<button class="rdpButton" id="connect" value=" " title="open session" /><br>' +
             '<label id="serverName" class="{2}" title="{3}">{4}</label>{5}' +
         '</div>';
 
