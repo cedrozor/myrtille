@@ -42,6 +42,9 @@ namespace Myrtille.Web
             object sender,
             EventArgs e)
         {
+            //Handle session fixation
+            SessionFixationHandler();
+
             try
             {
                 var MFAAuthClient = new MFAAuthenticationClient();
@@ -78,6 +81,55 @@ namespace Myrtille.Web
             }
         }
 
+        protected void SessionFixationHandler()
+        {
+            try
+            {
+                HttpContext.Current.Application.Lock();
+
+                // retrieve the given (old) http session
+                var httpSessions = (IDictionary<string, HttpSessionState>)HttpContext.Current.Application[HttpApplicationStateVariables.HttpSessions.ToString()];
+
+                if (httpSessions.ContainsKey(HttpContext.Current.Session.SessionID))
+                {
+
+                    var httpSession = httpSessions[HttpContext.Current.Session.SessionID];
+
+                    // retrieve the remote session bound to it
+                    var remoteSession = httpSession[HttpSessionStateVariables.RemoteSession.ToString()];
+
+                    if(remoteSession != null)
+                    {
+                        //Check if the existing session is connected, if so disconnect it
+                        if (((RemoteSession)remoteSession).State == RemoteSessionState.Connected)
+                        {
+                            ((RemoteSession)remoteSession).Manager.SendCommand(RemoteSessionCommand.CloseRdpClient);
+                        };
+                        
+                    }
+
+                    // unbind it from the old http session
+                    httpSession[HttpSessionStateVariables.RemoteSession.ToString()] = null;
+
+                    // bind it to the new http session
+                    //HttpContext.Current.Session[HttpSessionStateVariables.RemoteSession.ToString()] = remoteSession;
+
+                    // cancel the old http session
+                    httpSession.Abandon();
+
+                    // unregister it at application level
+                    httpSessions.Remove(httpSession.SessionID);
+                }
+            }
+            catch (Exception exc)
+            {
+                System.Diagnostics.Trace.TraceError("Failed to generate a new http session upon login ({0})", exc);
+            }
+            finally
+            {
+                HttpContext.Current.Application.UnLock();
+            }
+        }
         /// <summary>
         /// force remove the .net viewstate hidden fields from page (large bunch of unwanted data in url)
         /// </summary>

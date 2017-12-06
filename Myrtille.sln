@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myrtille.OASISOTPAdapter", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myrtille.Enterprise", "Myrtille.Enterprise\Myrtille.Enterprise.csproj", "{2EE62C9A-754D-4061-ADEF-F6744A762F0A}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Myrtille.Setup_x86", "Myrtille.Setup_x86\Myrtille.Setup_x86.vdproj", "{26B29F8C-D362-4EC7-9A54-32C1508AA11D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -153,6 +155,30 @@ Global
 		{2EE62C9A-754D-4061-ADEF-F6744A762F0A}.Release|x64.Build.0 = Release|Any CPU
 		{2EE62C9A-754D-4061-ADEF-F6744A762F0A}.Release|x86.ActiveCfg = Release|Any CPU
 		{2EE62C9A-754D-4061-ADEF-F6744A762F0A}.Release|x86.Build.0 = Release|Any CPU
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|.NET.ActiveCfg = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|.NET.Build.0 = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|Any CPU.ActiveCfg = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|Any CPU.Build.0 = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|Mixed Platforms.Build.0 = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|Win32.ActiveCfg = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|Win32.Build.0 = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|x64.ActiveCfg = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|x64.Build.0 = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|x86.ActiveCfg = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Debug|x86.Build.0 = Debug
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|.NET.ActiveCfg = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|.NET.Build.0 = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|Any CPU.ActiveCfg = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|Any CPU.Build.0 = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|Mixed Platforms.ActiveCfg = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|Mixed Platforms.Build.0 = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|Win32.ActiveCfg = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|Win32.Build.0 = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|x64.ActiveCfg = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|x64.Build.0 = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|x86.ActiveCfg = Release
+		{26B29F8C-D362-4EC7-9A54-32C1508AA11D}.Release|x86.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

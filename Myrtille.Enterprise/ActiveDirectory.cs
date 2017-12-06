@@ -1,5 +1,5 @@
 ﻿/*
-    OASIS One time passcode service integration
+    Enterprise mode, mimic behaviour of RDP gateways
 
     Copyright(c) 2017 Cedric Coste/Olive Innovations
 
@@ -202,8 +202,21 @@ namespace Myrtille.Enterprise
                     UserPrincipal user = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, username);
                     DirectoryEntry entry = (DirectoryEntry)user.GetUnderlyingObject();
 
-                    var directoryGroups = user.GetGroups().Select(m => m.Name).ToList<string>();
-                    //var directoryGroups = GetDirectoryGroups(entry);
+                    var directoryGroups = new List<string>();
+
+                    try
+                    {
+                        directoryGroups.AddRange(user.GetGroups().Select(m => m.Name).ToList<string>());
+                    }
+                    catch(Exception e)
+                    {
+                        //There is an issue accessing user primary ad group remotely, 
+                        //Exception: Information about the domain could not be retrieved (1355).
+                        //in that case use another method which will exclude the primary domain 
+                        // might need to find another way to do this!
+                        directoryGroups.AddRange(GetDirectoryGroups(entry));
+                    }
+                    
 
                     bool isAdmin = directoryGroups.Any(m => m.Equals(adminGroup, StringComparison.InvariantCultureIgnoreCase));
 

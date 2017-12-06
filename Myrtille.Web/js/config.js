@@ -193,5 +193,6 @@ function Config(
     this.getBufferSize = function() { return bufferSize; };
     
     // mouse
-    this.getMouseMoveSamplingRate = function() { return mouseMoveSamplingRate; };
+    this.getMouseMoveSamplingRate = function () { return mouseMoveSamplingRate; };
+    
 }

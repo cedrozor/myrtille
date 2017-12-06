@@ -22,6 +22,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Myrtille.Common.Interfaces;
+//OASIS OTP Provider is released under Apache 2.0 project.
+//Source available at https://github.com/oliveinnovations/oasis
+using OASIS.Integration;
 using OASIS.Integration.Models;
 namespace Myrtille.OASISOTPAdapter
 {
@@ -48,7 +51,10 @@ namespace Myrtille.OASISOTPAdapter
             var apiKey = ConfigurationManager.AppSettings["OASISApiKey"];
             var appKey = ConfigurationManager.AppSettings["OASISAppKey"];
             var appID = long.Parse(ConfigurationManager.AppSettings["OASISAppID"]);
-            OASIS.Integration.OTPProvider oasis = new OASIS.Integration.OTPProvider(appID,appKey,apiKey);
+
+            //OASIS OTP Provider is released under Apache 2.0 project.
+            //Source available at https://github.com/oliveinnovations/oasis
+            OTPProvider oasis = new OTPProvider(appID,appKey,apiKey);
 
             var state = oasis.RequestAuthorisationState(new RequestAuthorisationState
             {

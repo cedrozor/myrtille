@@ -224,7 +224,7 @@ function XmlHttp(config, dialog, display, network)
                 // disconnected session
                 else if (xhrResponseText == 'disconnected')
                 {
-                    window.location.href = config.getHttpServerUrl();
+                    window.location.href = config.getHttpServerUrl() ;
                 }
                 // new image
                 else

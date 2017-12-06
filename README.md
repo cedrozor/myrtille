@@ -102,7 +102,7 @@ Myrtille uses the following licensed software:
 - HTML5 websockets: Microsoft.WebSockets 0.2.3.1 (https://www.nuget.org/packages/Microsoft.WebSockets/0.2.3.1), licensed under MIT license. Copyright (c) Microsoft 2012.
 - Logging: Log4net 2.0.8 (https://logging.apache.org/log4net/), licensed under Apache 2.0 license.
 ## Option Third-party
-- OTP Adapter: OASIS.Integration 1.2.0.0 (https://www.nuget.org/packages/OASIS.Integration/), licensed under Apache 2.0 License.
+- OTP Adapter: OASIS.Integration 1.5.0.0 (https://github.com/oliveinnovations/oasis) (https://www.nuget.org/packages/OASIS.Integration/), licensed under Apache 2.0 License.
 
 See DISCLAIMERS.md file.
 
