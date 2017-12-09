@@ -164,7 +164,8 @@
                 HostID: hostID,
                 HostName: $('#editHostname').val(),
                 HostAddress: $('#editHostaddress').val(),
-                DirectoryGroups: $('#editgroupaccess').val()
+                DirectoryGroups: $('#editgroupaccess').val(),
+                Protocol: $('#editSecurityProtocol').val()
             }
         };
 
@@ -446,6 +447,7 @@ $(document).on('click', '.editServer', function () {
            $('#editHostname').val(editHostResponse.d.HostName);
            $('#editHostaddress').val(editHostResponse.d.HostAddress);
            $('#editgroupaccess').val(editHostResponse.d.DirectoryGroups);
+           $('#editSecurityProtocol').val(editHostResponse.d.Protocol);
            
        } else {
            alert(editHostResponse.d.Message);

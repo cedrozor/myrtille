@@ -26,6 +26,7 @@ using System.Web;
 using System.Web.SessionState;
 using System.Web.UI;
 using Myrtille.Helpers;
+using Myrtille.Common;
 using Myrtille.Common.Models;
 using System.Web.Services;
 
@@ -362,6 +363,7 @@ namespace Myrtille.Web
                 var loginPassword = startSessionRequest.Password;
                 var loginDomain = startSessionRequest.Domain;
                 var loginServer = startSessionRequest.Server;
+                var securityProtocol = SecurityProtocolEnum.auto;
 
                 if (EnterpriseClient.GetState())
                 {
@@ -379,6 +381,7 @@ namespace Myrtille.Web
                         loginPassword = RDPCryptoHelper.DecryptPassword(enterpriseConnection.Password);
                         loginDomain = "";
                         loginServer = (!string.IsNullOrEmpty(enterpriseConnection.HostAddress) ? enterpriseConnection.HostAddress : enterpriseConnection.HostName);
+                        securityProtocol = enterpriseConnection.Protocol;
                     }
                 }
 
@@ -402,7 +405,8 @@ namespace Myrtille.Web
                     ClientWidth = startSessionRequest.Width,
                     ClientHeight = startSessionRequest.Height,
                     Program = startSessionRequest.ProgramValue,
-                    AllowRemoteClipboard = allowClipboard
+                    AllowRemoteClipboard = allowClipboard,
+                    Protocol = securityProtocol
                 };
 
                 // set the remote session for the current http session
@@ -441,7 +445,8 @@ namespace Myrtille.Web
                     RemoteSession.Manager.Client.StartProcess(
                         RemoteSession.Id,
                         RemoteSession.ClientWidth,
-                        RemoteSession.ClientHeight);
+                        RemoteSession.ClientHeight,
+                        RemoteSession.Protocol);
 
                     // update controls
                     startSessionResponse.AdditionalControls = UpdateControls();
@@ -487,7 +492,8 @@ namespace Myrtille.Web
                         HostID = 0,
                         HostName = addHostRequest.HostName,
                         HostAddress = addHostRequest.HostAddress,
-                        DirectoryGroups = addHostRequest.DirectoryGroups
+                        DirectoryGroups = addHostRequest.DirectoryGroups,
+                        Protocol = addHostRequest.Protocol
                     },
                                 addHostRequest.SessionID);
 
@@ -506,7 +512,8 @@ namespace Myrtille.Web
                         HostID = (long)addHostRequest.HostID,
                         HostName = addHostRequest.HostName,
                         HostAddress = addHostRequest.HostAddress,
-                        DirectoryGroups = addHostRequest.DirectoryGroups
+                        DirectoryGroups = addHostRequest.DirectoryGroups,
+                        Protocol = addHostRequest.Protocol
                     }, addHostRequest.SessionID);
 
                     return new AddHostHttpResponse
@@ -563,11 +570,12 @@ namespace Myrtille.Web
                 return new EditHostHttpResponse
                 {
                     Success = (result != null),
-                    Message = (result == null ? "" : "An error occured deleting host!"),
+                    Message = (result == null ? "" : "An error occured retrieving host!"),
                     HostID = result?.HostID,
                     HostName = result?.HostName,
                     HostAddress = result?.HostAddress,
-                    DirectoryGroups = result?.DirectoryGroups
+                    DirectoryGroups = result?.DirectoryGroups,
+                    Protocol = result.Protocol
                 };
             }
             catch (Exception e)

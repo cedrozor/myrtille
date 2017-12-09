@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
+using Myrtille.Common;
 namespace Myrtille.Web
 {
     public class RemoteSessionDetails
@@ -24,5 +24,6 @@ namespace Myrtille.Web
         public bool CompatibilityMode;
         public string Program;
         public bool AllowRemoteClipboard;               // provided by the client to determine if remote access to clipboard is allowed
+        public SecurityProtocolEnum Protocol;
     }
 }

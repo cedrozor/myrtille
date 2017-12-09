@@ -199,6 +199,16 @@
                     <h5><label id="groupAccessLabel" for="editgroupaccess">Domain Groups Allowed (comma seperated)</label></h5>
                     <input type="text" runat="server" id="editgroupaccess" name="editgroupaccess" title="group access" style="width:100%"/>
                 </div>
+                <div>
+                    <h5><label id="securityProtocol" for="editSecurityProtocol">RDP Security Protocol</label></h5>
+                    <select name="editSecurityProtocol" id="editSecurityProtocol">
+                        <option value="0">auto</option>
+                        <option value="1">rdp</option>
+                        <option value="2">tls</option>
+                        <option value="3">nla</option>
+                        <option value="4">nla-ext</option>
+                    </select>
+                </div>
                 <br />
                 <br />
                 <div style="float: right">

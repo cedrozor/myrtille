@@ -121,6 +121,7 @@
     <Compile Include="Models\EnterpriseHost.cs" />
     <Compile Include="Models\EnterpriseHostEdit.cs" />
     <Compile Include="Models\EnterpriseSession.cs" />
+    <Compile Include="Models\SecurityProtocolEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\AccountHelper.cs" />
     <Compile Include="ServiceContracts\IEnterpriseService.cs" />

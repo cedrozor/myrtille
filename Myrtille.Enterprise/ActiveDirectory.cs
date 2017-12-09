@@ -62,7 +62,8 @@ namespace Myrtille.Enterprise
                 var host = new Host
                 {
                     HostName = editHost.HostName,
-                    HostAddress = editHost.HostAddress
+                    HostAddress = editHost.HostAddress,
+                    Protocol = editHost.Protocol
                 };
 
                 db.Host.Add(host);
@@ -97,6 +98,7 @@ namespace Myrtille.Enterprise
 
                 host.HostName = editHost.HostName;
                 host.HostAddress = editHost.HostAddress;
+                host.Protocol = editHost.Protocol;
 
                 var currentGroups = db.HostAccessGroups
                                         .Where(m => m.HostID == editHost.HostID)
@@ -159,6 +161,7 @@ namespace Myrtille.Enterprise
                     HostName = host.HostName,
                     HostAddress = host.HostAddress,
                     DirectoryGroups = directoryGroups.ToString()
+                    ,Protocol = host.Protocol
                 };
             }
         }
@@ -419,6 +422,8 @@ namespace Myrtille.Enterprise
                                       Username = s.Username
                                       ,
                                       Password = s.Password
+                                      ,
+                                      Protocol = h.Protocol
                                   })
                                 .FirstOrDefault();
                     }
@@ -442,6 +447,8 @@ namespace Myrtille.Enterprise
                                       Username = s.Username
                                       ,
                                       Password = s.Password
+                                      ,
+                                      Protocol = h.Protocol
                                   })
                                 .FirstOrDefault();
                     }

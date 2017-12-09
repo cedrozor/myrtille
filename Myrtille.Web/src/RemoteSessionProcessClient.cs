@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics;
 using System.ServiceModel;
 using Myrtille.Services.Contracts;
+using Myrtille.Common;
 
 namespace Myrtille.Web
 {
@@ -36,13 +37,14 @@ namespace Myrtille.Web
         public void StartProcess(
             int remoteSessionId,
             int clientWidth,
-            int clientHeight)
+            int clientHeight,
+            SecurityProtocolEnum protocol)
         {
             Trace.TraceInformation("Calling service start process, remote session {0}", _remoteSessionManager.RemoteSession.Id);
 
             try
             {
-                Channel.StartProcess(remoteSessionId, clientWidth, clientHeight);
+                Channel.StartProcess(remoteSessionId, clientWidth, clientHeight,protocol);
             }
             catch (Exception exc)
             {

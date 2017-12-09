@@ -17,7 +17,7 @@
 */
 
 using System.ServiceModel;
-
+using Myrtille.Common;
 namespace Myrtille.Services.Contracts
 {
     [ServiceContract(CallbackContract = typeof(IRemoteSessionProcessCallback))]
@@ -30,7 +30,8 @@ namespace Myrtille.Services.Contracts
         void StartProcess(
             int remoteSessionId,
             int clientWidth,
-            int clientHeight);
+            int clientHeight
+            ,SecurityProtocolEnum protocol);
 
         /// <summary>
         /// stop the rdp client process

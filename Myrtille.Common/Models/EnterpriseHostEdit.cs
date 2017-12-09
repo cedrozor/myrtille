@@ -12,5 +12,6 @@ namespace Myrtille.Common.Models
         public string HostName { get; set; }
         public string HostAddress { get; set; }
         public string DirectoryGroups { get; set; }
+        public SecurityProtocolEnum Protocol { get; set; }
     }
 }
