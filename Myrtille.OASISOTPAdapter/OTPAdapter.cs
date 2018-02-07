@@ -46,7 +46,7 @@ namespace Myrtille.OASISOTPAdapter
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public bool Authenticate(string username, string password)
+        public bool Authenticate(string username, string password, string clientIP = null)
         {
             var apiKey = ConfigurationManager.AppSettings["OASISApiKey"];
             var appKey = ConfigurationManager.AppSettings["OASISAppKey"];
@@ -54,7 +54,7 @@ namespace Myrtille.OASISOTPAdapter
 
             //OASIS OTP Provider is released under Apache 2.0 project.
             //Source available at https://github.com/oliveinnovations/oasis
-            OTPProvider oasis = new OTPProvider(appID,appKey,apiKey);
+            OTPProvider oasis = new OTPProvider(appID,appKey,apiKey,RemoteIP: clientIP);
 
             var state = oasis.RequestAuthorisationState(new RequestAuthorisationState
             {
@@ -68,7 +68,7 @@ namespace Myrtille.OASISOTPAdapter
 
             var result = oasis.VerifyUserOTP(new VerifyUserOTP
             {
-                UserID = state.UserID,
+                Username = username,
                 OTPCode = password,
                 VerificationType = VerificationTypeEnum.LOGIN
             });

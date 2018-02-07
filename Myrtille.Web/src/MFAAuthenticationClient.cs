@@ -22,11 +22,11 @@ namespace Myrtille.Web
                 throw;
             }
         }
-        public bool Authenticate(string username, string password)
+        public bool Authenticate(string username, string password, string clientIP = null)
         {
             try
             {
-                return Channel.Authenticate(username, password);
+                return Channel.Authenticate(username, password,clientIP);
             }
             catch (Exception exc)
             {

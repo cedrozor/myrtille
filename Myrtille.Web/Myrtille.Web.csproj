@@ -109,6 +109,7 @@
     <Compile Include="SocketHandler.ashx.cs">
       <DependentUpon>SocketHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="src\ClientIP.cs" />
     <Compile Include="src\EnterpriseServiceClient.cs" />
     <Compile Include="src\MFAAuthenticationClient.cs" />
     <Compile Include="src\RemoteSession.cs" />

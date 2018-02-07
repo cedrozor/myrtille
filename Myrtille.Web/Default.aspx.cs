@@ -260,11 +260,13 @@ namespace Myrtille.Web
         {
             try
             {
+                
+                var clientIP = ClientIP.ClientIPFromRequest(new HttpContextWrapper(HttpContext.Current).Request, true, new string[] { });
                 var MFAAuthClient = new MFAAuthenticationClient();
                 var EnterpriseClient = new EnterpriseServiceClient();
                 if (MFAAuthClient.GetState())
                 {
-                    if (!MFAAuthClient.Authenticate(loginRequest.Username, loginRequest.MFAPassword))
+                    if (!MFAAuthClient.Authenticate(loginRequest.Username, loginRequest.MFAPassword,clientIP))
                     {
                         return new StandardHttpResponse
                         {
@@ -322,7 +324,8 @@ namespace Myrtille.Web
             var EnterpriseClient = new EnterpriseServiceClient();
             if (MFAAuthClient.GetState() && !EnterpriseClient.GetState())
             {
-                var result = MFAAuthClient.Authenticate(startSessionRequest.Username, startSessionRequest.MFAPassword);
+                var clientIP = ClientIP.ClientIPFromRequest(new HttpContextWrapper(HttpContext.Current).Request, true, new string[] { });
+                var result = MFAAuthClient.Authenticate(startSessionRequest.Username, startSessionRequest.MFAPassword,clientIP);
 
                 if (!result)
                 {

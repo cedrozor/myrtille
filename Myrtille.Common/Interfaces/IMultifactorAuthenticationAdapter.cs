@@ -38,7 +38,7 @@ namespace Myrtille.Common.Interfaces
         /// <param name="username">Username</param>
         /// <param name="password">Password</param>
         /// <returns></returns>
-        bool Authenticate(string username, string password);
+        bool Authenticate(string username, string password, string clientIP = null);
 
         /// <summary>
         /// link to MFA provider page

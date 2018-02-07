@@ -24,9 +24,9 @@ namespace Myrtille.Services
             return Program._multifactorAdapter.PromptLabel;
         }
 
-        public bool Authenticate(string username, string password)
+        public bool Authenticate(string username, string password, string clientIP = null)
         {
-            return Program._multifactorAdapter.Authenticate(username, password);
+            return Program._multifactorAdapter.Authenticate(username, password,clientIP);
         }
     }
 }

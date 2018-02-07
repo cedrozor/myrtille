@@ -17,7 +17,7 @@ namespace Myrtille.Services.Contracts
         string GetPromptLabel();
 
         [OperationContract]
-        bool Authenticate(string username, string password);
+        bool Authenticate(string username, string password, string clientIP = null);
 
         [OperationContract]
         string GetProviderURL();
