@@ -1,7 +1,7 @@
 ﻿/*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -177,7 +177,19 @@ function Touchscreen(config, dialog, display, network, user)
                 user.triggerActivity();
 
             //dialog.showDebug('touch ' + (start ? 'start' : 'end'));
-            sendEvent(network.getCommandEnum().SEND_MOUSE_LEFT_BUTTON.text + start + touchX + '-' + touchY);   // same event as mouse left button
+            if (user.getRightClickButton() != null && user.getRightClickButton().value == 'Right-Click ON')
+            {
+                //dialog.showDebug('emulating mouse right click ' + (start ? 'down' : 'up'));
+                sendEvent(network.getCommandEnum().SEND_MOUSE_RIGHT_BUTTON.text + start + touchX + '-' + touchY);
+                if (!start)
+                {
+                    user.toggleRightClick(user.getRightClickButton());
+                }
+            }
+            else
+            {
+                sendEvent(network.getCommandEnum().SEND_MOUSE_LEFT_BUTTON.text + start + touchX + '-' + touchY);   // same event as mouse left button
+            }
 
             // update the last touch tap position
             lastTouchTapX = touchX;

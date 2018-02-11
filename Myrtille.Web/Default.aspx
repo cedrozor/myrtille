@@ -1,7 +1,7 @@
 ﻿<%--
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -143,7 +143,7 @@
             <input type="button" id="scale" value="Scale" onclick="toggleScaleDisplay();" title="dynamically scale the remote session display to the browser size (responsive design)"/>
 
             <!-- send right-click (on the last touched or left-clicked position) to the remote session. may be useful on touchpads or iOS devices -->
-            <input type="button" runat="server" id="mrc" value="Right-Click" onclick="sendRightClick();" title="send Right-Click (on the last touched or left-clicked position) to the remote session" />
+            <input type="button" runat="server" id="mrc" value="Right-Click OFF" onclick="toggleRightClick(this);" title="send Right-Click (on the last touched or left-clicked position) to the remote session" />
 
             <!-- virtual keyboard. on devices without a physical keyboard, forces the device virtual keyboard to pop up -->
             <input type="button" id="keyboard" value="Keyboard" onclick="openPopup('virtualKeyboardPopup', 'VirtualKeyboard.aspx');" title="send text to the remote session (tip: can be used to send the local clipboard content (text only))"/>

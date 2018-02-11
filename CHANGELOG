@@ -1,5 +1,23 @@
-﻿2017-11-14 Version 1.6.0 (stable)
+﻿2018-02-07 Version 1.7.0 (stable)
+	resynced FreeRDP with master repository; FreeRDP 2.0-RC2 milestone: https://github.com/FreeRDP/FreeRDP/milestone/8
+	FreeRDP HOTFIX: connection using FQDN is broken (either direct connection or through a connection broker redirection), using target IP instead
+	FreeRDP HOTFIX: fixed client IP resolution when using an ipv6 connection
+	updated the connection tooltip (ipv6 addresses require brackets, i.e. [::1])
+	changed the right-click button mechanism to a toggle
+
+2017-12-09 Version 1.6.1 (stable)
+	enabled fonts smoothing
+	modified disconnect button tooltip
+	removed pipes messages size limitation
+	pipes are no longer buffered
+	added support for multiple websockets on a single remote session to allow for collaborative mode (was already supported using long-polling). To share a remote session, simply copy and share the session url (contains the session id). CAUTION! this is experimental (no access control, no presenter role, etc.)
+	enforced wfreerdp process identity on pipes access rule
+	pipes are now used in byte mode instead of message (small performance improvement)
+	remote session is now closed in case of pipes failure instead of being stuck
+
+2017-11-14 Version 1.6.0 (stable)
 	resynced FreeRDP with master repository; among other things, fixes multiple vulnerabilities reported by the Cisco Talos Team (http://blog.talosintelligence.com/2017/07/vulnerbility-spotlight-freerdp-multiple.html) (thanks hac)
+	ignore certificate warning (when using NLA); may happen, for example, with a self-signed certificate (not trusted) or if the server joined a domain after the certificate was issued (name mismatch). more details here: http://www.vkernel.ro/blog/configuring-certificates-in-2012r2-remote-desktop-services-rds (required with the latest FreeRDP build)
 	connection settings (including user credentials) are no longer passed to FreeRDP through command line; using pipe communication instead (thanks Paul)
 	auto-connect / start program from url now doesn't require the "&program=" parameter (access to the desktop if missing or empty) (thanks noetius)
 	custom mouse cursors are now supported with IE (thanks Thijs)

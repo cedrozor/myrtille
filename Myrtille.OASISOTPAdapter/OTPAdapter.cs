@@ -52,6 +52,9 @@ namespace Myrtille.OASISOTPAdapter
             var appKey = ConfigurationManager.AppSettings["OASISAppKey"];
             var appID = long.Parse(ConfigurationManager.AppSettings["OASISAppID"]);
 
+            if (!string.IsNullOrEmpty(clientIP) && (clientIP.Equals("127.0.0.1") || clientIP.Equals("::1")))
+                clientIP = null;
+
             //OASIS OTP Provider is released under Apache 2.0 project.
             //Source available at https://github.com/oliveinnovations/oasis
             OTPProvider oasis = new OTPProvider(appID,appKey,apiKey,RemoteIP: clientIP);

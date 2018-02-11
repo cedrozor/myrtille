@@ -1,7 +1,7 @@
 ﻿/*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -224,7 +224,7 @@ function XmlHttp(config, dialog, display, network)
                 // disconnected session
                 else if (xhrResponseText == 'disconnected')
                 {
-                    window.location.href = config.getHttpServerUrl() ;
+                    window.location.href = config.getHttpServerUrl();
                 }
                 // new image
                 else

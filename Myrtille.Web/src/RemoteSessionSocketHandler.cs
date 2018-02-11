@@ -1,7 +1,7 @@
 ﻿/*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ namespace Myrtille.Web
         public override void OnOpen()
         {
             Trace.TraceInformation("Opening websocket, remote session {0}", _remoteSession.Id);
-            _remoteSession.Manager.WebSocket = this;
+            _remoteSession.Manager.WebSockets.Add(this);
             base.OnOpen();
 
             // send a disconnect notification
@@ -65,7 +65,7 @@ namespace Myrtille.Web
         public override void OnClose()
         {
             Trace.TraceInformation("Closing websocket, remote session {0}", _remoteSession.Id);
-            _remoteSession.Manager.WebSocket = null;
+            _remoteSession.Manager.WebSockets.Remove(this);
             base.OnClose();
         }
 

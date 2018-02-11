@@ -1,7 +1,7 @@
 ﻿/*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.ServiceModel;
 using System.Text;
@@ -49,7 +50,7 @@ namespace Myrtille.Web
                 Pipes.ProcessUpdatesPipeMessage = ProcessUpdatesPipeMessage;
 
                 // sockets
-                WebSocket = null;
+                WebSockets = new List<RemoteSessionSocketHandler>();
 
                 // messages
                 _messageEventLock = new object();
@@ -85,7 +86,7 @@ namespace Myrtille.Web
                 string message = null;
 
                 // image structure: tag (4 bytes) + info (32 bytes) + data
-                // > tag is used to identify an image (0: image; text message otherwise)
+                // > tag is used to identify an image (0: image; other: message)
                 // > info contains the image metadata (idx, posX, posY, etc.)
                 // > data is the image raw data
                 if (BitConverter.ToInt32(msg, 0) != 0)
@@ -99,10 +100,13 @@ namespace Myrtille.Web
                     // request page reload
                     if (message.Equals("reload"))
                     {
-                        if (WebSocket != null)
+                        if (WebSockets.Count > 0)
                         {
-                            Trace.TraceInformation("Sending reload request on websocket, remote session {0}", RemoteSession.Id);
-                            WebSocket.Send(message);
+                            Trace.TraceInformation("Sending reload request on websocket(s), remote session {0}", RemoteSession.Id);
+                            foreach (var webSocket in WebSockets)
+                            {
+                                webSocket.Send(message);
+                            }
                         }
                         else
                         {
@@ -113,10 +117,13 @@ namespace Myrtille.Web
                     // remote clipboard is available
                     else if (message.StartsWith("clipboard|"))
                     {
-                        if (WebSocket != null)
+                        if (WebSockets.Count > 0)
                         {
-                            Trace.TraceInformation("Sending clipboard content {0} on websocket, remote session {1}", message, RemoteSession.Id);
-                            WebSocket.Send(message);
+                            Trace.TraceInformation("Sending clipboard content {0} on websocket(s), remote session {1}", message, RemoteSession.Id);
+                            foreach (var webSocket in WebSockets)
+                            {
+                                webSocket.Send(message);
+                            }
                         }
                         else
                         {
@@ -148,129 +155,126 @@ namespace Myrtille.Web
 
         #region Sockets
 
-        public RemoteSessionSocketHandler WebSocket { get; set; }
+        public List<RemoteSessionSocketHandler> WebSockets { get; set; }
 
         #endregion
 
         #region Commands
 
-        public bool SendCommand(RemoteSessionCommand command, string args = "")
+        public void SendCommand(RemoteSessionCommand command, string args = "")
         {
+            if (RemoteSession.State == RemoteSessionState.NotConnected || RemoteSession.State == RemoteSessionState.Disconnected)
+                return;
+
+            var commandWithArgs = string.Concat((string)RemoteSessionCommandMapping.ToPrefix[command], args);
+
+            switch (command)
+            {
+                // as the process command line can be displayed into the task manager / process explorer, the connection settings (including user credentials) are now passed to the rdp client through the inputs pipe
+                // their values are set from the login page (using http(s) post), they shouldn't be modified at this step
+                case RemoteSessionCommand.SendServerAddress:
+                case RemoteSessionCommand.SendUserDomain:
+                case RemoteSessionCommand.SendUserName:
+                case RemoteSessionCommand.SendUserPassword:
+                case RemoteSessionCommand.SendStartProgram:
+                    // if needed
+                    break;
+
+                // browser, keyboard, mouse, etc.
+                case RemoteSessionCommand.SendBrowserResize:
+                case RemoteSessionCommand.SendKeyUnicode:
+                case RemoteSessionCommand.SendMouseMove:
+                case RemoteSessionCommand.SendMouseLeftButton:
+                case RemoteSessionCommand.SendMouseMiddleButton:
+                case RemoteSessionCommand.SendMouseRightButton:
+                case RemoteSessionCommand.SendMouseWheelUp:
+                case RemoteSessionCommand.SendMouseWheelDown:
+                    // if needed
+                    break;
+
+                case RemoteSessionCommand.SendKeyScancode:
+                    var keyCodeAndState = args.Split(new[] { "-" }, StringSplitOptions.None);
+
+                    var jsKeyCode = int.Parse(keyCodeAndState[0]);
+                    var keyState = keyCodeAndState[1];
+
+                    var rdpScanCode = JsKeyCodeToRdpScanCodeMapping.MapTable[jsKeyCode];
+                    if (rdpScanCode != null && (int)rdpScanCode != 0)
+                    {
+                        commandWithArgs = string.Concat((string)RemoteSessionCommandMapping.ToPrefix[command], (int)rdpScanCode + "-" + keyState);
+                    }
+                    break;
+
+                // control
+                case RemoteSessionCommand.SetStatMode:
+                    Trace.TraceInformation("Stat mode {0}, remote session {1}", args == "1" ? "ON" : "OFF", RemoteSession.Id);
+                    RemoteSession.StatMode = args == "1";
+                    break;
+
+                case RemoteSessionCommand.SetDebugMode:
+                    Trace.TraceInformation("Debug mode {0}, remote session {1}", args == "1" ? "ON" : "OFF", RemoteSession.Id);
+                    RemoteSession.DebugMode = args == "1";
+                    break;
+
+                case RemoteSessionCommand.SetCompatibilityMode:
+                    Trace.TraceInformation("Compatibility mode {0}, remote session {1}", args == "1" ? "ON" : "OFF", RemoteSession.Id);
+                    RemoteSession.CompatibilityMode = args == "1";
+                    break;
+
+                case RemoteSessionCommand.SetScaleDisplay:
+                    Trace.TraceInformation("Display scaling {0}, remote session {1}", args != "0" ? args : "OFF", RemoteSession.Id);
+                    RemoteSession.ScaleDisplay = args != "0";
+                    break;
+
+                case RemoteSessionCommand.SetImageEncoding:
+                    Trace.TraceInformation("Image encoding {0}, remote session {1}", int.Parse(args), RemoteSession.Id);
+                    RemoteSession.ImageEncoding = (ImageEncoding)int.Parse(args);
+                    break;
+
+                case RemoteSessionCommand.SetImageQuality:
+                    Trace.TraceInformation("Image quality {0}, remote session {1}", int.Parse(args), RemoteSession.Id);
+                    RemoteSession.ImageQuality = int.Parse(args);
+                    break;
+
+                case RemoteSessionCommand.SetImageQuantity:
+                    Trace.TraceInformation("Image quantity {0}, remote session {1}", int.Parse(args), RemoteSession.Id);
+                    RemoteSession.ImageQuantity = int.Parse(args);
+                    break;
+
+                case RemoteSessionCommand.RequestFullscreenUpdate:
+                    Trace.TraceInformation("Requesting fullscreen update, all image(s) will now be discarded while waiting for it, remote session {0}", RemoteSession.Id);
+                    FullscreenEventPending = true;
+                    break;
+
+                case RemoteSessionCommand.RequestRemoteClipboard:
+                    Trace.TraceInformation("Requesting remote clipboard, remote session {0}", RemoteSession.Id);
+                    break;
+
+                case RemoteSessionCommand.ConnectRdpClient:
+                    Trace.TraceInformation("Connecting remote session, remote session {0}", RemoteSession.Id);
+                    break;
+
+                case RemoteSessionCommand.CloseRdpClient:
+                    Trace.TraceInformation("Closing remote session, remote session {0}", RemoteSession.Id);
+                    break;
+            }
+
+            Trace.TraceInformation("Sending command with args {0}, remote session {1}", commandWithArgs, RemoteSession.Id);
+
             try
             {
-                var commandWithArgs = string.Concat((string)RemoteSessionCommandMapping.ToPrefix[command], args);
-
-                switch (command)
-                {
-                    // as the process command line can be displayed into the task manager / process explorer, the connection settings (including user credentials) are now passed to the rdp client through the inputs pipe
-                    // their values are set from the login page (using http(s) post), they shouldn't be modified at this step
-                    case RemoteSessionCommand.SendServerAddress:
-                    case RemoteSessionCommand.SendUserDomain:
-                    case RemoteSessionCommand.SendUserName:
-                    case RemoteSessionCommand.SendUserPassword:
-                    case RemoteSessionCommand.SendStartProgram:
-                        // if needed
-                        break;
-
-                    // browser, keyboard, mouse, etc.
-                    case RemoteSessionCommand.SendBrowserResize:
-                    case RemoteSessionCommand.SendKeyUnicode:
-                    case RemoteSessionCommand.SendMouseMove:
-                    case RemoteSessionCommand.SendMouseLeftButton:
-                    case RemoteSessionCommand.SendMouseMiddleButton:
-                    case RemoteSessionCommand.SendMouseRightButton:
-                    case RemoteSessionCommand.SendMouseWheelUp:
-                    case RemoteSessionCommand.SendMouseWheelDown:
-                        // if needed
-                        break;
-
-                    case RemoteSessionCommand.SendKeyScancode:
-                        var keyCodeAndState = args.Split(new[] { "-" }, StringSplitOptions.None);
-
-                        var jsKeyCode = int.Parse(keyCodeAndState[0]);
-                        var keyState = keyCodeAndState[1];
-
-                        var rdpScanCode = JsKeyCodeToRdpScanCodeMapping.MapTable[jsKeyCode];
-                        if (rdpScanCode != null && (int)rdpScanCode != 0)
-                        {
-                            commandWithArgs = string.Concat((string)RemoteSessionCommandMapping.ToPrefix[command], (int)rdpScanCode + "-" + keyState);
-                        }
-                        break;
-
-                    // control
-                    case RemoteSessionCommand.SetStatMode:
-                        Trace.TraceInformation("Stat mode {0}, remote session {1}", args == "1" ? "ON" : "OFF", RemoteSession.Id);
-                        RemoteSession.StatMode = args == "1";
-                        break;
-
-                    case RemoteSessionCommand.SetDebugMode:
-                        Trace.TraceInformation("Debug mode {0}, remote session {1}", args == "1" ? "ON" : "OFF", RemoteSession.Id);
-                        RemoteSession.DebugMode = args == "1";
-                        break;
-
-                    case RemoteSessionCommand.SetCompatibilityMode:
-                        Trace.TraceInformation("Compatibility mode {0}, remote session {1}", args == "1" ? "ON" : "OFF", RemoteSession.Id);
-                        RemoteSession.CompatibilityMode = args == "1";
-                        break;
-
-                    case RemoteSessionCommand.SetScaleDisplay:
-                        Trace.TraceInformation("Display scaling {0}, remote session {1}", args != "0" ? args : "OFF", RemoteSession.Id);
-                        RemoteSession.ScaleDisplay = args != "0";
-                        break;
-
-                    case RemoteSessionCommand.SetImageEncoding:
-                        Trace.TraceInformation("Image encoding {0}, remote session {1}", int.Parse(args), RemoteSession.Id);
-                        RemoteSession.ImageEncoding = (ImageEncoding)int.Parse(args);
-                        break;
-
-                    case RemoteSessionCommand.SetImageQuality:
-                        Trace.TraceInformation("Image quality {0}, remote session {1}", int.Parse(args), RemoteSession.Id);
-                        RemoteSession.ImageQuality = int.Parse(args);
-                        break;
-
-                    case RemoteSessionCommand.SetImageQuantity:
-                        Trace.TraceInformation("Image quantity {0}, remote session {1}", int.Parse(args), RemoteSession.Id);
-                        RemoteSession.ImageQuantity = int.Parse(args);
-                        break;
-
-                    case RemoteSessionCommand.RequestFullscreenUpdate:
-                        Trace.TraceInformation("Requesting fullscreen update, all image(s) will now be discarded while waiting for it, remote session {0}", RemoteSession.Id);
-                        FullscreenEventPending = true;
-                        break;
-
-                    case RemoteSessionCommand.RequestRemoteClipboard:
-                        Trace.TraceInformation("Requesting remote clipboard, remote session {0}", RemoteSession.Id);
-                        if (!RemoteSession.AllowRemoteClipboard) return false;
-                        break;
-
-                    case RemoteSessionCommand.ConnectRdpClient:
-                        Trace.TraceInformation("Connecting remote session, remote session {0}", RemoteSession.Id);
-                        break;
-
-                    case RemoteSessionCommand.CloseRdpClient:
-                        Trace.TraceInformation("Closing remote session, remote session {0}", RemoteSession.Id);
-                        break;
-                }
-
-                Trace.TraceInformation("Sending command with args {0}, remote session {1}", commandWithArgs, RemoteSession.Id);
-
-                if (RemoteSession.State == RemoteSessionState.Connecting ||
-                    RemoteSession.State == RemoteSessionState.Connected ||
-                    RemoteSession.State == RemoteSessionState.Disconnecting)
-                {
-                    PipeHelper.WritePipeMessage(
-                        Pipes.InputsPipe,
-                        "remotesession_" + RemoteSession.Id + "_inputs",
-                        commandWithArgs + "\t");
-                }
+                PipeHelper.WritePipeMessage(
+                    Pipes.InputsPipe,
+                    "remotesession_" + RemoteSession.Id + "_inputs",
+                    commandWithArgs + "\t");
             }
             catch (Exception exc)
             {
                 Trace.TraceError("Failed to send command {0}, args {1}, remote session {2} ({3})", command, args, RemoteSession.Id, exc);
-                return false;
-            }
 
-            return true;
+                // there is a problem with the inputs pipe, force close the remote session in order to avoid it being stuck
+                Client.StopProcess();
+            }
         }
 
         #endregion
@@ -352,27 +356,30 @@ namespace Myrtille.Web
                     }
                 }
 
-                // if using a websocket, send the image
-                if (WebSocket != null)
+                // if using websocket(s), send the image
+                if (WebSockets.Count > 0)
                 {
-                    Trace.TraceInformation("Sending image {0} ({1}) on websocket, remote session {2}", image.Idx, (image.Fullscreen ? "screen" : "region"), RemoteSession.Id);
+                    Trace.TraceInformation("Sending image {0} ({1}) on websocket(s), remote session {2}", image.Idx, (image.Fullscreen ? "screen" : "region"), RemoteSession.Id);
 
-                    if (!WebSocket.BinaryMode)
+                    foreach (var webSocket in WebSockets)
                     {
-                        WebSocket.Send(
-                            image.Idx + "," +
-                            image.PosX + "," +
-                            image.PosY + "," +
-                            image.Width + "," +
-                            image.Height + "," +
-                            image.Format.ToString().ToLower() + "," +
-                            image.Quality + "," +
-                            image.Fullscreen.ToString().ToLower() + "," +
-                            Convert.ToBase64String(image.Data));
-                    }
-                    else
-                    {
-                        WebSocket.Send(data);
+                        if (!webSocket.BinaryMode)
+                        {
+                            webSocket.Send(
+                                image.Idx + "," +
+                                image.PosX + "," +
+                                image.PosY + "," +
+                                image.Width + "," +
+                                image.Height + "," +
+                                image.Format.ToString().ToLower() + "," +
+                                image.Quality + "," +
+                                image.Fullscreen.ToString().ToLower() + "," +
+                                Convert.ToBase64String(image.Data));
+                        }
+                        else
+                        {
+                            webSocket.Send(data);
+                        }
                     }
                 }
                 // otherwise, it will be retrieved later
@@ -556,10 +563,12 @@ namespace Myrtille.Web
             {
                 Pipes.DeletePipes();
             }
-            if (WebSocket != null)
+            if (WebSockets.Count > 0)
             {
-                WebSocket.Close();
-                WebSocket = null;
+                foreach (var webSocket in WebSockets)
+                {
+                    webSocket.Close();
+                }
             }
         }
 

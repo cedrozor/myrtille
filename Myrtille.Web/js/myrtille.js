@@ -1,7 +1,7 @@
 /*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -283,6 +283,19 @@ function toggleScaleDisplay()
     }
 }
 
+function toggleRightClick(button)
+{
+    try
+    {
+        // client side only; no need to persist the button state over the session (page reload = reset the toggle button)
+        user.toggleRightClick(button);
+    }
+    catch (exc)
+    {
+        dialog.showDebug('myrtille toggleRightClick error: ' + exc.message);
+    }
+}
+
 function requestRemoteClipboard()
 {
     try
@@ -383,36 +396,5 @@ function sendCtrlAltDel()
     catch (exc)
     {
         dialog.showDebug('myrtille sendCtrlAltDel error: ' + exc.message);
-    }
-}
-
-function sendRightClick()
-{
-    try
-    {
-        // check touchscreen first (same logic as mouse)
-        var lastMouseClickX = user.getTouchscreen().getLastTouchTapX();
-        var lastMouseClickY = user.getTouchscreen().getLastTouchTapY();
-
-        // if there is no touchscreen tap activity, check mouse click
-        // note that, if mouse and touchscreen are both used, the touchscreen activity is prioritary
-        if (lastMouseClickX == null || lastMouseClickY == null)
-        {
-            lastMouseClickX = user.getMouse().getLastMouseClickX();
-            lastMouseClickY = user.getMouse().getLastMouseClickY();
-        }
-
-        if (lastMouseClickX != null && lastMouseClickY != null)
-        {
-            if (config.getAdaptiveFullscreenTimeout() > 0)
-                user.triggerActivity();
-
-            network.processUserEvent('mouse', network.getCommandEnum().SEND_MOUSE_RIGHT_BUTTON.text + '1' + lastMouseClickX + '-' + lastMouseClickY);
-            network.processUserEvent('mouse', network.getCommandEnum().SEND_MOUSE_RIGHT_BUTTON.text + '0' + lastMouseClickX + '-' + lastMouseClickY);
-        }
-    }
-    catch (exc)
-    {
-        dialog.showDebug('myrtille sendRightClick error: ' + exc.message);
     }
 }

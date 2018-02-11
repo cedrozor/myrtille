@@ -1,7 +1,7 @@
 /*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -183,7 +183,19 @@ function Mouse(config, dialog, display, network, user)
                 {
                     case 1:
                         //dialog.showDebug('mouse left click ' + (down ? 'down' : 'up'));
-                        sendEvent(network.getCommandEnum().SEND_MOUSE_LEFT_BUTTON.text + down + mouseX + '-' + mouseY);
+                        if (user.getRightClickButton() != null && user.getRightClickButton().value == 'Right-Click ON')
+                        {
+                            //dialog.showDebug('emulating mouse right click ' + (down ? 'down' : 'up'));
+                            sendEvent(network.getCommandEnum().SEND_MOUSE_RIGHT_BUTTON.text + down + mouseX + '-' + mouseY);
+                            if (!down)
+                            {
+                                user.toggleRightClick(user.getRightClickButton());
+                            }
+                        }
+                        else
+                        {
+                            sendEvent(network.getCommandEnum().SEND_MOUSE_LEFT_BUTTON.text + down + mouseX + '-' + mouseY);
+                        }
                         break;
                     case 4:
                         //dialog.showDebug('mouse middle click ' + (down ? 'down' : 'up'));
@@ -202,7 +214,19 @@ function Mouse(config, dialog, display, network, user)
                 {
                     case 0:
                         //dialog.showDebug('mouse left click ' + (down ? 'down' : 'up'));
-                        sendEvent(network.getCommandEnum().SEND_MOUSE_LEFT_BUTTON.text + down + mouseX + '-' + mouseY);
+                        if (user.getRightClickButton() != null && user.getRightClickButton().value == 'Right-Click ON')
+                        {
+                            //dialog.showDebug('emulating mouse right click ' + (down ? 'down' : 'up'));
+                            sendEvent(network.getCommandEnum().SEND_MOUSE_RIGHT_BUTTON.text + down + mouseX + '-' + mouseY);
+                            if (!down)
+                            {
+                                user.toggleRightClick(user.getRightClickButton());
+                            }
+                        }
+                        else
+                        {
+                            sendEvent(network.getCommandEnum().SEND_MOUSE_LEFT_BUTTON.text + down + mouseX + '-' + mouseY);
+                        }
                         break;
                     case 1:
                         //dialog.showDebug('mouse middle click ' + (down ? 'down' : 'up'));

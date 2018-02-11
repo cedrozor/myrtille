@@ -1,7 +1,7 @@
 /*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -39,6 +39,10 @@ function User(config, dialog, display, network)
     // touchscreen
     var touchscreen = null;
     this.getTouchscreen = function() { return touchscreen; };
+
+    // send a right click on the next touch or left-click action
+    var rightClickButton = null;
+    this.getRightClickButton = function() { return rightClickButton; };
 
     this.init = function()
     {
@@ -87,6 +91,20 @@ function User(config, dialog, display, network)
         {
             dialog.showDebug('user init error: ' + exc.message);
             throw exc;
+        }
+    };
+
+    this.toggleRightClick = function(button)
+    {
+        try
+        {
+            rightClickButton = button;
+            rightClickButton.value = rightClickButton.value == 'Right-Click OFF' ? 'Right-Click ON' : 'Right-Click OFF';
+            //dialog.showDebug('toggling ' + rightClickButton.value);
+        }
+        catch (exc)
+        {
+            dialog.showDebug('user toggleRightClick error: ' + exc.message);
         }
     };
 

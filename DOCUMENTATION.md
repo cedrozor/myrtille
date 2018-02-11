@@ -34,7 +34,7 @@ Starting from version 1.3.0, it's possible to connect and run a program automati
 
 From version 1.5.0, Myrtille does support hashed passwords (so that the password is not plain text into the url).
 
-Currently not working with Windows 2008 servers. See notes and limitations.
+The start remote application from url feature only works on Windows Servers editions (starting from Server 2012) and only if the program is allowed to run (remoteApp policy). See notes and limitations.
 
 ### Syntax
 https://myserver/Myrtille/?__EVENTTARGET=&__EVENTARGUMENT=&server=server&domain=domain[optional]&user=user&passwordHash=passwordHash&program=program[optional]&width=width(px)[optional]&height=height(px)[optional]&connect=Connect%21
@@ -148,7 +148,7 @@ This is a thing to consider if you want to isolate the web gateway from your int
 ## Notes and limitations
 - Starting from myrtille version 1.2.0, the packaged FreeRDP and OpenSSL binaries use a statically-linked runtime; that means there is no longer need for the Microsoft Visual C++ redistributables (x86). It's still a good idea to install them however as they will be required if the build options are changed.
 
-- On Windows Server 2008, the FreeRDP remoteApp and shell features don't work. It's not possible to start a remote application from URL. https://github.com/FreeRDP/FreeRDP/issues/1669
+- On Windows Server 2008 and Windows Workstations (XP/Vista/7/8/10), the FreeRDP remoteApp and shell features don't work. It's not possible to start a remote application from URL. https://github.com/FreeRDP/FreeRDP/issues/1669
 
 - On Windows Server 2012, you may have issues installing the Microsoft Visual C++ 2015 redistributables (x86) (http://stackoverflow.com/questions/31536606/while-installing-vc-redist-x64-exe-getting-error-failed-to-configure-per-machi). To circumvent that, ensure your system is fully updated (Windows updates) first or try to install the package "Windows8.1-KB2999226-x64.msu" manually.
 
@@ -185,7 +185,7 @@ First at all, ensure the Myrtille prerequisites are met (IIS 7 or greater (prefe
 	- Retry with debug enabled and check logs (into the "log" folder). You can change their verbosity level in config (but be warned it will affect peformance and flood the disk if set too verbose).
 
 - I don't have a mouse (or a right button), how can I Right-Click? (i.e.: on a touchpad or iOS device)
-	- Tap/Left-Click the screen where you want the Right-Click to occur then press the "Right-Click" button into the toolbar (on top of the screen)
+	- You can toggle on the "Right-Click" button into the toolbar, then touch or left-click the screen to trigger a right-click at that position
 
 - The RDP session continues to run after clicking "Disconnect"
 	- Check the RDP server configuration (session disconnect timeout in particular). You can setup it automatically by importing the Myrtille "myrtille\bin\RDPSetup.reg" file into registry.
