@@ -1,7 +1,7 @@
 ﻿/*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
-    Copyright(c) 2014-2017 Cedric Coste
+    Copyright(c) 2014-2018 Cedric Coste
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -39,6 +39,12 @@ namespace Myrtille.Services.Contracts
         /// </summary>
         [OperationContract]
         void StopProcess();
+
+        /// <summary>
+        /// retrieve the user account the rdp client process is running on
+        /// </summary>
+        [OperationContract]
+        string GetProcessIdentity();
     }
 
     public interface IRemoteSessionProcessCallback
