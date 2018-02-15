@@ -284,7 +284,7 @@
                         serverId,
                         (isAdmin ? "editServer" : ""),
                         (isAdmin ? "Edit Server" : ""),
-                        serverName,
+                        (isAdmin ? "Edit " : "") + serverName,
                         ""
                         );
 

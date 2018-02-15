@@ -189,7 +189,7 @@
                 <div >
                     <h5><label id="hostnameLabel" for="editHostname">Host name:</label></h5>
                     <input type="text" id="editHostname" name="editHostname" title="host name" />
-                    <input type="button" id="createSession" value="Create Session" onclick="showCreateSessionModal(false);"/>
+                    <input type="button" id="createSession" value="Create Single Use Session URL" onclick="showCreateSessionModal(false);"/>
                 </div>
                 <div>
                     <h5><label id="hostAddressLabel" for="editHostaddress">Host address (optional, uses hostname if not specified):</label></h5>
