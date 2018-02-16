@@ -81,11 +81,13 @@ The most important settings are:
 
 ## Code organization
 - **Myrtille.RDP**: link to the myrtille FreeRDP fork. C++ code. RDP client, modified to forward the user input(s) and encode the session display into the configured image format(s). The modified code in FreeRDP is identified by region tags "#pragma region Myrtille" and "#pragma endregion".
-- **Myrtille.Common**: C# code. Common helpers.
+- **Myrtille.Common**: C# code. Common helpers, WCF contracts (interfaces).
 - **Myrtille.Services**: C# code. WCF services, hosted by a Windows Service (or a console application in debug build). start/stop the rdp client and upload/download file(s) to/from the connected user documents folder.
-- **Myrtille.Services.Contracts**: C# code. WCF contracts (interfaces).
 - **Myrtille.Web**: C# code. IIS Web application; gateway between the browser and the rdp client; maintain correlation between http and rdp sessions.
-- **Myrtille.Setup**: MSI installer.
+- **Myrtille.Setup**: MSI installer (64bit).
+- **Myrtille.Setup_x86**: MSI installer (32bit).
+- **Myrtille.Enterprise**: C# code. Enable preauthentication against active directory, host configuration and restrictions.
+- **Myrtille.OASISOTPAdapter**: C# code. Enable two-factor authententication via the oasis platform.
 
 ## Build
 Myrtille uses C#, C++ and vanilla Javascript code (no additional libraries). Microsoft Visual Studio Community 2015 was used as primary development environment, using the .NET 4.5 framework.
@@ -198,3 +200,48 @@ First at all, ensure the Myrtille prerequisites are met (IIS 7 or greater (prefe
 	- Check your network configuration (is something filtering the traffic?) and capabilities (high latency or small bandwidth?).
 	- Maybe the default settings are not adapted to your configuration. You can tweak the "js/config.js" file as you wish (see extensive comments there).
 	- Despite my best efforts to produce quality and efficient code, I may have missed/messed something... Please don't hesitate to tell me or add your contribution! Thanks! :)
+
+## Enterprise mode
+Enterprise mode enables authententication against a domain, allows administrators to create host connections which can be restricted based on the directory groups the authenticated user belongs to. When etnerprise mode is enabled the normal login page does not login to a specific host but instead authentiates against a domain.
+
+As a part of enterprise mode the following additional functions exists
+	- Authenticate users against a domain/active directory instead of a host they wish to connect to
+	- Allow administrators to define a list of hosts these hosts are the only hosts the users can connect to
+	- Access to hosts can be restricted based on the groups the authenticated user belongs To
+	- Administrators can create a single use session to a specific host with specific login credentials, the single use session creates a url which can be provided to another user to only be used once.
+
+To enable Enterprise Mode edit the app.config file of the myrtille service, uncomment the appSettings 
+	- EnterpriseAdapter, this is the adapter to use for enterprise mode
+	- EnterpriseAdminGroup, this is the directory group which will define a user as an administrator who can create, edit, delete hosts, define access to hosts and create single use sessions.
+	- EnterpriseDomain, this is the FQDN or the IP of the directory server within your domain.
+	- Restart Myrtille.Service windows service if it is running to use the new settings
+
+Enterprise mode has been written to provide authententication against an active directory, however, Myrtille.Common.Interfaces contains the interface class to create your own enterprise mode adapters, this could be created to use a database or another service to preauthenticate a user.
+
+NOTE: The username and password entered in the login screen is cached to create a session, when a host is selected to connect to the same username and password is passed within the RDP connection, therefore if another adapter is created it is important that the username and password for a user are the same as those used to connect to a host.
+
+## OASIS Multifactor Authentication
+Enabling this option allows you to require users to provide a one-time passcode which is validated against a cloud based 2fa authentication platform. This requires a mobile application which can be used to scan QR codes and generate the one-time passcodes, these applications are free from app stores and a popular choice is google authenticator.
+
+The adapter has been written to use a platform provided by Olive Innovations named OASIS, this is free to use for 10 users, to use this service follow these instructions
+
+	1) Visit https://oasis.oliveinnovations.com and register for free
+	2) Once logged in, create a User Group, on the menu select User Groups, then click New, input a Name i.e. Myrtille and save
+	3) Create a user, choose Users from the menu, then click New, input user details and tick the box to send register by email (important the username must be the same as the username you will login to myrtille with when registering via email the user will have a link which will direct to page to complete registration), you will be directed to the user detail page, select the user group created in  Step 2
+		NOTE: If you have enabled Enterprise Mode and wish to sync your Active Directory with OASIS, visit http://www.oliveinnovations.com, go to download area and download the Gateway application, instructions for configuration can be found in the docs are on the same website
+	4) Create an application, choose Applications from the menu, click New, enter a Name and click save, you will then be directed to the application details page, grant access to the user group created in Step 2
+	5) Within the application page, click button Application Key, this will display the information to configure Myrtille.
+
+Once these steps are completed, open the app.config of Myrtille.Services, uncomment the following lines from the appSettings
+	- MFAAuthAdapter, this is the OASIS MFA adapter
+	- OASISApiKey, this is the API Key found when you clicked Application Key in step 5
+	- OASISAppID, this is the APP ID found when you clicked Application Key in step 5
+	- OASISAppKey, this is the App Key found when you clicked Application Key in step 5
+	- Restart Myrtille.Service windows service if it is running to use the new settings
+
+The included MFA adapter is written by Olive Innovations Ltd for use with the OASIS platform, Olive Innovations included in Myrtille.Common.Interfaces an interface for multifactor authentication, this can be used to implement another MFA platform or create your own. 
+The Myrtille.OASISOTPAdapter.OTPAdapter uses a package from nuget OASIS.Integration https://www.nuget.org/packages/OASIS.Integration/, Olive Innovations has made this open source and it is available at https://github.com/OliveInnovations/OASIS/tree/master/OASIS.Integration
+
+NOTE: For the MFA adapter to authenticate the user correctly it is important that the username entered when login in to Myrtille is the same username registered on the MFA platform.
+
+
