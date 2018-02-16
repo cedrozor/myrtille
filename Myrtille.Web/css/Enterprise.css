@@ -1,0 +1,59 @@
+﻿#enterpriseDiv{    
+    top: 0;
+    left: 0;
+    width: 96%;
+    height: auto;
+    margin: 2%;    
+    background: #ffffff;
+}
+ 
+#serverListDiv{
+    margin:inherit;
+    width: inherit;
+    height: auto;
+}
+ 
+.serverLink{
+    display: inline-block;
+    border-radius: 5px;
+    border: 1px solid #ecf0f1;
+    margin: 5px;
+    color: #fff;
+}
+ 
+.serverLink label{
+    width:inherit;
+    font-size: small;
+    color: #000;    
+}
+ 
+.serverLink:hover{
+    background-color: #ecf0f1;
+    color: #000;
+}
+
+.rdpButton{
+    width: 80px;
+    height: 80px;
+    background: Url(../img/RemoteDesktop.png);
+    background-size: 80px 80px;
+    background-repeat: no-repeat;
+    border: 0;
+    cursor: pointer;
+}
+ 
+#serverContainer {
+    left: 50%;
+    position: absolute;
+    margin-top: 0px;
+    margin-left: -50%;
+    width: 100%;
+}
+ 
+.editServer {
+    cursor: pointer;
+}
+ 
+.editServer:hover{
+    text-decoration: underline;
+}

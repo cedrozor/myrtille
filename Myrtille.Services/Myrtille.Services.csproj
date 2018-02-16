@@ -89,14 +89,31 @@
     <ApplicationIcon>myrtille.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServerCompact, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.SqlServerCompact.6.2.0\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
@@ -107,7 +124,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnterpriseService.cs" />
     <Compile Include="FileStorage.cs" />
+    <Compile Include="MFAAuthentication.cs" />
     <Compile Include="Program.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -150,15 +169,26 @@
       <Project>{37630774-1321-4E6A-8661-4430A8946E9E}</Project>
       <Name>Myrtille.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Myrtille.Services.Contracts\Myrtille.Services.Contracts.csproj">
-      <Project>{010E1702-3045-4B13-BFB6-06FFC60B5CBB}</Project>
-      <Name>Myrtille.Services.Contracts</Name>
+    <ProjectReference Include="..\Myrtille.Enterprise\Myrtille.Enterprise.csproj">
+      <Project>{2ee62c9a-754d-4061-adef-f6744a762f0a}</Project>
+      <Name>Myrtille.Enterprise</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Myrtille.OASISOTPAdapter\Myrtille.OASISOTPAdapter.csproj">
+      <Project>{8174d4cb-c5fd-464e-b5e9-4dde36243505}</Project>
+      <Name>Myrtille.OASISOTPAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="myrtille.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

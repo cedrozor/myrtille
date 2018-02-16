@@ -51,8 +51,8 @@ a img
     position: absolute;
     top: 50%;
     left: 50%;
+    margin-left: -225px;
     margin-top: -150px;
-    margin-left: -150px;
     width: 450px;
     height: 300px;
 }
@@ -72,32 +72,60 @@ a img
     display: inline-block;
 }
 
-label
+.inputDiv label
 {
     float: left;
     width: 200px;
     margin-top: 2px;
 }
-
+#mfaProvider{
+    float: left;
+    width: 200px;
+    margin-top: 2px;
+}
+#mfaProvider:hover{
+    text-decoration: underline;
+}
+ 
+#loginError{
+    display: inline-block;
+    width: 100%;
+    color: red;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom:5px;
+}
+ 
+/*#login,*/
+#deleteHost,
+#saveHost,
+#closePopupButton
+{
+    float: left;
+    margin-top:10px;
+    width: 100px;
+}
+ 
 #server,
 #domain,
-#user,
+#username,
 #password,
+#mfaPassword,
 #program
 {
     width: 200px;
     margin-top: 2px;
 }
-
+ 
 /* program to run is better defined into an URL, but can be enabled into the login screen */
-#programLabel,
-#program
+ 
+#programDiv
 {
     visibility: hidden;
     display: none;
 }
 
-#connect
+#login
 {
     width: 204px;
     margin-top: 2px;
@@ -119,6 +147,8 @@ label
 {
     overflow: auto;
     display: inline-block;
+    background-color: #34495e;
+    width: 100%;
 }
 
 /* server info */
