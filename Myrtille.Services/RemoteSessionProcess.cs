@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Windows.Forms;
 using Myrtille.Services.Contracts;
+using Myrtille.Common;
 
 namespace Myrtille.Services
 {
@@ -40,7 +41,8 @@ namespace Myrtille.Services
         public void StartProcess(
             int remoteSessionId,
             int clientWidth,
-            int clientHeight)
+            int clientHeight
+            ,SecurityProtocolEnum protocol)
         {
             try
             {
@@ -114,7 +116,9 @@ namespace Myrtille.Services
                     " -async-channels" +                                                                            // async channels
                     " -async-transport" +                                                                           // async transport
                     " +clipboard" +                                                                                 // clipboard support
-                    " /audio-mode:2";                                                                               // audio mode (not supported for now, 2: do not play)
+                    " /audio-mode:2" +
+                    (protocol != SecurityProtocolEnum.auto ? " /sec:" + protocol.ToString() : "");                  //override security protocol used to connect to remote host                                                                               // audio mode (not supported for now, 2: do not play)
+                    
 
                 if (!Environment.UserInteractive)
                 {
@@ -253,6 +257,8 @@ namespace Myrtille.Services
             GC.SuppressFinalize(this);
             StopProcess();
         }
+
+
 
         #endregion
     }

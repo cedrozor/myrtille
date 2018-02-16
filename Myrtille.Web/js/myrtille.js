@@ -110,54 +110,54 @@ function startMyrtille(remoteSessionActive, statEnabled, debugEnabled, compatibi
         // prevent session fixation attack by generating a new session ID upon login
         // also, using http get method to prevent the browser asking for http post data confirmation if the page is reloaded
         // https://www.owasp.org/index.php/Session_Fixation
-        var redirectUrl = '';
+        //var redirectUrl = '';
 
-        if (window.location.href.indexOf('?') == -1)
-        {
-            //alert('no querystring detected');
-            // retrieve the http session id from url; in cookieless mode (default), it has the format "(S(sessionId))"
-            // reload the page without it, so that a new session is generated while the current one is abandonned
-            var startIdx = httpServerUrl.indexOf('(S(');
-            if (startIdx != -1)
-            {
-                var endIdx = httpServerUrl.indexOf('))');
-                var httpSessionId = httpServerUrl.substr(startIdx + 3, endIdx - startIdx - 3);
-                //alert('http session id: ' + httpSessionId);
-                redirectUrl = httpServerUrl.replace('/(S(' + httpSessionId + '))', '') + '?oldSID=' + httpSessionId;
-            }
-            // http session id missing from url
-            // the http session may use a cookie (CAUTION! in this case, multi tabs/sessions support is disabled)
-            // simple redirect with an empty querystring
-            else
-            {
-                //alert('no http session id into url');
-                redirectUrl = httpServerUrl + '?';
-            }
-        }
-        else
-        {
-            //alert('querystring detected');
-            // the http session used on login was abandonned; remove it from url
-            if (window.location.href.indexOf('?oldSID=') != -1)
-            {
-                //alert('clearing old session id from url');
-                redirectUrl = window.location.href.substr(0, window.location.href.indexOf('?oldSID=')) + '?';
-            }
-            // auto-connect / start program from url
-            // there is no need for any session fixation protection in this case because the user credentials are already into the url (with password either plain text or hashed)
-            else if (window.location.href.indexOf('&connect=') != -1)
-            {
-                // redirect with an empty querystring
-                redirectUrl = httpServerUrl + '?';
-            }
-        }
+        //if (window.location.href.indexOf('?') == -1)
+        //{
+        //    //alert('no querystring detected');
+        //    // retrieve the http session id from url; in cookieless mode (default), it has the format "(S(sessionId))"
+        //    // reload the page without it, so that a new session is generated while the current one is abandonned
+        //    var startIdx = httpServerUrl.indexOf('(S(');
+        //    if (startIdx != -1)
+        //    {
+        //        var endIdx = httpServerUrl.indexOf('))');
+        //        var httpSessionId = httpServerUrl.substr(startIdx + 3, endIdx - startIdx - 3);
+        //        //alert('http session id: ' + httpSessionId);
+        //        redirectUrl = httpServerUrl.replace('/(S(' + httpSessionId + '))', '') + '?oldSID=' + httpSessionId;
+        //    }
+        //    // http session id missing from url
+        //    // the http session may use a cookie (CAUTION! in this case, multi tabs/sessions support is disabled)
+        //    // simple redirect with an empty querystring
+        //    else
+        //    {
+        //        //alert('no http session id into url');
+        //        redirectUrl = httpServerUrl + '?';
+        //    }
+        //}
+        //else
+        //{
+        //    //alert('querystring detected');
+        //    // the http session used on login was abandonned; remove it from url
+        //    if (window.location.href.indexOf('?oldSID=') != -1)
+        //    {
+        //        //alert('clearing old session id from url');
+        //        redirectUrl = window.location.href.substr(0, window.location.href.indexOf('?oldSID=')) + '?';
+        //    }
+        //    // auto-connect / start program from url
+        //    // there is no need for any session fixation protection in this case because the user credentials are already into the url (with password either plain text or hashed)
+        //    else if (window.location.href.indexOf('&connect=') != -1)
+        //    {
+        //        // redirect with an empty querystring
+        //        redirectUrl = httpServerUrl + '?';
+        //    }
+        //}
 
-        if (redirectUrl != '')
-        {
-            //alert('reloading page with url: ' + redirectUrl);
-            window.location.href = redirectUrl;
-            return;
-        }
+        //if (redirectUrl != '')
+        //{
+        //    //alert('reloading page with url: ' + redirectUrl);
+        //    window.location.href = redirectUrl;
+        //    return;
+        //}
 
         myrtille = new Myrtille(httpServerUrl, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight);
         myrtille.init();
