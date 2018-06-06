@@ -46,7 +46,8 @@ namespace Myrtille.Services
             int clientWidth,
             int clientHeight,
             bool allowRemoteClipboard,
-            SecurityProtocolEnum securityProtocol)
+            SecurityProtocolEnum securityProtocol,
+            HostTypeEnum hostType)
         {
             Trace.TraceInformation("Connecting remote session {0}, server {1}, domain {2}, user {3}, program {4}", remoteSessionId, serverAddress, string.IsNullOrEmpty(userDomain) ? "(none)" : userDomain, userName, string.IsNullOrEmpty(startProgram) ? "(none)" : startProgram);
 
@@ -65,13 +66,25 @@ namespace Myrtille.Services
 
                 // see https://github.com/cedrozor/myrtille/blob/master/DOCUMENTATION.md#build for information and steps to build FreeRDP along with myrtille
 
+                // Select host client process to use based on the type of host connection
+                var hostProgram = "";
+                switch (hostType)
+                {
+                    case HostTypeEnum.RDP:
+                        hostProgram = "wfreerdp.exe";
+                        break;
+                    case HostTypeEnum.SSH:
+                        hostProgram = "Myrtille.SSH.exe";
+                        break;
+                }
+
                 if (Environment.UserInteractive)
                 {
-                    _process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace(@"Myrtille.Services\bin", @"Myrtille.RDP\FreeRDP"), "wfreerdp.exe");
+                    _process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace(@"Myrtille.Services\bin", @"Myrtille.RDP\FreeRDP"), hostProgram);
                 }
                 else
                 {
-                    _process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wfreerdp.exe");
+                    _process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, hostProgram);
                 }
 
                 // ensure the FreeRDP executable does exists

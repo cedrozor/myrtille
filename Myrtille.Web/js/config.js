@@ -27,7 +27,8 @@ function Config(
     compatibilityMode,                                  // old HTML4 browsers (no websocket, no canvas) or HTML5 otherwise
     scaleDisplay,                                       // scale the remote session display to the browser size (responsive design)
     displayWidth,                                       // remote session original (unscaled) display width
-    displayHeight)                                      // remote session original (unscaled) display height
+    displayHeight,                                      // remote session original (unscaled) display height
+    hostType)                                           // type of remote session host RDP or SSH
 {
     /*************************************************************************************************************************************************************************************************/
     /*** Enums                                                                                                                                                                                     ***/
@@ -193,5 +194,8 @@ function Config(
     this.getBufferSize = function() { return bufferSize; };
     
     // mouse
-    this.getMouseMoveSamplingRate = function() { return mouseMoveSamplingRate; };
+    this.getMouseMoveSamplingRate = function () { return mouseMoveSamplingRate; };
+
+    // host type
+    this.getHostType = function () { return hostType; }
 }

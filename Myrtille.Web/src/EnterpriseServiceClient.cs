@@ -150,5 +150,18 @@ namespace Myrtille.Web
                 throw;
             }
         }
+
+        public bool AddSessionHostCredentials(EnterpriseHostSessionCredentials credentials)
+        {
+            try
+            {
+                return Channel.AddSessionHostCredentials(credentials);
+            }
+            catch (Exception exc)
+            {
+                Trace.TraceError("Failed to create session credentials for user({0})", exc);
+                throw;
+            }
+        }
     }
 }

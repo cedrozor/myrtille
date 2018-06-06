@@ -37,13 +37,17 @@
         
         <link rel="icon" type="image/png" href="img/myrtille.png"/>
         <link rel="stylesheet" type="text/css" href="css/Default.css"/>
+        <link rel="stylesheet" type="text/css" href="css/xterm.css"/>
 
+        <script language="javascript" type="text/javascript" src="js/xterm/xterm.js"></script>
+        <script language="javascript" type="text/javascript" src="js/xterm/addons/fit/fit.js"></script>
         <script language="javascript" type="text/javascript" src="js/myrtille.js"></script>
         <script language="javascript" type="text/javascript" src="js/config.js"></script>
         <script language="javascript" type="text/javascript" src="js/dialog.js"></script>
         <script language="javascript" type="text/javascript" src="js/display.js"></script>
         <script language="javascript" type="text/javascript" src="js/display/canvas.js"></script>
         <script language="javascript" type="text/javascript" src="js/display/divs.js"></script>
+        <script language="javascript" type="text/javascript" src="js/display/terminaldivs.js"></script>
         <script language="javascript" type="text/javascript" src="js/network.js"></script>
         <script language="javascript" type="text/javascript" src="js/network/buffer.js"></script>
         <script language="javascript" type="text/javascript" src="js/network/longpolling.js"></script>
@@ -63,7 +67,8 @@
         <%=(RemoteSession != null && RemoteSession.CompatibilityMode).ToString(CultureInfo.InvariantCulture).ToLower()%>,
         <%=(RemoteSession != null && RemoteSession.ScaleDisplay).ToString(CultureInfo.InvariantCulture).ToLower()%>,
         <%=(RemoteSession != null ? RemoteSession.ClientWidth.ToString() : "null")%>,
-        <%=(RemoteSession != null ? RemoteSession.ClientHeight.ToString() : "null")%>);">
+        <%=(RemoteSession != null ? RemoteSession.ClientHeight.ToString() : "null")%>,
+        '<%=(RemoteSession != null ? RemoteSession.HostType.ToString() : "RDP")%>');">
 
         <!-- custom UI: all elements below, including the logo, are customizable into Default.css -->
 
@@ -84,7 +89,14 @@
 
                 <!-- standard mode -->
                 <div runat="server" id="domainServerDiv">
-                    
+                    <div class="inputDiv">
+                        <label id="hostTypeLabel" for="hostType">Host Type</label>
+                        <asp:DropDownList ID="hostType" runat="server">
+                            <asp:ListItem Text="RDP" Value="RDP" Selected="True"></asp:ListItem>
+                            <asp:ListItem Text="SSH" Value="SSH"></asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
+
                     <!-- server -->
                     <div class="inputDiv">
                         <label id="serverLabel" for="server">Server (:port)</label>
@@ -154,8 +166,11 @@
                 
                 <div id="hostsControl">
 
-                    <!-- new host -->
-                    <input type="button" runat="server" id="newHost" value="New Host" onclick="openPopup('editHostPopup', 'EditHost.aspx');" title="New Host"/>
+                    <!-- new rdp host -->
+                    <input type="button" runat="server" id="newHost" value="New RDP Host" onclick="openPopup('editHostPopup', 'EditHost.aspx?hostType=RDP');" title="New RDP Host"/>
+
+                    <!-- new ssh host -->
+                    <input type="button" runat="server" id="newSSHHost" value="New SSH Host" onclick="openPopup('editHostPopup', 'EditHost.aspx?hostType=SSH');" title="New SSH Host"/>
                 
                     <!-- logout -->
                     <input type="button" runat="server" id="logout" value="Logout" onserverclick="LogoutButtonClick" title="Logout"/>
@@ -167,7 +182,7 @@
                     <ItemTemplate>
                         <div class="hostDiv">
                             <a runat="server" id="hostLink" title="connect">
-                                <img src="img/RemoteDesktop.png" alt="host" width="128px" height="128px"/>
+                                <img src="<%# Eval("HostImage").ToString() %>"  alt="host" width="128px" height="128px"/>
                             </a>
                             <br/>
                             <span runat="server" id="hostName" title="edit"></span>
@@ -213,7 +228,7 @@
                 <!-- send a right-click on the next touch or left-click action. may be useful on touchpads or iOS devices -->
                 <input type="button" runat="server" id="mrc" value="Right-Click OFF" onclick="toggleRightClick(this);" title="if toggled on, send a Right-Click on the next touch or left-click action" disabled="disabled"/>
 
-                <!-- share session -->
+                <!--Share session-->
                 <input type="button" runat="server" id="share" value="Share" onclick="openPopup('shareSessionPopup', 'ShareSession.aspx');" title="share session" disabled="disabled"/>
 
                 <!-- disconnect -->

@@ -56,5 +56,8 @@ namespace Myrtille.Services.Contracts
 
         [OperationContract]
         bool ChangeUserPassword(string username, string oldPassword, string newPassword);
+
+        [OperationContract]
+        bool AddSessionHostCredentials(EnterpriseHostSessionCredentials credentials);
     }
 }

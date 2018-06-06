@@ -20,7 +20,7 @@
 /*** Main                                                                                                                                                                                          ***/
 /*****************************************************************************************************************************************************************************************************/
 
-function Myrtille(httpServerUrl, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight)
+function Myrtille(httpServerUrl, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight, hostType)
 {
     var config = null;
     this.getConfig = function() { return config; };
@@ -41,7 +41,7 @@ function Myrtille(httpServerUrl, statEnabled, debugEnabled, compatibilityMode, s
     {
         try
         {
-            config = new Config(httpServerUrl, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight);
+            config = new Config(httpServerUrl, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight, hostType);
             
             dialog = new Dialog(config);
             
@@ -77,7 +77,7 @@ this.getConfig = function() { return config; };
 
 var fullscreenPending = false;
 
-function startMyrtille(remoteSessionActive, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight)
+function startMyrtille(remoteSessionActive, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight, hostType)
 {
     try
     {
@@ -107,7 +107,7 @@ function startMyrtille(remoteSessionActive, statEnabled, debugEnabled, compatibi
         var httpServerUrl = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/' + pathname + '/';
         //alert('http server url: ' + httpServerUrl);
 
-        myrtille = new Myrtille(httpServerUrl, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight);
+        myrtille = new Myrtille(httpServerUrl, statEnabled, debugEnabled, compatibilityMode, scaleDisplay, displayWidth, displayHeight, hostType);
         myrtille.init();
 
         // code shortcuts

@@ -44,5 +44,7 @@ namespace Myrtille.Services.Contracts
         string CreateUserSession(string sessionID, long hostID, string username, string password);
 
         bool ChangeUserPassword(string username, string oldPassword, string newPassword, string domain);
+
+        bool AddSessionHostCredentials(EnterpriseHostSessionCredentials credentials);
     }
 }

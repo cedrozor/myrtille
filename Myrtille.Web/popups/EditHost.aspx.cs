@@ -29,6 +29,7 @@ namespace Myrtille.Web
         private EnterpriseServiceClient _enterpriseClient;
         private EnterpriseSession _enterpriseSession;
         private long? _hostId = null;
+        private string _hostType = null;
 
         /// <summary>
         /// page init
@@ -65,6 +66,15 @@ namespace Myrtille.Web
                         Response.Redirect("~/", true);
                     }
 
+                    if (Request["hostType"] != null)
+                    {
+                        _hostType = Request["hostType"];
+                    }
+                    else
+                    {
+                        _hostType = "RDP";
+                    }
+
                     // retrieve the host, if any (create if empty)
                     if (Request["hostId"] != null)
                     {
@@ -89,6 +99,8 @@ namespace Myrtille.Web
                                         hostAddress.Value = host.HostAddress;
                                         groupsAccess.Value = host.DirectoryGroups;
                                         securityProtocol.SelectedIndex = (int)host.Protocol;
+                                        _hostType = host.HostType.ToString();
+                                        promptCredentials.Checked = host.PromptForCredentials;
                                     }
                                 }
                                 catch (Exception exc)
@@ -105,6 +117,9 @@ namespace Myrtille.Web
                         createSessionUrl.Disabled = true;
                         deleteHost.Disabled = true;
                     }
+
+                    rdpSecurityInput.Visible = (_hostType == "RDP");
+                    startProgramInput.Visible = (_hostType == "RDP");
                 }
                 catch (ThreadAbortException)
                 {
@@ -131,27 +146,25 @@ namespace Myrtille.Web
 
             try
             {
-                if (!_hostId.HasValue)
+                var enterpriseHost = new EnterpriseHostEdit
                 {
-                    _enterpriseClient.AddHost(new EnterpriseHostEdit
-                    {
-                        HostID = 0,
-                        HostName = hostName.Value,
-                        HostAddress = hostAddress.Value,
-                        DirectoryGroups = groupsAccess.Value,
-                        Protocol = (SecurityProtocolEnum)securityProtocol.SelectedIndex
-                    }, _enterpriseSession.SessionID);
+                    HostID = _hostId ?? 0,
+                    HostName = hostName.Value,
+                    HostAddress = hostAddress.Value,
+                    DirectoryGroups = groupsAccess.Value,
+                    Protocol = (SecurityProtocolEnum)securityProtocol.SelectedIndex,
+                    HostType = _hostType,
+                    StartRemoteProgram = startProgram.Value,
+                    PromptForCredentials = promptCredentials.Checked
+                };
+
+                if(_hostId != null)
+                {
+                    _enterpriseClient.UpdateHost(enterpriseHost, _enterpriseSession.SessionID);
                 }
                 else
                 {
-                    _enterpriseClient.UpdateHost(new EnterpriseHostEdit
-                    {
-                        HostID = _hostId.Value,
-                        HostName = hostName.Value,
-                        HostAddress = hostAddress.Value,
-                        DirectoryGroups = groupsAccess.Value,
-                        Protocol = (SecurityProtocolEnum)securityProtocol.SelectedIndex
-                    }, _enterpriseSession.SessionID);
+                    _enterpriseClient.AddHost(enterpriseHost, _enterpriseSession.SessionID);
                 }
 
                 // refresh the hosts list

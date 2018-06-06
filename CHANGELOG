@@ -1,4 +1,9 @@
-﻿2018-05-24 Version 1.9.0 (stable)
+﻿2018-05-28 Verions 2.0.0 (beta)
+	SSH terminal support
+	Include prompt for user credentials in enterprise mode
+	fix login failure when passing domain in enterprise mode if IP is used instead of FQDN
+
+2018-05-24 Version 1.9.0 (stable)
 	resynced FreeRDP (version 2.0-RC2-dev3), now using the openssl 1.1.x architecture. Should fix any previously reported FQDN and NLA issues
 	added a pdf virtual printer; any document printed with the "Myrtille PDF" printer is downloaded to the browser and can be opened/saved/printed from there
 	pdf content is now downloaded into an hidden iframe, instead of a new tab, to prevent popup blockers to block it

@@ -216,6 +216,7 @@ namespace Myrtille.Web
                 toolbar.Style["display"] = "none";
                 hosts.Visible = true;
                 newHost.Visible = _enterpriseSession.IsAdmin;
+                newSSHHost.Visible = _enterpriseSession.IsAdmin;
                 hostsList.DataSource = _enterpriseClient.GetSessionHosts(_enterpriseSession.SessionID);
                 hostsList.DataBind();
             }
@@ -232,12 +233,14 @@ namespace Myrtille.Web
                 browser.Value = RemoteSession.CompatibilityMode ? "HTML5" : "HTML4";
                 browser.Disabled = false;
                 scale.Value = RemoteSession.ScaleDisplay ? "Unscale" : "Scale";
-                scale.Disabled = false;
+                scale.Disabled = RemoteSession.HostType == HostTypeEnum.RDP;
                 keyboard.Disabled = false;
-                clipboard.Disabled = !RemoteSession.AllowRemoteClipboard;
-                files.Disabled = RemoteSession.ServerAddress.ToLower() != "localhost" && RemoteSession.ServerAddress != "127.0.0.1" && RemoteSession.ServerAddress != "[::1]" && RemoteSession.ServerAddress != Request.Url.Host && string.IsNullOrEmpty(RemoteSession.UserDomain);
-                cad.Disabled = false;
-                mrc.Disabled = false;
+                // disable clipboard for SSH or if set to disable in config
+                clipboard.Disabled = RemoteSession.HostType == HostTypeEnum.SSH || !RemoteSession.AllowRemoteClipboard;
+                // disable files for SSH or if set to disable in config
+                files.Disabled = RemoteSession.HostType == HostTypeEnum.SSH || (RemoteSession.ServerAddress.ToLower() != "localhost" && RemoteSession.ServerAddress != "127.0.0.1" && RemoteSession.ServerAddress != "[::1]" && RemoteSession.ServerAddress != Request.Url.Host && string.IsNullOrEmpty(RemoteSession.UserDomain));
+                cad.Disabled = RemoteSession.HostType == HostTypeEnum.SSH; // disable ctrl + alt + del for SSH
+                mrc.Disabled = RemoteSession.HostType == HostTypeEnum.SSH; // disable mouse right click for SSH
                 share.Disabled = !RemoteSession.AllowSessionSharing || !Session.SessionID.Equals(RemoteSession.OwnerSessionID);
                 disconnect.Disabled = false;
             }
@@ -374,6 +377,8 @@ namespace Myrtille.Web
             var loginUser = user.Value;
             var loginPassword = string.IsNullOrEmpty(passwordHash.Value) ? password.Value : RDPCryptoHelper.DecryptPassword(passwordHash.Value);
             var loginProtocol = SecurityProtocolEnum.auto;
+            var startProgram = program.Value;
+            var loginHostType = hostType.SelectedValue;
 
             // connect an host from the hosts list or from a one time session url
             if (_enterpriseSession != null && Request["SD"] != null)
@@ -400,6 +405,8 @@ namespace Myrtille.Web
                     loginUser = connection.Username;
                     loginPassword = RDPCryptoHelper.DecryptPassword(connection.Password);
                     loginProtocol = connection.Protocol;
+                    loginHostType = connection.HostType;
+                    startProgram = connection.StartRemoteProgram;
                 }
                 catch (Exception exc)
                 {
@@ -453,11 +460,12 @@ namespace Myrtille.Web
                     UserPassword = loginPassword,
                     ClientWidth = int.Parse(width.Value),
                     ClientHeight = int.Parse(height.Value),
-                    StartProgram = program.Value,
+                    StartProgram = startProgram,
                     AllowRemoteClipboard = allowRemoteClipboard,
                     SecurityProtocol = loginProtocol,
                     AllowSessionSharing = allowSessionSharing,
-                    OwnerSessionID = Session.SessionID
+                    OwnerSessionID = Session.SessionID,
+                    HostType = (HostTypeEnum)Enum.Parse(typeof(HostTypeEnum), loginHostType)
                 };
 
                 // bind the remote session to the current http session
@@ -499,7 +507,8 @@ namespace Myrtille.Web
                         RemoteSession.ClientWidth,
                         RemoteSession.ClientHeight,
                         RemoteSession.AllowRemoteClipboard,
-                        RemoteSession.SecurityProtocol);
+                        RemoteSession.SecurityProtocol,
+                        RemoteSession.HostType);
                 }
                 catch (Exception exc)
                 {
@@ -661,9 +670,19 @@ namespace Myrtille.Web
             {
                 var host = e.Item.DataItem as EnterpriseHost;
 
-                var hostLink = e.Item.FindControl("hostLink") as HtmlAnchor;
-                hostLink.HRef = string.Format("?SD={0}&__EVENTTARGET=&__EVENTARGUMENT=&connect=Connect%21", host.HostID);
-                hostLink.Attributes["class"] = "hostLink";
+                if (host.PromptForCredentials)
+                {
+                    var hostLink = e.Item.FindControl("hostLink") as HtmlAnchor;
+                    hostLink.HRef = null;
+                    hostLink.Attributes["onclick"] = string.Format("openPopup('editCredentialPopup', 'CredentialsPrompt.aspx?hostId={0}');", host.HostID);
+                    hostLink.Attributes["class"] = "hostLink";
+                }
+                else
+                {
+                    var hostLink = e.Item.FindControl("hostLink") as HtmlAnchor;
+                    hostLink.HRef = string.Format("?SD={0}&__EVENTTARGET=&__EVENTARGUMENT=&connect=Connect%21", host.HostID);
+                    hostLink.Attributes["class"] = "hostLink";
+                }
 
                 var hostName = e.Item.FindControl("hostName") as HtmlGenericControl;
                 hostName.InnerText = (_enterpriseSession.IsAdmin ? "Edit " : "") + host.HostName;

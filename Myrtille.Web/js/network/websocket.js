@@ -217,6 +217,10 @@ function Websocket(config, dialog, display, network)
                 {
                     window.location.href = window.location.href;
                 }
+                //receive terminal data, send to xtermjs
+                else if (message.length >= 5 && message.substr(0, 5) == 'term|') {
+                    display.getDivs().writeTerminal(message.substr(5, message.length - 5));
+                }
                 // remote clipboard
                 else if (message.length >= 10 && message.substr(0, 10) == 'clipboard|')
                 {

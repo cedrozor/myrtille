@@ -18,8 +18,7 @@
 
 /* Windows style UI */
 
-body
-{
+body {
     padding: 0px;
     margin: 0px;
     background-color: #34495e;
@@ -46,24 +45,27 @@ a img
 /*** LOGIN                                                                                                                                                                                         ***/
 /*****************************************************************************************************************************************************************************************************/
 
-#login
-{
+#login {
     position: absolute;
     top: 50%;
     left: 50%;
     margin-top: -150px;
-    margin-left: -150px;
+    margin-left: -225px;
     width: 450px;
     height: 300px;
+    padding: 10px 10px 30px 10px;
 }
 
 /* customizable logo (replace the background image by yours) */
 /* remote desktop logo, credits BlackVariant (Patrick) http://blackvariant.deviantart.com */
-#logo
-{
+#logo {
     background-image: url("../img/RemoteDesktop.png");
-    width: 128px;
+    background-repeat: no-repeat;
+    background-position: center;
     height: 128px;
+    width: auto;
+    max-width: 400px;
+    max-height: 128px;
     margin-bottom: 20px;
 }
 
@@ -98,6 +100,11 @@ label,
 #program
 {
     width: 200px;
+    margin-top: 2px;
+}
+
+#hostType {
+    width: 204px;
     margin-top: 2px;
 }
 
@@ -161,8 +168,7 @@ label,
 }
 
 .hostLink,
-.hostName
-{
+.hostName {
     cursor: pointer;
 }
 
@@ -310,7 +316,7 @@ label,
 #editHostPopupInner
 {
     width: 400px;
-    height: 270px;
+    height: 340px;
 }
 
 #editHostPopupInner
@@ -330,13 +336,32 @@ label,
     padding-left: 10px;
 }
 
+/* credential popup*/
+#editCredentialPopup,
+#editCredentialPopupInner {
+    width: 400px;
+    height: 200px;
+}
+#editCredentialPopupInner {
+    color: #000;
+    background: #fff;
+}
+
+#editCredentialsPopupTitle {
+    padding-top: 20px;
+    padding-left: 10px;
+}
+
+.editCredentialPopupInput {
+    padding-left: 10px;
+}
+
 /* host session popup */
 
 #editHostSessionPopup,
-#editHostSessionPopupInner
-{
+#editHostSessionPopupInner {
     width: 400px;
-    height: 450px;
+    height: 350px;
 }
 
 #editHostSessionPopupInner

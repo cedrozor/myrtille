@@ -67,6 +67,15 @@ namespace Myrtille.Web {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl domainServerDiv;
         
         /// <summary>
+        /// hostType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList hostType;
+        
+        /// <summary>
         /// server control.
         /// </summary>
         /// <remarks>
@@ -182,6 +191,15 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton newHost;
+        
+        /// <summary>
+        /// newSSHHost control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputButton newSSHHost;
         
         /// <summary>
         /// logout control.

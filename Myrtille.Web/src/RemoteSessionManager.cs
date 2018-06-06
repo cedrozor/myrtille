@@ -28,6 +28,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.SessionState;
 using Myrtille.Helpers;
+using Myrtille.Services.Contracts;
 
 namespace Myrtille.Web
 {
@@ -142,6 +143,30 @@ namespace Myrtille.Web
                             StopWaitForImageEvent();
                         }
                     }
+                    // SSH Terminal data
+                    else if (message.StartsWith("term|"))
+                    {
+                        if (RemoteSession.State == RemoteSessionState.Connecting)
+                        {
+                            // we have recieved terminal input therefore remote session is now connected
+                            RemoteSession.State = RemoteSessionState.Connected;
+                        }
+
+                        if (WebSockets.Count > 0)
+                        {
+                            Trace.TraceInformation("Sending terminal content {0} on websocket(s), remote session {1}", message, RemoteSession.Id);
+                            foreach (var webSocket in WebSockets)
+                            {
+                                webSocket.Send(message);
+                            }
+                        }
+                        else
+                        {
+                            TerminalText = message.Remove(0, 5);
+                            TerminalAvailable = true;
+                            StopWaitForImageEvent();
+                        }
+                    }
                     // print job
                     else if (message.StartsWith("printjob|"))
                     {
@@ -210,7 +235,6 @@ namespace Myrtille.Web
 
                 // browser, keyboard, mouse, etc.
                 case RemoteSessionCommand.SendBrowserResize:
-                case RemoteSessionCommand.SendKeyUnicode:
                 case RemoteSessionCommand.SendMouseMove:
                 case RemoteSessionCommand.SendMouseLeftButton:
                 case RemoteSessionCommand.SendMouseMiddleButton:
@@ -219,17 +243,42 @@ namespace Myrtille.Web
                 case RemoteSessionCommand.SendMouseWheelDown:
                     // if needed
                     break;
-
+                case RemoteSessionCommand.SendKeyUnicode:
                 case RemoteSessionCommand.SendKeyScancode:
                     var keyCodeAndState = args.Split(new[] { "-" }, StringSplitOptions.None);
 
                     var jsKeyCode = int.Parse(keyCodeAndState[0]);
                     var keyState = keyCodeAndState[1];
+                    int? remoteKeyCode = null;
 
-                    var rdpScanCode = JsKeyCodeToRdpScanCodeMapping.MapTable[jsKeyCode];
-                    if (rdpScanCode != null && (int)rdpScanCode != 0)
+                    if (command == RemoteSessionCommand.SendKeyUnicode)
                     {
-                        commandWithArgs = string.Concat((string)RemoteSessionCommandMapping.ToPrefix[command], (int)rdpScanCode + "-" + keyState);
+                        switch (RemoteSession.HostType)
+                        {
+                            case HostTypeEnum.RDP:
+                                break;
+                            case HostTypeEnum.SSH:
+                                remoteKeyCode = (int?)JSKeyCodeToSSHBashShellUniCodeMapping.MapTable[jsKeyCode];
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (RemoteSession.HostType)
+                        {
+                            case HostTypeEnum.RDP:
+                                remoteKeyCode = (int?)JsKeyCodeToRdpScanCodeMapping.MapTable[jsKeyCode];
+                                break;
+                            case HostTypeEnum.SSH:
+                                remoteKeyCode = (int?)JSKeyCodeToSSHBashShellScanCodeMapping.MapTable[jsKeyCode];
+                                break;
+                        }
+                    }
+
+
+                    if (remoteKeyCode != null && (int)remoteKeyCode != 0)
+                    {
+                        commandWithArgs = string.Concat((string)RemoteSessionCommandMapping.ToPrefix[command], (int)remoteKeyCode + "-" + keyState);
                     }
                     break;
 
@@ -574,6 +623,23 @@ namespace Myrtille.Web
                 lock (_messageEventLock)
                 {
                     _clipboardAvailable = value;
+                }
+            }
+        }
+
+        public string TerminalText { get; private set; }
+        private bool _terminalAvailable;
+        public bool TerminalAvailable
+        {
+            get
+            {
+                return _terminalAvailable;
+            }
+            set
+            {
+                lock (_messageEventLock)
+                {
+                    _terminalAvailable = value;
                 }
             }
         }

@@ -24,5 +24,20 @@ namespace Myrtille.Services.Contracts
         public string HostName { get; set; }
         public string HostAddress { get; set; }
         public SecurityProtocolEnum Protocol { get; set; }
+        public string HostType { get; set; }
+        public string StartRemoteProgram { get; set; }
+        public string HostImage
+        {
+            get
+            {
+                if(HostType == "SSH")
+                {
+                    return "./img/RemoteSSH.png";
+                }
+
+                return "./img/RemoteDesktop.png";
+            }
+        }
+        public bool PromptForCredentials { get; set; }
     }
 }

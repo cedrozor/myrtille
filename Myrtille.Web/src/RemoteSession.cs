@@ -46,6 +46,7 @@ namespace Myrtille.Web
         public int ExitCode;
         public bool AllowSessionSharing;                // set in myrtille web config
         public string OwnerSessionID;                   // the http session on which the remote session is bound to
+        public HostTypeEnum HostType;                   // set remote host type, RDP or SSH
 
         public RemoteSession()
         {

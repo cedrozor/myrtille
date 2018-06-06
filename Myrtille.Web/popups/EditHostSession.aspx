@@ -53,6 +53,7 @@
                     <textarea runat="server" id="sessionUrl" readonly="readonly" rows="4" cols="50"></textarea>
                     <span><h5>Copy the URL and use how required; it can only be used once</h5></span>
                 </div>
+
                 <div class="editHostSessionPopupInput">
                     <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
                 </div>

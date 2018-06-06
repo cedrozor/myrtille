@@ -26,5 +26,8 @@ namespace Myrtille.Services.Contracts
         public string HostAddress { get; set; }
         public string DirectoryGroups { get; set; }
         public SecurityProtocolEnum Protocol { get; set; }
+        public string HostType { get; set; }
+        public string StartRemoteProgram { get; set; }
+        public bool PromptForCredentials { get; set; }
     }
 }

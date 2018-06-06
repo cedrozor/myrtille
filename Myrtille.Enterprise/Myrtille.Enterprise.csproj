@@ -68,6 +68,7 @@
     <Compile Include="Data\MyrtilleEnterpriseDBContext.cs" />
     <Compile Include="Data\Session.cs" />
     <Compile Include="Data\SessionGroup.cs" />
+    <Compile Include="Data\SessionHostCredential.cs" />
     <Compile Include="Helpers\DirectoryExceptionHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

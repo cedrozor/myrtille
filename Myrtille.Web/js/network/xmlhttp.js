@@ -216,6 +216,11 @@ function XmlHttp(config, dialog, display, network)
                 {
                     window.location.href = window.location.href;
                 }
+                //receive terminal data, send to xtermjs
+                else if (xhrResponseText.length > 5 && xhrResponseText.substr(0, 5) == "term|")
+                {
+                    display.getDivs().writeTerminal(xhrResponseText.substr(5, xhrResponseText.length - 5));
+                }
                 // remote clipboard
                 else if (xhrResponseText.length >= 10 && xhrResponseText.substr(0, 10) == 'clipboard|')
                 {

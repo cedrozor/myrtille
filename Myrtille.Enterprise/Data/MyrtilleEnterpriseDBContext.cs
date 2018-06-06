@@ -34,5 +34,6 @@ namespace Myrtille.Enterprise
         public virtual DbSet<SessionGroup> SessionGroup { get; set; }
         public virtual DbSet<Host> Host { get; set; }
         public virtual DbSet<HostAccessGroups> HostAccessGroups { get; set; }
+        public virtual DbSet<SessionHostCredential> SessionHostCredentials { get; set; }
     }
 }

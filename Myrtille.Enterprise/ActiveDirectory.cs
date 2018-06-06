@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
     Myrtille: A native HTML4/5 Remote Desktop Protocol client.
 
     Copyright(c) 2014-2018 Cedric Coste
@@ -34,6 +35,7 @@ namespace Myrtille.Enterprise
 {
     public class ActiveDirectory : IEnterpriseAdapter
     {
+
         public void Initialize()
         {
             using (var db = new MyrtilleEnterpriseDBContext())
@@ -219,7 +221,10 @@ namespace Myrtille.Enterprise
                 {
                     HostName = editHost.HostName,
                     HostAddress = editHost.HostAddress,
-                    Protocol = editHost.Protocol
+                    Protocol = editHost.Protocol,
+                    HostType = editHost.HostType,
+                    StartRemoteProgram = editHost.StartRemoteProgram,
+                    PromptForCredentials = editHost.PromptForCredentials
                 };
 
                 db.Host.Add(host);
@@ -272,9 +277,11 @@ namespace Myrtille.Enterprise
                     HostID = host.ID,
                     HostName = host.HostName,
                     HostAddress = host.HostAddress,
-                    DirectoryGroups = directoryGroups.ToString()
-                    ,
-                    Protocol = host.Protocol
+                    DirectoryGroups = directoryGroups.ToString(),
+                    Protocol = host.Protocol,
+                    HostType = (host.HostType ?? "RDP"),
+                    StartRemoteProgram = host.StartRemoteProgram,
+                    PromptForCredentials = host.PromptForCredentials
                 };
             }
         }
@@ -296,6 +303,8 @@ namespace Myrtille.Enterprise
                 host.HostName = editHost.HostName;
                 host.HostAddress = editHost.HostAddress;
                 host.Protocol = editHost.Protocol;
+                host.StartRemoteProgram = editHost.StartRemoteProgram;
+                host.PromptForCredentials = editHost.PromptForCredentials;
 
                 var currentGroups = db.HostAccessGroups
                                         .Where(m => m.HostID == editHost.HostID)
@@ -410,7 +419,10 @@ namespace Myrtille.Enterprise
                             {
                                 HostID = h.ID,
                                 HostName = h.HostName,
-                                HostAddress = h.HostAddress
+                                HostAddress = h.HostAddress,
+                                HostType = (h.HostType ?? "RDP"),
+                                StartRemoteProgram = h.StartRemoteProgram,
+                                PromptForCredentials = h.PromptForCredentials
                             })
                         .Distinct()
                         .OrderBy(m => m.HostName)
@@ -428,7 +440,10 @@ namespace Myrtille.Enterprise
                             {
                                 HostID = h.ID,
                                 HostName = h.HostName,
-                                HostAddress = h.HostAddress
+                                HostAddress = h.HostAddress,
+                                HostType = (h.HostType ?? "RDP"),
+                                StartRemoteProgram = h.StartRemoteProgram,
+                                PromptForCredentials = h.PromptForCredentials
                             })
                             .Distinct()
                             .OrderBy(m => m.HostName)
@@ -476,11 +491,15 @@ namespace Myrtille.Enterprise
                                       ,
                                       HostAddress = h.HostAddress
                                       ,
+                                      HostType = (h.HostType ?? "RDP")
+                                      ,
                                       Username = s.Username
                                       ,
                                       Password = s.Password
                                       ,
                                       Protocol = h.Protocol
+                                      ,
+                                      StartRemoteProgram = h.StartRemoteProgram
                                   })
                                 .FirstOrDefault();
                     }
@@ -490,6 +509,8 @@ namespace Myrtille.Enterprise
                                   join sg in db.SessionGroup on s.ID equals sg.SessionID
                                   join hag in db.HostAccessGroups on sg.DirectoryGroup equals hag.AccessGroup
                                   join h in db.Host on hag.HostID equals h.ID
+                                  join sc in db.SessionHostCredentials on new { x1 = s.ID, x2 = h.ID } equals new {x1 = sc.SessionID, x2 = sc.HostID } into scl
+                                  from sc in scl.DefaultIfEmpty()
                                   where s.SessionID == sessionID
                                      && h.ID == hostID
                                      && s.Expire > DateTime.Now
@@ -501,11 +522,15 @@ namespace Myrtille.Enterprise
                                       ,
                                       HostAddress = h.HostAddress
                                       ,
-                                      Username = s.Username
+                                      HostType = (h.HostType ?? "RDP")
                                       ,
-                                      Password = s.Password
+                                      Username = (h.PromptForCredentials ? sc.Username : s.Username)
+                                      ,
+                                      Password = (h.PromptForCredentials ? sc.Password : s.Password)
                                       ,
                                       Protocol = h.Protocol
+                                      ,
+                                      StartRemoteProgram = h.StartRemoteProgram
                                   })
                                 .FirstOrDefault();
                     }
@@ -587,6 +612,46 @@ namespace Myrtille.Enterprise
             }
         }
 
+        /// <summary>
+        /// Add override credentials for specific session host
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <returns></returns>
+        public bool AddSessionHostCredentials(EnterpriseHostSessionCredentials credentials)
+        {
+            using (var db = new MyrtilleEnterpriseDBContext())
+            {
+                var session = db.Session.FirstOrDefault(m => m.SessionID == credentials.SessionID);
+
+                if (session == null) return false;
+
+                if (!db.Host.Any(m => m.ID == credentials.HostID)) return false;
+
+                var sessionHost = db.SessionHostCredentials.FirstOrDefault(m => m.SessionID == session.ID
+                                            && m.HostID == m.HostID);
+
+                if(sessionHost != null)
+                {
+                    db.SessionHostCredentials.Remove(sessionHost);
+                }
+
+                sessionHost = new SessionHostCredential
+                {
+                    SessionID = session.ID,
+                    HostID = credentials.HostID,
+                    Username = credentials.Username,
+                    Password = AES_Encrypt(RDPCryptoHelper.EncryptPassword(credentials.Password), credentials.SessionKey),
+                };
+
+                
+                db.SessionHostCredentials.Add(sessionHost);
+                db.SaveChanges();
+
+                return true;
+            }
+        }
+
+
         #region aes encryption
 
         private static string AES_Encrypt(string stringToBeEncrypted, string passwordString)
@@ -657,6 +722,8 @@ namespace Myrtille.Enterprise
 
             return decryptedString;
         }
+
+
 
         #endregion
     }

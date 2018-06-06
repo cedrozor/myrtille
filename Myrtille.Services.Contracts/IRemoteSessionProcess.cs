@@ -36,7 +36,8 @@ namespace Myrtille.Services.Contracts
             int clientWidth,
             int clientHeight,
             bool allowRemoteClipboard,
-            SecurityProtocolEnum securityProtocol);
+            SecurityProtocolEnum securityProtocol,
+            HostTypeEnum HostType);
 
         /// <summary>
         /// stop the rdp client process

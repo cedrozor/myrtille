@@ -84,6 +84,13 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="popups\CredentialsPrompt.aspx.cs">
+      <DependentUpon>CredentialsPrompt.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="popups\CredentialsPrompt.aspx.designer.cs">
+      <DependentUpon>CredentialsPrompt.aspx</DependentUpon>
+    </Compile>
     <Compile Include="popups\ShareSession.aspx.cs">
       <DependentUpon>ShareSession.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -144,11 +151,12 @@
       <DependentUpon>SocketHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="src\EnterpriseServiceClient.cs" />
+    <Compile Include="src\JSKeyCodeToSSHBashShellUniCodeMapping.cs" />
+    <Compile Include="src\JSKeyCodeToSSHBashShellScanCodeMapping.cs" />
     <Compile Include="src\PrinterServiceClient.cs" />
     <Compile Include="src\FileStorageClient.cs" />
     <Compile Include="src\MFAAuthenticationClient.cs" />
     <Compile Include="src\RemoteSession.cs" />
-    <Compile Include="src\RemoteSessionCommand.cs" />
     <Compile Include="src\RemoteSessionImage.cs" />
     <Compile Include="src\RemoteSessionPipes.cs" />
     <Compile Include="src\RemoteSessionProcessClient.cs" />
@@ -200,13 +208,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\xterm.css" />
     <Content Include="img\bandwidthTest.png" />
     <Content Include="img\myrtille.png" />
     <Content Include="img\RemoteDesktop.png" />
+    <Content Include="img\RemoteSSH.png" />
     <Content Include="img\test.webp" />
     <Content Include="js\config.js" />
     <Content Include="js\display\canvas.js" />
     <Content Include="js\display\divs.js" />
+    <Content Include="js\display\terminaldivs.js" />
     <Content Include="js\network\websocket.js" />
     <Content Include="js\user.js" />
     <Content Include="js\network.js" />
@@ -215,7 +226,10 @@
     <Content Include="js\network\longpolling.js" />
     <Content Include="js\network\xmlhttp.js" />
     <Content Include="js\user\touchscreen.js" />
+    <Content Include="js\xterm\addons\fit\fit.js" />
+    <Content Include="js\xterm\xterm.js" />
     <Content Include="myrtille.ico" />
+    <Content Include="popups\CredentialsPrompt.aspx" />
     <Content Include="popups\ShareSession.aspx" />
     <Content Include="popups\EditHostSession.aspx" />
     <Content Include="popups\EditHost.aspx" />

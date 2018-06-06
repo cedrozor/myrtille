@@ -1,5 +1,5 @@
 ﻿# Myrtille
-Myrtille provides a simple and fast access to remote desktops and applications through a web browser, without any plugin, extension or configuration.
+Myrtille provides a simple and fast access to remote desktops, SSH and remote applications through a web browser, without any plugin, extension or configuration.
 
 Technically, Myrtille is an HTTP(S) to RDP gateway.
 
@@ -14,6 +14,7 @@ More information in the DOCUMENTATION.md file.
 
 ## Features
 - HTTP(S) to RDP gateway
+- HTTP(S) to SSH gateway
 - Multifactor Authentication
 - Active Directory integration
 - Start remote application from URL
@@ -84,6 +85,8 @@ Myrtille uses the following licensed software:
 - Redirection Port Monitor: RedMon 1.9 (http://pages.cs.wisc.edu/~ghost/redmon/index.htm), licensed under GPL v3 license.
 - Postscript Printer Drivers: Microsoft Postscript Printer Driver V3 (https://docs.microsoft.com/en-us/windows-hardware/drivers/print/microsoft-postscript-printer-driver), copyright (c) Microsoft Corporation. All rights reserved.
 - Postscript and PDF interpreter/renderer: Ghostscript 9.23 (https://www.ghostscript.com/download/gsdnld.html), licensed under AGPL v3 license.
+- SSH: SSH.NET 2016.1.0 (https://github.com/sshnet/SSH.NET/), licensed under MIT License (MIT)
+- HTML Terminal Emulator: xtermjs, (https://xtermjs.org/)
 
 See DISCLAIMERS.md file.
 
@@ -106,7 +109,7 @@ Cedric Coste (cedrozor@gmail.com).
 - Catalin Trifanescu (AppliKr developer: application server. Steemind cofounder)
 - Fabien Janvier (AppliKr developer: website css, clipping algorithm, websocket server)
 - UltraSam (AppliKr developer: rdp client, http gateway)
-- Paul Oliver (Olive Innovations Ltd: MFA, enterprise mode)
+- Paul Oliver (Olive Innovations Ltd: MFA, enterprise mode, SSH terminal)
 
 ## Links
 - Website:	http://cedrozor.github.io/myrtille

@@ -34,6 +34,7 @@ function Display(config, dialog)
 
     // divs (HTML4)
     var divs = null;
+    this.getDivs = function () { return divs; };
 
     this.init = function()
     {
@@ -48,89 +49,99 @@ function Display(config, dialog)
                 return;
             }
 
-            /* display mode
-
-            DIV
-            HTML4 compatibility mode; images are loaded as divs background images
-
-            CANVAS
-            HTML5 mode; fallback to divs if not supported
-
-            SVG
-            not implemented but could be an option (see http://stackoverflow.com/questions/5882716/html5-canvas-vs-svg-vs-div)
-
-            AUTO (default)
-            use canvas if possible; divs otherwise
-
-            */
-
-            switch (config.getDisplayMode())
+            if (config.getHostType() == 'RDP')
             {
-                case config.getDisplayModeEnum().DIV:
-                    break;
+                /* display mode
 
-                case config.getDisplayModeEnum().CANVAS:
-                    if (config.getCompatibilityMode())
-                    {
-                        config.setDisplayMode(config.getDisplayModeEnum().DIV);
-                    }
-                    break;
+                DIV
+                HTML4 compatibility mode; images are loaded as divs background images
+
+                CANVAS
+                HTML5 mode; fallback to divs if not supported
+
+                SVG
+                not implemented but could be an option (see http://stackoverflow.com/questions/5882716/html5-canvas-vs-svg-vs-div)
+
+                AUTO (default)
+                use canvas if possible; divs otherwise
+
+                */
+
+                switch (config.getDisplayMode())
+                {
+                    case config.getDisplayModeEnum().DIV:
+                        break;
+
+                    case config.getDisplayModeEnum().CANVAS:
+                        if (config.getCompatibilityMode())
+                        {
+                            config.setDisplayMode(config.getDisplayModeEnum().DIV);
+                        }
+                        break;
                    
-                default:
-                    config.setDisplayMode(config.getCompatibilityMode() ? config.getDisplayModeEnum().DIV : config.getDisplayModeEnum().CANVAS);
-            }
+                    default:
+                        config.setDisplayMode(config.getCompatibilityMode() ? config.getDisplayModeEnum().DIV : config.getDisplayModeEnum().CANVAS);
+                }
 
-            // canvas support will be checked on init
-            if (config.getDisplayMode() == config.getDisplayModeEnum().CANVAS)
-            {
-                canvas = new Canvas(config, dialog, this);
-                canvas.init();
-            }
+                // canvas support will be checked on init
+                if (config.getDisplayMode() == config.getDisplayModeEnum().CANVAS)
+                {
+                    canvas = new Canvas(config, dialog, this);
+                    canvas.init();
+                }
 
-            // if not using canvas, use divs
-            if (config.getDisplayMode() == config.getDisplayModeEnum().DIV)
+                // if not using canvas, use divs
+                if (config.getDisplayMode() == config.getDisplayModeEnum().DIV)
+                {
+                    divs = new Divs(config, dialog, this);
+                    divs.init();
+                }
+
+                dialog.showStat(dialog.getShowStatEnum().DISPLAY_MODE, config.getDisplayMode());
+
+                /* image encoding
+
+                PNG
+                lossless (best quality), less sized for text images but more sized for graphic ones. best suited for office applications
+            
+                JPEG
+                lossy, allows automatic quality tweak depending on bandwidth availability, less sized for graphic images but more sized for text ones. best suited for imaging applications
+            
+                WEBP
+                may reduce the overall images size but at the expense of speed and server CPU; it's also not supported by all browsers (google tech, so mostly supported by chrome). it's mostly an experimental feature; fallback to JPEG if not supported
+            
+                AUTO (default)
+                will encode both PNG and JPEG and return the lowest sized format; pros: optimize quality and bandwidth usage, cons: slower and higher server CPU. best suited for mixed (text and imaging) applications
+
+                */
+
+                if (config.getImageEncoding() == config.getImageEncodingEnum().WEBP)
+                {
+                    checkWebpSupport();
+                }
+
+                // image count per second; currently just an information but could be used for throttling display, if needed
+                window.setInterval(function()
+                {
+                    //dialog.showDebug('checking image count per second');
+                    dialog.showStat(dialog.getShowStatEnum().IMAGE_COUNT_PER_SEC, imgCountPerSec);
+                    imgCountPerSec = 0;
+                },
+                1000);
+
+                // reasonable number of images to display when using divs
+                dialog.showStat(dialog.getShowStatEnum().IMAGE_COUNT_OK, (config.getDisplayMode() == config.getDisplayModeEnum().CANVAS ? 'N/A' : config.getImageCountOk()));
+
+                // maximal number of images to display when using divs
+                dialog.showStat(dialog.getShowStatEnum().IMAGE_COUNT_MAX, (config.getDisplayMode() == config.getDisplayModeEnum().CANVAS ? 'N/A' : config.getImageCountMax()));
+            }
+            else if (config.getHostType() == 'SSH')
             {
-                divs = new Divs(config, dialog, this);
+                // ssh uses xtermjs within a div, load div regardless of of browser compatibility
+
+                divs = new TerminalDivs(config, dialog, this);
                 divs.init();
             }
-
-            dialog.showStat(dialog.getShowStatEnum().DISPLAY_MODE, config.getDisplayMode());
-
-            /* image encoding
-
-            PNG
-            lossless (best quality), less sized for text images but more sized for graphic ones. best suited for office applications
-            
-            JPEG
-            lossy, allows automatic quality tweak depending on bandwidth availability, less sized for graphic images but more sized for text ones. best suited for imaging applications
-            
-            WEBP
-            may reduce the overall images size but at the expense of speed and server CPU; it's also not supported by all browsers (google tech, so mostly supported by chrome). it's mostly an experimental feature; fallback to JPEG if not supported
-            
-            AUTO (default)
-            will encode both PNG and JPEG and return the lowest sized format; pros: optimize quality and bandwidth usage, cons: slower and higher server CPU. best suited for mixed (text and imaging) applications
-
-            */
-
-            if (config.getImageEncoding() == config.getImageEncodingEnum().WEBP)
-            {
-                checkWebpSupport();
-            }
-
-            // image count per second; currently just an information but could be used for throttling display, if needed
-            window.setInterval(function()
-            {
-                //dialog.showDebug('checking image count per second');
-                dialog.showStat(dialog.getShowStatEnum().IMAGE_COUNT_PER_SEC, imgCountPerSec);
-                imgCountPerSec = 0;
-            },
-            1000);
-
-            // reasonable number of images to display when using divs
-            dialog.showStat(dialog.getShowStatEnum().IMAGE_COUNT_OK, (config.getDisplayMode() == config.getDisplayModeEnum().CANVAS ? 'N/A' : config.getImageCountOk()));
-
-            // maximal number of images to display when using divs
-            dialog.showStat(dialog.getShowStatEnum().IMAGE_COUNT_MAX, (config.getDisplayMode() == config.getDisplayModeEnum().CANVAS ? 'N/A' : config.getImageCountMax()));
         }
         catch (exc)
         {
