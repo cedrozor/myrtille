@@ -1,0 +1,632 @@
+﻿/*
+    Myrtille: A native HTML4/5 Remote Desktop Protocol client.
+
+    Copyright(c) 2014-2020 Cedric Coste
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* Windows style UI */
+
+body {
+    padding: 0px;
+    margin: 0px;
+    background-color: #34495e;
+    color: #ecf0f1;
+}
+
+a {
+    text-decoration: none;
+    color: #ecf0f1;
+}
+
+    a img {
+        border: 0;
+    }
+
+* {
+    font-family: "Segoe UI";
+}
+
+/*****************************************************************************************************************************************************************************************************/
+/*** LOGIN                                                                                                                                                                                         ***/
+/*****************************************************************************************************************************************************************************************************/
+
+#login {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -225px;
+    width: 450px;
+    height: 300px;
+    padding: 10px 10px 30px 10px;
+}
+
+/* customizable logo (replace the background image by yours) */
+/* remote desktop logo, credits BlackVariant (Patrick) http://blackvariant.deviantart.com */
+#logo {
+    background-image: url("../img/RemoteDesktop.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 128px;
+    width: auto;
+    max-width: 400px;
+    max-height: 128px;
+    margin-bottom: 20px;
+}
+
+.inputDiv {
+    display: inline-block;
+}
+
+.inputAdvDiv {
+    display: inline-block;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 20px;
+}
+
+    /* Hide default HTML checkbox */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 18px;
+        left: 4px;
+        bottom: 3px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(18px);
+}
+
+
+label,
+#mfaProvider {
+    float: left;
+    width: 200px;
+    margin-top: 2px;
+}
+
+#mfaProvider {
+    cursor: pointer;
+}
+
+    #mfaProvider:hover {
+        text-decoration: underline;
+    }
+
+#hostType,
+#securityProtocol {
+    width: 204px;
+    margin-top: 2px;
+}
+
+#server,
+#vmGuid,
+#domain,
+#user,
+#password,
+#mfaPassword,
+#program {
+    width: 200px;
+    margin-top: 2px;
+}
+
+#vmEnhancedMode {
+    margin-top: 6px;
+    margin-left: 0px;
+}
+
+/* program to run is better defined into an URL, but can be enabled into the login screen */
+#programLabel,
+#program {
+    visibility: hidden;
+    display: none;
+}
+
+#connect {
+    width: 204px;
+    margin-top: 2px;
+    margin-left: 200px;
+    display: inline-block;
+}
+
+#version {
+    font-size: 10px;
+    display: inline-block;
+}
+
+#adminDiv {
+    margin-top: 5px;
+    font-size: 12px;
+    text-decoration: underline;
+}
+
+#errorDiv {
+    margin-left: 200px;
+}
+
+#connectError {
+    color: #ff0000;
+}
+
+/*****************************************************************************************************************************************************************************************************/
+/*** HOSTS                                                                                                                                                                                         ***/
+/*****************************************************************************************************************************************************************************************************/
+
+#hosts {
+    /* if needed */
+}
+
+#hostsControl {
+    /* if needed */
+}
+
+#enterpriseUserInfo {
+    width: 250px;
+}
+
+#newRDPHost,
+#newSSHHost,
+#logout {
+    width: 150px;
+}
+
+#hostsList {
+    /* if needed */
+}
+
+.hostDiv {
+    display: inline-block;
+    text-align: center;
+    font-size: 15px;
+}
+
+    .hostDiv:hover {
+        background-color: #ecf0f1;
+        color: #000;
+    }
+
+.hostLink,
+.hostName {
+    cursor: pointer;
+}
+
+    .hostName:hover {
+        text-decoration: underline;
+    }
+
+/*****************************************************************************************************************************************************************************************************/
+/*** TOOLBAR                                                                                                                                                                                       ***/
+/*****************************************************************************************************************************************************************************************************/
+
+#toolbarToggle {
+    position: absolute;
+    border: 1px solid #ddd;
+    background-color: #F4F4F4;
+    z-index: 200;
+}
+
+#toolbar {
+    position: absolute;
+    left: 23px;
+    overflow: auto;
+    display: inline-block;
+    z-index: 200;
+}
+
+/* connection */
+#serverInfo,
+#userInfo {
+    float: left;
+    width: 150px;
+}
+
+/* controls */
+#stat,
+#debug,
+#browser,
+#scale,
+#reconnect,
+#keyboard,
+#osk,
+#clipboard,
+#files,
+#cad,
+#mrc,
+#vswipe,
+#share,
+#disconnect {
+    float: left;
+    width: 110px;
+}
+
+/*****************************************************************************************************************************************************************************************************/
+/*** POPUPS                                                                                                                                                                                        ***/
+/*****************************************************************************************************************************************************************************************************/
+
+/* background fader */
+
+#bgfDiv {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    filter: alpha(opacity=70);
+    opacity: .70;
+    -moz-opacity: 0.7;
+    background-color: black;
+    z-index: 300;
+}
+
+/* draggable popups */
+
+#dragDiv {
+    position: absolute;
+    overflow: hidden;
+    left: 50px;
+    top: 50px;
+    background-color: white;
+    z-index: 400;
+    visibility: hidden;
+    display: none;
+    touch-action: none;
+}
+
+#dragHandle {
+    height: 20px;
+    background-color: silver;
+}
+
+/* virtual keyboard popup */
+
+#virtualKeyboardPopup {
+    width: 470px;
+    height: 290px;
+}
+
+#virtualKeyboardPopupDesc {
+    font-weight: bold;
+}
+
+#virtualKeyboardPopupText {
+    width: 425px;
+    height: 150px;
+    margin-bottom: 5px;
+}
+
+/* on-screen keyboard popup */
+
+#onScreenKeyboardPopup {
+    width: 500px;
+    height: 300px;
+}
+
+/* show dialog popup */
+
+#showDialogPopup {
+    width: 470px;
+    height: 240px;
+}
+
+#showDialogPopupDesc {
+    font-weight: bold;
+}
+
+#showDialogPopupText {
+    width: 425px;
+    height: 150px;
+    margin-bottom: 5px;
+}
+
+/* file storage popup */
+
+#fileStoragePopup {
+    width: 470px;
+    height: 130px;
+}
+
+#fileStoragePopupDesc {
+    font-weight: bold;
+}
+
+#fileToDownloadSelect {
+    width: 250px;
+}
+
+/* host popup */
+
+#editHostPopup,
+#editHostPopupInner {
+    width: 420px;
+    height: 450px;
+}
+
+#editHostPopupInner {
+    color: #000;
+    background: #fff;
+}
+
+#editHostPopupTitle {
+    padding-top: 20px;
+    padding-left: 10px;
+}
+
+.editHostPopupInput {
+    padding-left: 10px;
+}
+
+/* credential popup */
+
+#editCredentialPopup,
+#editCredentialPopupInner {
+    width: 400px;
+    height: 250px;
+}
+
+#editCredentialPopupInner {
+    color: #000;
+    background: #fff;
+}
+
+#editCredentialsPopupTitle {
+    padding-top: 20px;
+    padding-left: 10px;
+}
+
+.editCredentialPopupInput {
+    padding-left: 10px;
+}
+
+/* host session popup */
+
+#editHostSessionPopup,
+#editHostSessionPopupInner {
+    width: 400px;
+    height: 500px;
+}
+
+#editHostSessionPopupInner {
+    color: #000;
+    background: #fff;
+}
+
+#editHostSessionPopupTitle {
+    padding-top: 20px;
+    padding-left: 10px;
+}
+
+.editHostSessionPopupInput {
+    padding-left: 10px;
+}
+
+#sessionUrl {
+    width: 370px;
+}
+
+/* share session popup */
+
+#shareSessionPopup,
+#shareSessionPopupInner {
+    width: 400px;
+    height: 370px;
+}
+
+#shareSessionPopupInner {
+    color: #000;
+    background: #fff;
+}
+
+#shareSessionPopupTitle {
+    padding-top: 20px;
+    padding-left: 10px;
+}
+
+.shareSessionPopupInput {
+    padding-left: 10px;
+}
+
+#guestControlLabel {
+    padding-top: 10px;
+    width: 100px;
+}
+
+#guestControl {
+    margin-top: 17px;
+}
+
+/* change password popup */
+
+#changePasswordPopup,
+#changePasswordPopupInner {
+    width: 400px;
+    height: 330px;
+}
+
+#changePasswordPopupInner {
+    color: #000;
+    background: #fff;
+}
+
+#changePasswordPopupTitle {
+    padding-top: 20px;
+    padding-left: 10px;
+}
+
+.changePasswordMessage {
+    padding-left: 10px;
+}
+
+.changePasswordPopupInput {
+    padding-left: 10px;
+}
+
+#changeError {
+    padding-left: 10px;
+    font-size: 10pt;
+    color: red;
+    width: 380px;
+}
+
+/* copy clipboard popup */
+
+#copyClipboardPopup {
+    width: 470px;
+    height: 240px;
+}
+
+#copyClipboardPopupDesc {
+    font-weight: bold;
+}
+
+#copyClipboardPopupText {
+    width: 425px;
+    height: 150px;
+    margin-bottom: 5px;
+}
+
+/* paste clipboard popup */
+
+#pasteClipboardPopup {
+    width: 470px;
+    height: 240px;
+}
+
+#pasteClipboardPopupDesc {
+    font-weight: bold;
+}
+
+#pasteClipboardPopupText {
+    width: 425px;
+    height: 150px;
+    margin-bottom: 5px;
+}
+
+/*****************************************************************************************************************************************************************************************************/
+/*** HELPERS                                                                                                                                                                                       ***/
+/*****************************************************************************************************************************************************************************************************/
+
+/* remote session display */
+
+#displayDiv {
+    position: absolute;
+    z-index: 100;
+    /* fix touchscreen on Edge (disabled by default and using pointer events instead of touch) by emulating mouse events */
+    touch-action: none;
+}
+
+/* remote session display: canvas (HTML5) */
+
+canvas {
+    position: absolute;
+    z-index: 100;
+}
+
+/* remote session display: divs (HTML4) */
+
+.imageDiv {
+    position: absolute;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    z-index: 100;
+}
+
+/* remote session helpers */
+
+#cacheDiv {
+    visibility: hidden;
+    display: none;
+}
+
+#statDiv {
+    visibility: hidden;
+    display: none;
+    font-size: 10px;
+    background-color: black;
+    color: lightgrey;
+    z-index: 200;
+}
+
+#debugDiv {
+    visibility: hidden;
+    display: none;
+    font-size: 12px;
+    background-color: lightgrey;
+    color: black;
+    z-index: 200;
+}
+
+#msgDiv {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+    font-size: 18px;
+    font-weight: bold;
+    overflow: hidden;
+    background-color: red;
+    color: white;
+    z-index: 200;
+}
+
+#kbhDiv {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+    background-color: #FAF8CC;
+    color: black;
+    z-index: 200;
+}

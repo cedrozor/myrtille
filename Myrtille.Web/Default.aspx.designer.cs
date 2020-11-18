@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Myrtille.Web {
-    
-    
-    public partial class Default {
-        
+namespace Myrtille.Web
+{
+
+
+    public partial class Default
+    {
+
         /// <summary>
         /// mainForm control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm mainForm;
-        
+
         /// <summary>
         /// width control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden width;
-        
+
         /// <summary>
         /// height control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden height;
-        
+
         /// <summary>
         /// login control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl login;
-        
+
         /// <summary>
         /// logo control.
         /// </summary>
@@ -56,7 +58,16 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl logo;
-        
+
+        /// <summary>
+        /// advancedControlInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox advancedControlInput;
+
         /// <summary>
         /// hostConnectDiv control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl hostConnectDiv;
-        
+
         /// <summary>
         /// hostType control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlSelect hostType;
-        
+
         /// <summary>
         /// securityProtocol control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlSelect securityProtocol;
-        
+
         /// <summary>
         /// server control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText server;
-        
+
         /// <summary>
         /// vmGuid control.
         /// </summary>
@@ -101,7 +112,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText vmGuid;
-        
+
         /// <summary>
         /// vmEnhancedMode control.
         /// </summary>
@@ -110,7 +121,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox vmEnhancedMode;
-        
+
         /// <summary>
         /// domain control.
         /// </summary>
@@ -119,7 +130,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText domain;
-        
+
         /// <summary>
         /// user control.
         /// </summary>
@@ -128,7 +139,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText user;
-        
+
         /// <summary>
         /// password control.
         /// </summary>
@@ -137,7 +148,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputPassword password;
-        
+
         /// <summary>
         /// passwordHash control.
         /// </summary>
@@ -146,7 +157,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden passwordHash;
-        
+
         /// <summary>
         /// mfaDiv control.
         /// </summary>
@@ -155,7 +166,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl mfaDiv;
-        
+
         /// <summary>
         /// mfaProvider control.
         /// </summary>
@@ -164,7 +175,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor mfaProvider;
-        
+
         /// <summary>
         /// mfaPassword control.
         /// </summary>
@@ -173,7 +184,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText mfaPassword;
-        
+
         /// <summary>
         /// program control.
         /// </summary>
@@ -182,7 +193,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText program;
-        
+
         /// <summary>
         /// connect control.
         /// </summary>
@@ -191,7 +202,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputSubmit connect;
-        
+
         /// <summary>
         /// adminDiv control.
         /// </summary>
@@ -200,7 +211,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl adminDiv;
-        
+
         /// <summary>
         /// adminUrl control.
         /// </summary>
@@ -209,7 +220,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor adminUrl;
-        
+
         /// <summary>
         /// adminText control.
         /// </summary>
@@ -218,7 +229,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl adminText;
-        
+
         /// <summary>
         /// connectError control.
         /// </summary>
@@ -227,7 +238,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl connectError;
-        
+
         /// <summary>
         /// hosts control.
         /// </summary>
@@ -236,7 +247,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl hosts;
-        
+
         /// <summary>
         /// enterpriseUserInfo control.
         /// </summary>
@@ -245,7 +256,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText enterpriseUserInfo;
-        
+
         /// <summary>
         /// newRDPHost control.
         /// </summary>
@@ -254,7 +265,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton newRDPHost;
-        
+
         /// <summary>
         /// newSSHHost control.
         /// </summary>
@@ -263,7 +274,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton newSSHHost;
-        
+
         /// <summary>
         /// logout control.
         /// </summary>
@@ -272,7 +283,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton logout;
-        
+
         /// <summary>
         /// hostsList control.
         /// </summary>
@@ -281,7 +292,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater hostsList;
-        
+
         /// <summary>
         /// toolbarToggle control.
         /// </summary>
@@ -290,7 +301,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl toolbarToggle;
-        
+
         /// <summary>
         /// toolbar control.
         /// </summary>
@@ -299,7 +310,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl toolbar;
-        
+
         /// <summary>
         /// serverInfo control.
         /// </summary>
@@ -308,7 +319,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText serverInfo;
-        
+
         /// <summary>
         /// userInfo control.
         /// </summary>
@@ -317,7 +328,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText userInfo;
-        
+
         /// <summary>
         /// scale control.
         /// </summary>
@@ -326,7 +337,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton scale;
-        
+
         /// <summary>
         /// reconnect control.
         /// </summary>
@@ -335,7 +346,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton reconnect;
-        
+
         /// <summary>
         /// keyboard control.
         /// </summary>
@@ -344,7 +355,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton keyboard;
-        
+
         /// <summary>
         /// osk control.
         /// </summary>
@@ -353,7 +364,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton osk;
-        
+
         /// <summary>
         /// clipboard control.
         /// </summary>
@@ -362,7 +373,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton clipboard;
-        
+
         /// <summary>
         /// files control.
         /// </summary>
@@ -371,7 +382,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton files;
-        
+
         /// <summary>
         /// cad control.
         /// </summary>
@@ -380,7 +391,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton cad;
-        
+
         /// <summary>
         /// mrc control.
         /// </summary>
@@ -389,7 +400,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton mrc;
-        
+
         /// <summary>
         /// vswipe control.
         /// </summary>
@@ -398,7 +409,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton vswipe;
-        
+
         /// <summary>
         /// share control.
         /// </summary>
@@ -407,7 +418,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton share;
-        
+
         /// <summary>
         /// disconnect control.
         /// </summary>
@@ -416,7 +427,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton disconnect;
-        
+
         /// <summary>
         /// imageQuality control.
         /// </summary>
