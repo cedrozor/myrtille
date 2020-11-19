@@ -71,7 +71,7 @@
 
 </head>
 
-<body class="container-login100" onload="startMyrtille(
+<body onload="startMyrtille(
         <%=(RemoteSession != null ? "'" + RemoteSession.State.ToString().ToUpper() + "'" : "null")%>,
         getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'stat'),
         getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'debug'),
@@ -94,132 +94,144 @@
         <!-- *** LOGIN                                                                                                                                                                      *** -->
         <!-- ********************************************************************************************************************************************************************************** -->
 
-        <div runat="server" id="login" class="wrap-login100" visible="false">
+        <div runat="server" id="login" class="container-login100" visible="false">
+            <div id="loginMainPage" class="wrap-login100" visible="false">
+                <!-- customizable logo -->
+                <%--<div runat="server" id="logo"></div>--%>
+                <div runat="server" id="logo" class="login100-pic js-tilt"></div>
+                <div class="login100-form validate-form">
+                    <span class="login100-form-title">RDP Login</span>
+                    <!-- show or hide advanced controls -->
+                    <div class="inputDiv" id="toggleAdvancedDiv">
+                        <label id="advancedControlLabel" class="wrap-label100">Advanced Controls</label>
+                        <label class="switch">
+                            <input id="advancedControlInput" type="checkbox" runat="server" onclick="toggleAdvancedControls(this);" />
+                            <span class="slider"></span>
+                        </label>
 
-            <!-- customizable logo -->
-            <%--<div runat="server" id="logo"></div>--%>
-            <div runat="server" id="logo" class="login100-pic js-tilt"></div>
-            <div class="login100-form validate-form">
-                <span class="login100-form-title">RDP Login</span>
-                <!-- show or hide advanced controls -->
-                <div class="inputDiv" id="toggleAdvancedDiv" >
-                    <label id="advancedControlLabel">Advanced Controls</label>
-                    <label class="switch">
-                        <input id="advancedControlInput" type="checkbox" runat="server" />
-                        <span class="slider" onclick="toggleAdvancedControls();"></span>
-                    </label>
-
-                    <%--<input id="advancedControlInput" type="checkbox" runat="server" onclick="toggleAdvancedControls();" />--%>
-                </div>
-
-                <!-- standard mode -->
-                <div runat="server" id="hostConnectDiv" >
-
-                    <!-- type -->
-                    <div id="hostTypeDiv" style="display:none;" class="wrap-input100 validate-input">
-                        <label id="hostTypeLabel" for="hostType" class="loginLabel">Protocol</label>
-                        <select runat="server" id="hostType" onchange="onHostTypeChange(this);" title="host type" class="input100">
-                            <option value="0" selected="selected">RDP</option>
-                            <option value="0">RDP over VM bus (Hyper-V)</option>
-                            <option value="1">SSH</option>
-                        </select>
+                        <%--<input id="advancedControlInput" type="checkbox" runat="server" onclick="toggleAdvancedControls();" />--%>
                     </div>
 
-                    <!-- security -->
-                    <div id="securityProtocolDiv" style="display:none;" class="wrap-input100 validate-input">
-                        <label id="securityProtocolLabel" for="securityProtocol" class="loginLabel">Security</label>
-                        <select runat="server" id="securityProtocol" class="input100" title="NLA = safest, RDP = backward compatibility (if the server doesn't enforce NLA) and interactive logon (leave user and password empty); AUTO for Hyper-V VM or if not sure">
-                            <option value="0" selected="selected">AUTO</option>
-                            <option value="1">RDP</option>
-                            <option value="2">TLS</option>
-                            <option value="3">NLA</option>
-                            <option value="4">NLA-EXT</option>
-                        </select>
-                    </div>
+                    <!-- standard mode -->
+                    <div runat="server" id="hostConnectDiv">
 
-                    <!-- server -->
-                    <div class="inputDiv" id="serverPortDiv" style="display:none;">
-                        <label id="serverLabel" for="server" class="loginLabel" >Server (:port)</label>
-                        <input type="text" runat="server" id="server" title="host name or address (:port, if other than the standard 3389 (rdp), 2179 (rdp over vm bus) or 22 (ssh)). use [] for ipv6. CAUTION! if using a hostname or if you have a connection broker, make sure the DNS is reachable by myrtille (or myrtille has joined the domain)" />
-                    </div>
-
-                    <!-- hyper-v -->
-                    <div id="vmDiv" style="visibility: hidden; display: none;">
-
-                        <!-- vm guid -->
-                        <div class="inputDiv" id="vmGuidDiv">
-                            <label id="vmGuidLabel" for="vmGuid" class="loginLabel">VM GUID</label>
-                            <input type="text" runat="server" id="vmGuid" title="guid of the Hyper-V VM to connect" />
+                        <!-- type -->
+                        <div id="hostTypeDiv" style="display: none;" class="inputDiv wrap-input100 validate-input">
+                            <label id="hostTypeLabel" for="hostType" class="wrap-label100">Protocol</label>
+                            <select runat="server" id="hostType" onchange="onHostTypeChange(this);" title="host type" class="drop-input100">
+                                <option value="0" selected="selected">RDP</option>
+                                <option value="0">RDP over VM bus (Hyper-V)</option>
+                                <option value="1">SSH</option>
+                            </select>
                         </div>
 
-                        <!-- enhanced mode -->
-                        <div class="inputDiv" id="vmEnhancedModeDiv">
-                            <label id="vmEnhancedModeLabel" for="vmEnhancedMode" class="loginLabel" >VM Enhanced Mode</label>
-                            <input type="checkbox" runat="server" id="vmEnhancedMode" title="faster display and clipboard/printer redirection, if supported by the guest VM" />
+                        <!-- security -->
+                        <div id="securityProtocolDiv" style="display: none;" class="inputDiv wrap-input100 validate-input">
+                            <label id="securityProtocolLabel" for="securityProtocol" class="wrap-label100">Security</label>
+                            <select runat="server" id="securityProtocol" class="drop-input100" title="NLA = safest, RDP = backward compatibility (if the server doesn't enforce NLA) and interactive logon (leave user and password empty); AUTO for Hyper-V VM or if not sure">
+                                <option value="0" selected="selected">AUTO</option>
+                                <option value="1">RDP</option>
+                                <option value="2">TLS</option>
+                                <option value="3">NLA</option>
+                                <option value="4">NLA-EXT</option>
+                            </select>
+                        </div>
+
+                        <!-- server -->
+                        <div class="inputDiv" id="serverPortDiv" style="display: none;">
+                            <label id="serverLabel" for="server" class="wrap-label100">Server (:port)</label>
+                            <input type="text" runat="server" id="server" class="wrap-text-input100" title="host name or address (:port, if other than the standard 3389 (rdp), 2179 (rdp over vm bus) or 22 (ssh)). use [] for ipv6. CAUTION! if using a hostname or if you have a connection broker, make sure the DNS is reachable by myrtille (or myrtille has joined the domain)" />
+                        </div>
+
+                        <!-- hyper-v -->
+                        <div id="vmDiv" style="display: none;">
+
+                            <!-- vm guid -->
+                            <div class="inputDiv" id="vmGuidDiv">
+                                <label id="vmGuidLabel" for="vmGuid" class="wrap-label100">VM GUID</label>
+                                <input type="text" runat="server" id="vmGuid" class="wrap-text-input100" title="guid of the Hyper-V VM to connect" />
+                            </div>
+
+                            <!-- enhanced mode -->
+                            <%--                        <div class="inputDiv" id="vmEnhancedModeDiv">
+                            <label id="vmEnhancedModeLabel" for="vmEnhancedMode" class="wrap-label100" >VM Enhanced Mode</label>
+                            <input type="checkbox" runat="server" id="vmEnhancedMode" class="wrap-text-input100" title="faster display and clipboard/printer redirection, if supported by the guest VM" />
+                        </div>--%>
+
+                            <div class="inputDiv" id="vmEnhancedModeDiv">
+                                <label id="vmEnhancedModeLabel" class="wrap-label100">VM Enhanced Mode</label>
+                                <label class="switch">
+                                    <input id="vmEnhancedMode" type="checkbox" runat="server" title="faster display and clipboard/printer redirection, if supported by the guest VM" />
+                                    <span class="slider"></span>
+                                </label>
+
+                                <%--<input id="advancedControlInput" type="checkbox" runat="server" onclick="toggleAdvancedControls();" />--%>
+                            </div>
+
+                        </div>
+
+                        <!-- domain -->
+                        <div class="inputDiv" id="domainDiv" style="display: none;">
+                            <label id="domainLabel" for="domain" class="wrap-label100">Domain (optional)</label>
+                            <input type="text" runat="server" id="domain" class="wrap-text-input100" title="user domain (if applicable)" />
                         </div>
 
                     </div>
 
-                    <!-- domain -->
-                    <div class="inputDiv" id="domainDiv" style="display:none;">
-                        <label id="domainLabel" for="domain" class="loginLabel">Domain (optional)</label>
-                        <input type="text" runat="server" id="domain" title="user domain (if applicable)" />
+                    <!-- user -->
+                    <div class="inputDiv">
+                        <label id="userLabel" for="user" class="wrap-label100">User</label>
+                        <input type="text" runat="server" id="user" class="wrap-text-input100" title="user name" />
                     </div>
 
-                </div>
+                    <!-- password -->
+                    <div class="inputDiv">
+                        <label id="passwordLabel" for="password" class="wrap-label100">Password</label>
+                        <input type="password" runat="server" id="password" class="wrap-text-input100" title="user password" />
+                    </div>
 
-                <!-- user -->
-                <div class="inputDiv">
-                    <label id="userLabel" for="user" class="loginLabel">User</label>
-                    <input type="text" runat="server" id="user" title="user name" />
-                </div>
+                    <!-- hashed password (aka password 51) -->
+                    <input type="hidden" runat="server" id="passwordHash" />
 
-                <!-- password -->
-                <div class="inputDiv">
-                    <label id="passwordLabel" for="password" class="loginLabel">Password</label>
-                    <input type="password" runat="server" id="password" title="user password" />
-                </div>
+                    <!-- MFA password -->
+                    <div class="inputDiv" runat="server" id="mfaDiv" visible="false">
+                        <a runat="server" id="mfaProvider" href="#" target="_blank" tabindex="-1" title="MFA provider"></a>
+                        <input type="text" runat="server" id="mfaPassword" class="wrap-text-input100" title="MFA password" />
+                    </div>
 
-                <!-- hashed password (aka password 51) -->
-                <input type="hidden" runat="server" id="passwordHash" />
+                    <!-- program to run -->
+                    <div class="inputDiv">
+                        <label id="programLabel" for="program" class="wrap-label100">Program to run (optional)</label>
+                        <input type="text" runat="server" id="program" class="wrap-text-input100" title="executable path, name and parameters (double quotes must be escaped) (optional)" />
+                    </div>
 
-                <!-- MFA password -->
-                <div class="inputDiv" runat="server" id="mfaDiv" visible="false">
-                    <a runat="server" id="mfaProvider" href="#" target="_blank" tabindex="-1" title="MFA provider"></a>
-                    <input type="text" runat="server" id="mfaPassword" title="MFA password" />
-                </div>
+                    <!-- connect -->
+                    <input type="submit" runat="server" id="connect" value="Connect!" onserverclick="ConnectButtonClick" title="Click to Join Session" class="login100-form validate-form input100-submit" />
 
-                <!-- program to run -->
-                <div class="inputDiv">
-                    <label id="programLabel" for="program" class="loginLabel">Program to run (optional)</label>
-                    <input type="text" runat="server" id="program" title="executable path, name and parameters (double quotes must be escaped) (optional)" />
-                </div>
+                    <!-- myrtille version -->
+                    <div id="version" class="version100-field">
+                        <a href="https://www.myrtille.io/" target="_blank" title="myrtille">
+                            <img src="img/myrtille.png" alt="myrtille" width="15px" height="15px" />
+                        </a>
+                        <span class="versionText">
+                            <%=typeof(Default).Assembly.GetName().Version%>
+                        </span>
+                    </div>
 
-                <!-- connect -->
-                <input type="submit" runat="server" id="connect" value="Connect!" onserverclick="ConnectButtonClick" title="open session" />
+                    <!-- hosts management -->
+                    <div runat="server" id="adminDiv" visible="false">
+                        <a runat="server" id="adminUrl" href="?mode=admin">
+                            <span runat="server" id="adminText">Hosts management</span>
+                        </a>
+                    </div>
 
-                <!-- myrtille version -->
-                <div id="version">
-                    <a href="https://www.myrtille.io/" target="_blank" title="myrtille">
-                        <img src="img/myrtille.png" alt="myrtille" width="15px" height="15px" />
-                    </a>
-                    <span>
-                        <%=typeof(Default).Assembly.GetName().Version%>
-                    </span>
-                </div>
-
-                <!-- hosts management -->
-                <div runat="server" id="adminDiv" visible="false">
-                    <a runat="server" id="adminUrl" href="?mode=admin">
-                        <span runat="server" id="adminText">Hosts management</span>
-                    </a>
-                </div>
-
-                <!-- connect error -->
-                <div id="errorDiv">
-                    <span runat="server" id="connectError"></span>
+                    <!-- connect error -->
+                    <div id="errorDiv">
+                        <span runat="server" id="connectError"></span>
+                    </div>
                 </div>
             </div>
+
         </div>
 
         <!-- ********************************************************************************************************************************************************************************** -->
@@ -363,7 +375,7 @@
         // if the display resolution isn't set, the remote session isn't able to start; redirect with the client resolution
         if (window.location.href.indexOf('&connect=') != -1 && (window.location.href.indexOf('&width=') == -1 || window.location.href.indexOf('&height=') == -1)) {
             var width = document.getElementById('<%=width.ClientID%>').value;
-                var height = document.getElementById('<%=height.ClientID%>').value;
+            var height = document.getElementById('<%=height.ClientID%>').value;
 
             var redirectUrl = window.location.href;
 
@@ -389,20 +401,20 @@
 
                 // remote session toolbar
                 if (<%=(RemoteSession != null && (RemoteSession.State == RemoteSessionState.Connecting || RemoteSession.State == RemoteSessionState.Connected)).ToString(CultureInfo.InvariantCulture).ToLower()%>) {
-                        // the toolbar is enabled (web.config)
-                        if (document.getElementById('<%=toolbar.ClientID%>') != null) {
-                            // resume the saved toolbar state
-                            if (getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'toolbar')) {
-                                toggleToolbar();
-                            }
+                    // the toolbar is enabled (web.config)
+                    if (document.getElementById('<%=toolbar.ClientID%>') != null) {
+                        // resume the saved toolbar state
+                        if (getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'toolbar')) {
+                            toggleToolbar();
+                        }
 
-                            // in addition to having their states also saved into a cookie, stat, debug and compatibility buttons are always available into the toolbar (even for guest(s) if the remote session is shared)
-                            document.getElementById('stat').value = getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'stat') ? 'Stat ON' : 'Stat OFF';
-                            document.getElementById('debug').value = getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'debug') ? 'Debug ON' : 'Debug OFF';
-                            document.getElementById('browser').value = getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'browser') ? 'HTML5 OFF' : 'HTML5 ON';
+                        // in addition to having their states also saved into a cookie, stat, debug and compatibility buttons are always available into the toolbar (even for guest(s) if the remote session is shared)
+                        document.getElementById('stat').value = getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'stat') ? 'Stat ON' : 'Stat OFF';
+                        document.getElementById('debug').value = getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'debug') ? 'Debug ON' : 'Debug OFF';
+                        document.getElementById('browser').value = getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'browser') ? 'HTML5 OFF' : 'HTML5 ON';
 
-                            // swipe is disabled on IE/Edge because it emulates mouse events by default (experimental)
-                            document.getElementById('<%=vswipe.ClientID%>').disabled = document.getElementById('<%=vswipe.ClientID%>').disabled || display.isIEBrowser();
+                        // swipe is disabled on IE/Edge because it emulates mouse events by default (experimental)
+                        document.getElementById('<%=vswipe.ClientID%>').disabled = document.getElementById('<%=vswipe.ClientID%>').disabled || display.isIEBrowser();
                     }
                 }
             }
@@ -433,7 +445,7 @@
             //alert('client width: ' + width + ', height: ' + height);
 
             document.getElementById('<%=width.ClientID%>').value = width;
-                document.getElementById('<%=height.ClientID%>').value = height;
+            document.getElementById('<%=height.ClientID%>').value = height;
         }
 
         function disableControl(controlId) {
@@ -448,17 +460,17 @@
             disableControl('debug');
             disableControl('browser');
             disableControl('<%=scale.ClientID%>');
-                disableControl('<%=reconnect.ClientID%>');
-                disableControl('<%=keyboard.ClientID%>');
-                disableControl('<%=osk.ClientID%>');
-                disableControl('<%=clipboard.ClientID%>');
-                disableControl('<%=files.ClientID%>');
-                disableControl('<%=cad.ClientID%>');
-                disableControl('<%=mrc.ClientID%>');
-                disableControl('<%=vswipe.ClientID%>');
-                disableControl('<%=share.ClientID%>');
-                disableControl('<%=disconnect.ClientID%>');
-                disableControl('<%=imageQuality.ClientID%>');
+            disableControl('<%=reconnect.ClientID%>');
+            disableControl('<%=keyboard.ClientID%>');
+            disableControl('<%=osk.ClientID%>');
+            disableControl('<%=clipboard.ClientID%>');
+            disableControl('<%=files.ClientID%>');
+            disableControl('<%=cad.ClientID%>');
+            disableControl('<%=mrc.ClientID%>');
+            disableControl('<%=vswipe.ClientID%>');
+            disableControl('<%=share.ClientID%>');
+            disableControl('<%=disconnect.ClientID%>');
+            disableControl('<%=imageQuality.ClientID%>');
         }
 
         function toggleToolbar() {
@@ -509,12 +521,51 @@
             target.setAttribute('data-y', y);
         }
 
-        function toggleAdvancedControls() {
-            $('#hostTypeDiv').toggle();
-            $('#securityProtocolDiv').toggle();
-            $('#serverPortDiv').toggle();
-            $('#domainDiv').toggle();
+        function toggleAdvancedControls(advancedControlInputShow) {
+
+            // Set Default & Hide Host Type
+            var hostTypeDiv = document.getElementById('hostTypeDiv'); //Represent (UI Option) Protocol Selection
+            var hostType = document.getElementById('hostType'); //to default set teh value to RDP
+            var securityProtocolDiv = document.getElementById('securityProtocolDiv'); //Represent (UI Option) Security Selection
+            var serverPortDiv = document.getElementById('serverPortDiv'); //Represent (UI Option) Server (:port) Selection
+            var vmDiv = document.getElementById('vmDiv'); //Represent (UI Option) VM GUID & VM Enhanced Mode Selection
+            var domainDiv = document.getElementById('domainDiv'); //Represent (UI Option) Domain (optional) Selection
+            //Set default host to RDP
+
+            hostType.value = '0';
+            if (advancedControlInputShow.checked) {
+                hostTypeDiv.style.visibility = 'visible';
+                hostTypeDiv.style.display = 'block';
+                securityProtocolDiv.style.visibility = 'visible';
+                securityProtocolDiv.style.display = 'block';
+                serverPortDiv.style.visibility = 'visible';
+                serverPortDiv.style.display = 'block';
+                //vmDiv.style.visibility = 'hidden';
+                //vmDiv.style.display = 'none';
+                domainDiv.style.visibility = 'visible';
+                domainDiv.style.display = 'block';
+            } else {
+                hostTypeDiv.style.visibility = 'hidden';
+                hostTypeDiv.style.display = 'none';
+                securityProtocolDiv.style.visibility = 'hidden';
+                securityProtocolDiv.style.display = 'none';
+                serverPortDiv.style.visibility = 'hidden';
+                serverPortDiv.style.display = 'none';
+                vmDiv.style.visibility = 'hidden';
+                vmDiv.style.display = 'none';
+                domainDiv.style.visibility = 'hidden';
+                domainDiv.style.display = 'none';
+            }
+
+            //$('#hostTypeDiv').toggle();
+            //$('#securityProtocolDiv').toggle();
+            //$('#serverPortDiv').toggle();
+            //$('#domainDiv').toggle();
+            //$('#vmDiv').toggle();
             return false;
+        }
+        function ConnectButtonClick() {
+            document.getElementById('loginMainPage').style.visibility = 'hidden';
         }
 
     </script>
