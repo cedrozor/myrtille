@@ -98,8 +98,11 @@
                 <div runat="server" id="logo" class="js-tilt"></div>
 
 
+                <%
+                if (_allowAdvancedControl)
+                {%>
 
-                <!-- show or hide advanced controls -->
+                < !-- show or hide advanced controls -->
                 <div class="inputDiv slider-advanced" id="toggleAdvancedDiv">
                     <label id="advancedControlLabel">Advanced Controls</label>
                     <label class="switch">
@@ -107,6 +110,14 @@
                         <span class="slider"></span>
                     </label>
                 </div>
+
+                <% }
+                    else
+                    {%>
+                <div class="inputDiv slider-advanced" id="toggleAdvancedDiv" ></div>
+                    <%}
+                    %>
+
 
                 <!-- standard mode -->
                 <div runat="server" id="hostConnectDiv">
@@ -211,7 +222,7 @@
                 <!-- hosts management -->
                 <div runat="server" id="adminDiv" visible="false">
                     <a runat="server" id="adminUrl" href="?mode=admin">
-                        <span runat="server" id="adminText">Hosts management</span>
+                        <span runat="server" id="adminText" class="hostMButton" >Hosts management</span>
                     </a>
                 </div>
 

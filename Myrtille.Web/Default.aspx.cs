@@ -50,6 +50,7 @@ namespace Myrtille.Web
         private bool _loginEnabled;
         private string _loginUrl;
         private bool _httpSessionUseUri;
+        public bool _allowAdvancedControl;
 
         private bool _authorizedRequest = true;
 
@@ -57,6 +58,14 @@ namespace Myrtille.Web
 
         private EnterpriseSession _enterpriseSession;
         protected RemoteSession RemoteSession;
+
+
+        ///Onload Check if Advanced Control is allowed
+        
+        //public void checkAdvancedControl(object sender, EventArgs e)
+        //{
+
+        //}
 
         /// <summary>
         /// page init
@@ -67,6 +76,12 @@ namespace Myrtille.Web
             object sender,
             EventArgs e)
         {
+            // advanced control enable/disable
+            if (!bool.TryParse(ConfigurationManager.AppSettings["EnableAdvancedControl"], out _allowAdvancedControl))
+            {
+                _allowAdvancedControl = false;
+            }
+
             // remote clipboard
             if (!bool.TryParse(ConfigurationManager.AppSettings["AllowRemoteClipboard"], out _allowRemoteClipboard))
             {

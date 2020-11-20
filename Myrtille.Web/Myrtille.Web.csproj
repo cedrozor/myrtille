@@ -291,13 +291,6 @@
       <DependentUpon>SendInputs.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\animate.css" />
@@ -306,10 +299,8 @@
     <Content Include="css\hamburgers.min.css" />
     <Content Include="css\main.css" />
     <Content Include="css\select2.min.css" />
-    <Content Include="css\StyleSheet1.css" />
     <Content Include="css\util.css" />
     <Content Include="css\xterm.css" />
-    <Content Include="Default-Copy.html" />
     <Content Include="handlers\EventSourceHandler.ashx" />
     <Content Include="favicon.ico" />
     <Content Include="GetHash.aspx" />
@@ -368,7 +359,6 @@
     <Content Include="Myrtille.Web.Install.ps1" />
     <Content Include="Myrtille.Web.Uninstall.ps1" />
     <Content Include="handlers\LongPollingHandler.ashx" />
-    <Content Include="WebForm1.aspx" />
     <Content Include="img\img.webp" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
