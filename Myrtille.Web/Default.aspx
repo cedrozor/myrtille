@@ -97,12 +97,12 @@
                 <!-- customizable logo -->
                 <div runat="server" id="logo" class="js-tilt"></div>
 
-
+                < !-- show or hide advanced controls -->
                 <%
                 if (_allowAdvancedControl)
                 {%>
 
-                < !-- show or hide advanced controls -->
+
                 <div class="inputDiv slider-advanced" id="toggleAdvancedDiv">
                     <label id="advancedControlLabel">Advanced Controls</label>
                     <label class="switch">
