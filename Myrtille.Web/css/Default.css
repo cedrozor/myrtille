@@ -16,218 +16,54 @@
     limitations under the License.
 */
 
-
-/*****************************************************************************************************************************************************************************************************/
-/*** Styles by Sabyasachi                                                                                                                                                                                       ***/
-/*****************************************************************************************************************************************************************************************************/
-
-/*Check width later*/
-.container-login100 {
-    width: 100%;
-    height: 100vh;
-    display: -webkit-flex;
-    justify-content: center;
-    align-items: center;
-}
-.wrap-login100 {
-    width: 800px;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 60px 50px 60px 50px
-}
-
-.login100-pic {
-    width: 316px;
-    background-image: url("/img/img.webp");
-}
-
-    .login100-pic img {
-        max-width: 100%
-    }
-
-.login100-form {
-    width: 400px
-}
-
-.login100-form-title {
-    font-family: Helvetica;
-    font-size: 30px;
-    font-weight: 700;
-    color: #333;
-    line-height: 1.2;
-    text-align: center;
-    width: 100%;
-    display: block;
-    padding-bottom: 54px
-}
-
-.wrap-input100 {
-    position: relative;
-    width: 100%;
-    z-index: 1;
-}
-
-.wrap-text-input100 {
-    outline: none;
-    border: none;
-    height: 24px;
-    border-bottom: 1px solid blue;
-    margin-top: 0px;
-    background-color: #f5f5f5;
-    padding-left: 5px;
-}
-
-.wrap-text-input100:focus {
-    border: 2px solid #2ba75b;
-    background-color: #e2e2e2;
-}
-
-
-.wrap-label100 {
-    width: 140px;
-    color: #555;
-    font-size: 15px;
-    font-weight: 700;
-    margin-top:0px;
-    margin-right: 10px;
-    border-right: 1px solid #504ec1;
-    padding: 0 6px 0 0;
-    text-align: right;
-}
-
-.drop-input100 {
-    color: #fff;
-    background-color: #2196f3;
-    border-color: #4e57ce;
-    font-size: 12px;
-    border-radius: .2rem;
-    cursor: pointer;
-    height: 24px;
-    width: 200px;
-}
-
-
-.validate-input {
-    position: relative
-}
-
-.input100-submit {
-    padding: 5px 20px !important;
-    border-radius: 10px !important;
-    background-color: #00bbec !important;
-    color: #ffffff !important;
-    border: 1px solid #89898c;
-    box-shadow: 3px 5px 8px #969090;
-    width: 100px;
-    position: relative;
-    left: 240px;
-}
-
-.input100-submit:hover {
-    color: #000000 !important;
-    background-color: #FFFFFF !important;
-    border: 1px solid rgba(87,184,70,.8);
-    cursor: pointer;
-}
-
-.version100-field {
-    position: relative;
-    left: -100px;
-    color: #000000;
-}
-
 /* Windows style UI */
 
 body {
     padding: 0px;
     margin: 0px;
+    background: -webkit-gradient(linear, left top, left bottom, from(rgb(200, 80, 192)), to(rgb(65, 88, 208))) fixed;
     color: #ecf0f1;
-    background: #9053c7;
-    background: -webkit-linear-gradient(-135deg,#c850c0,#4158d0);
-    background: -o-linear-gradient(-135deg,#c850c0,#4158d0);
-    background: -moz-linear-gradient(-135deg,#c850c0,#4158d0);
-    background: linear-gradient(-135deg,#c850c0,#4158d0)
+    display: -webkit-flex;
+    width: 100%;
+    height: 100vh;
 }
 
-a
-{
+.borderLogin {
+    width: 800px;
+    background: #fff;
+}
+
+a {
     text-decoration: none;
     color: #ecf0f1;
 }
 
-/*a img
-{
-    border: 0;
-}*/
+    a img {
+        border: 0;
+    }
 
-*
-{
+* {
     font-family: "Segoe UI";
 }
 
 /*****************************************************************************************************************************************************************************************************/
-/*** LOGIN                                                                                                                                                                                         ***/
+/*** CSS by Saby                                                                                                                                                                                        ***/
 /*****************************************************************************************************************************************************************************************************/
 
- 
-#old-login {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -150px;
-    margin-left: -225px;
-    width: 450px;
-    height: 300px;
-    padding: 10px 10px 30px 10px;
-}
-
-/* customizable logo (replace the background image by yours) */
-/* remote desktop logo, credits BlackVariant (Patrick) http://blackvariant.deviantart.com */
-
-
-
-#old-logo
-{
-    background-image: url("../img/RemoteDesktop.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 128px;
-    width: auto;
-    max-width: 400px;
-    max-height: 128px;
-    margin-bottom: 20px;
-}
-
-.inputDiv {
-    display: inline-block;
-    margin-bottom: 15px;
-}
-
-.inputAdvDiv {
-    display: inline-block;
-}
 
 .switch {
-    position: relative;
+    position: absolute;
     display: inline-block;
-    width: 40px;
+    width: 35px;
     height: 20px;
+    border: none;
 }
-
-/* Hide default HTML checkbox */
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
+    /* Hide default HTML checkbox */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
 /* The slider */
 .slider {
@@ -242,18 +78,17 @@ a
     transition: .4s;
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 14px;
-    width: 16px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
 
 input:checked + .slider {
     background-color: #2196F3;
@@ -269,29 +104,178 @@ input:checked + .slider:before {
     transform: translateX(18px);
 }
 
+.slider-advanced {
+    margin-bottom: 15px !important;
+}
+
+.slider-advancedVME {
+    margin-bottom: 15px !important;
+}
+
+.slider-rest {
+}
+
+.wrap-text-input100 {
+    outline: none;
+    border: none;
+    height: 24px;
+    border-bottom: 1px solid blue;
+    background-color: #f5f5f5;
+    padding-left: 5px;
+}
+
+    .wrap-text-input100:focus {
+        border: 2px solid #2ba75b;
+        background-color: #e2e2e2;
+    }
+
+
+/*****************************************************************************************************************************************************************************************************/
+/*** LOGIN                                                                                                                                                                                         ***/
+/*****************************************************************************************************************************************************************************************************/
+
+/*#login
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -225px;
+    width: 450px;
+    height: 300px;
+    padding: 10px 10px 30px 10px;
+}*/
+
+#login {
+    width: 70%;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    padding: 60px 50px 60px 50px;
+}
+
+@media (max-width: 1040px) {
+    #login {
+        width: 50%;
+        max-width: 800px;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        padding: 60px 50px 60px 50px;
+    }
+}
+
+/* customizable logo (replace the background image by yours) */
+/* remote desktop logo, credits BlackVariant (Patrick) http://blackvariant.deviantart.com */
+/*#logo
+{
+    background-image: url("../img/RemoteDesktop.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 128px;
+    width: auto;
+    max-width: 400px;
+    max-height: 128px;
+    margin-bottom: 20px;
+}*/
+
+#logo {
+    background-image: url("../img/img.webp");
+    width: 316px;
+    height: 70%;
+    position: absolute;
+    top: 23px;
+}
+
+@media (max-width: 1040px) {
+    #logo {
+        background-image: url("../img/img.webp");
+        width: 316px;
+        position: absolute;
+        height: 0vh;
+    }
+}
+
+
+.inputDiv {
+    display: inline-block;
+    margin-bottom: 0px;
+    margin-left: 50%;
+}
+
+@media (max-width: 1040px) {
+    .inputDiv {
+        display: inline-block;
+        margin-bottom: 0px;
+        margin-left: 0%;
+    }
+}
 
 label,
 #mfaProvider {
     float: left;
-    width: 200px;
-    margin-top: 2px;
+    width: 140px;
+    color: #555;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 10px;
+    border-right: 1px solid #504ec1;
+    padding: 0 6px 0 0;
+    text-align: right;
+    margin-top: 2.5px;
 }
 
-#mfaProvider
-{
+@media (max-width: 730px) {
+    label,
+    #mfaProvider {
+        float: left;
+        width: auto;
+        color: #555;
+        font-size: 14px;
+        font-weight: 700;
+        margin-right: 10px;
+        border-right: 1px solid #504ec1;
+        padding: 0 6px 0 0;
+        text-align: left;
+        margin-top: 2.5px;
+    }
+}
+
+#mfaProvider {
     cursor: pointer;
 }
 
-#mfaProvider:hover
-{
-    text-decoration: underline;
-}
+    #mfaProvider:hover {
+        text-decoration: underline;
+    }
 
 #hostType,
-#securityProtocol
-{
+#securityProtocol {
     width: 200px;
     margin-top: 0px;
+    color: #fff;
+    background-color: #2196f3;
+    border-color: #4e57ce;
+    font-size: 12px;
+    border-radius: .2rem;
+    cursor: pointer;
+    height: 24px;
+    margin-bottom: 15px;
 }
 
 #server,
@@ -300,47 +284,94 @@ label,
 #user,
 #password,
 #mfaPassword,
-#program
-{
+#program {
     width: 200px;
-    margin-top: 0px;
+    margin-top: 2px;
+    margin-bottom: 15px;
 }
 
-#vmEnhancedMode
-{
+#vmEnhancedMode {
     margin-top: 6px;
     margin-left: 0px;
 }
 
 /* program to run is better defined into an URL, but can be enabled into the login screen */
 #programLabel,
-#program
-{
+#program {
     visibility: hidden;
     display: none;
 }
 
-
-#version
+/*#connect
 {
-    font-size: 10px;
+    width: 204px;
+    margin-top: 2px;
+    margin-left: 200px;
     display: inline-block;
+}*/
+
+#connect {
+    padding: 5px 20px !important;
+    border-radius: 10px !important;
+    background-color: #00bbec !important;
+    color: #ffffff !important;
+    border: 1px solid #89898c;
+    box-shadow: 3px 5px 8px #969090;
+    width: 100px;
+    position: relative;
+    margin-left: 83%;
 }
 
-#adminDiv
-{
+@media (max-width: 1040px) {
+    #connect {
+        padding: 5px 20px !important;
+        border-radius: 10px !important;
+        background-color: #00bbec !important;
+        color: #ffffff !important;
+        border: 1px solid #89898c;
+        box-shadow: 3px 5px 8px #969090;
+        width: 100px;
+        position: relative;
+        margin-left: 63%;
+    }
+}
+
+#connect:hover {
+    color: #000000 !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid rgba(87,184,70,.8);
+    cursor: pointer;
+}
+
+#version {
+    font-size: 10px;
+    display: inline-block;
+    margin-left: 53%;
+    position: relative;
+    margin-top: -22px;
+    color: #000;
+}
+
+@media (max-width: 1040px) {
+    #version {
+        font-size: 10px;
+        display: inline-block;
+        margin-left: 5%;
+        color: #000;
+    }
+}
+
+#adminDiv {
     margin-top: 5px;
     font-size: 12px;
     text-decoration: underline;
 }
 
-#errorDiv
-{
+#errorDiv {
     margin-left: 200px;
 }
 
-#connectError
-{
+#connectError {
     color: #ff0000;
 }
 
@@ -348,56 +379,47 @@ label,
 /*** HOSTS                                                                                                                                                                                         ***/
 /*****************************************************************************************************************************************************************************************************/
 
-#hosts
-{
+#hosts {
     /* if needed */
 }
 
-#hostsControl
-{
+#hostsControl {
     /* if needed */
 }
 
-#enterpriseUserInfo
-{
+#enterpriseUserInfo {
     width: 250px;
 }
 
 #newRDPHost,
 #newSSHHost,
-#logout
-{
+#logout {
     width: 150px;
 }
 
-#hostsList
-{
+#hostsList {
     /* if needed */
 }
 
-.hostDiv
-{
+.hostDiv {
     display: inline-block;
     text-align: center;
     font-size: 15px;
 }
 
-.hostDiv:hover
-{
-    background-color: #ecf0f1;
-    color: #000;
-}
+    .hostDiv:hover {
+        background-color: #ecf0f1;
+        color: #000;
+    }
 
 .hostLink,
-.hostName
-{
+.hostName {
     cursor: pointer;
 }
 
-.hostName:hover
-{
-    text-decoration: underline;
-}
+    .hostName:hover {
+        text-decoration: underline;
+    }
 
 /*****************************************************************************************************************************************************************************************************/
 /*** TOOLBAR                                                                                                                                                                                       ***/
@@ -408,9 +430,6 @@ label,
     border: 1px solid #ddd;
     background-color: #F4F4F4;
     z-index: 200;
-    z-index: 200;
-    top: 0px;
-    left: 0px;
 }
 
 #toolbar {
@@ -419,13 +438,11 @@ label,
     overflow: auto;
     display: inline-block;
     z-index: 200;
-    top: 0px;
 }
 
 /* connection */
 #serverInfo,
-#userInfo
-{
+#userInfo {
     float: left;
     width: 150px;
 }
@@ -444,8 +461,7 @@ label,
 #mrc,
 #vswipe,
 #share,
-#disconnect
-{
+#disconnect {
     float: left;
     width: 110px;
 }
@@ -456,8 +472,7 @@ label,
 
 /* background fader */
 
-#bgfDiv
-{
+#bgfDiv {
     position: absolute;
     visibility: hidden;
     display: none;
@@ -474,8 +489,7 @@ label,
 
 /* draggable popups */
 
-#dragDiv
-{
+#dragDiv {
     position: absolute;
     overflow: hidden;
     left: 50px;
@@ -487,27 +501,23 @@ label,
     touch-action: none;
 }
 
-#dragHandle
-{
+#dragHandle {
     height: 20px;
     background-color: silver;
 }
 
 /* virtual keyboard popup */
 
-#virtualKeyboardPopup
-{
+#virtualKeyboardPopup {
     width: 470px;
     height: 290px;
 }
 
-#virtualKeyboardPopupDesc
-{
+#virtualKeyboardPopupDesc {
     font-weight: bold;
 }
 
-#virtualKeyboardPopupText
-{
+#virtualKeyboardPopupText {
     width: 425px;
     height: 150px;
     margin-bottom: 5px;
@@ -515,27 +525,23 @@ label,
 
 /* on-screen keyboard popup */
 
-#onScreenKeyboardPopup
-{
+#onScreenKeyboardPopup {
     width: 500px;
     height: 300px;
 }
 
 /* show dialog popup */
 
-#showDialogPopup
-{
+#showDialogPopup {
     width: 470px;
     height: 240px;
 }
 
-#showDialogPopupDesc
-{
+#showDialogPopupDesc {
     font-weight: bold;
 }
 
-#showDialogPopupText
-{
+#showDialogPopupText {
     width: 425px;
     height: 150px;
     margin-bottom: 5px;
@@ -543,196 +549,165 @@ label,
 
 /* file storage popup */
 
-#fileStoragePopup
-{
+#fileStoragePopup {
     width: 470px;
     height: 130px;
 }
 
-#fileStoragePopupDesc
-{
+#fileStoragePopupDesc {
     font-weight: bold;
 }
 
-#fileToDownloadSelect
-{
+#fileToDownloadSelect {
     width: 250px;
 }
 
 /* host popup */
 
 #editHostPopup,
-#editHostPopupInner
-{
+#editHostPopupInner {
     width: 420px;
     height: 450px;
 }
 
-#editHostPopupInner
-{
+#editHostPopupInner {
     color: #000;
     background: #fff;
 }
 
-#editHostPopupTitle
-{
+#editHostPopupTitle {
     padding-top: 20px;
     padding-left: 10px;
 }
 
-.editHostPopupInput
-{
+.editHostPopupInput {
     padding-left: 10px;
 }
 
 /* credential popup */
 
 #editCredentialPopup,
-#editCredentialPopupInner
-{
+#editCredentialPopupInner {
     width: 400px;
     height: 250px;
 }
 
-#editCredentialPopupInner
-{
+#editCredentialPopupInner {
     color: #000;
     background: #fff;
 }
 
-#editCredentialsPopupTitle
-{
+#editCredentialsPopupTitle {
     padding-top: 20px;
     padding-left: 10px;
 }
 
-.editCredentialPopupInput
-{
+.editCredentialPopupInput {
     padding-left: 10px;
 }
 
 /* host session popup */
 
 #editHostSessionPopup,
-#editHostSessionPopupInner
-{
+#editHostSessionPopupInner {
     width: 400px;
     height: 500px;
 }
 
-#editHostSessionPopupInner
-{
+#editHostSessionPopupInner {
     color: #000;
     background: #fff;
 }
 
-#editHostSessionPopupTitle
-{
+#editHostSessionPopupTitle {
     padding-top: 20px;
     padding-left: 10px;
 }
 
-.editHostSessionPopupInput
-{
+.editHostSessionPopupInput {
     padding-left: 10px;
 }
 
-#sessionUrl
-{
+#sessionUrl {
     width: 370px;
 }
 
 /* share session popup */
 
 #shareSessionPopup,
-#shareSessionPopupInner
-{
+#shareSessionPopupInner {
     width: 400px;
     height: 370px;
 }
 
-#shareSessionPopupInner
-{
+#shareSessionPopupInner {
     color: #000;
     background: #fff;
 }
 
-#shareSessionPopupTitle
-{
+#shareSessionPopupTitle {
     padding-top: 20px;
     padding-left: 10px;
 }
 
-.shareSessionPopupInput
-{
+.shareSessionPopupInput {
     padding-left: 10px;
 }
 
-#guestControlLabel
-{
+#guestControlLabel {
     padding-top: 10px;
     width: 100px;
 }
 
-#guestControl
-{
+#guestControl {
     margin-top: 17px;
 }
 
 /* change password popup */
 
 #changePasswordPopup,
-#changePasswordPopupInner
-{
+#changePasswordPopupInner {
     width: 400px;
     height: 330px;
 }
 
-#changePasswordPopupInner
-{
+#changePasswordPopupInner {
     color: #000;
     background: #fff;
 }
 
-#changePasswordPopupTitle
-{
+#changePasswordPopupTitle {
     padding-top: 20px;
     padding-left: 10px;
 }
 
-.changePasswordMessage
-{
+.changePasswordMessage {
     padding-left: 10px;
 }
 
-.changePasswordPopupInput
-{
+.changePasswordPopupInput {
     padding-left: 10px;
 }
 
-#changeError
-{
+#changeError {
     padding-left: 10px;
     font-size: 10pt;
     color: red;
-    width:380px;
+    width: 380px;
 }
 
 /* copy clipboard popup */
 
-#copyClipboardPopup
-{
+#copyClipboardPopup {
     width: 470px;
     height: 240px;
 }
 
-#copyClipboardPopupDesc
-{
+#copyClipboardPopupDesc {
     font-weight: bold;
 }
 
-#copyClipboardPopupText
-{
+#copyClipboardPopupText {
     width: 425px;
     height: 150px;
     margin-bottom: 5px;
@@ -740,19 +715,16 @@ label,
 
 /* paste clipboard popup */
 
-#pasteClipboardPopup
-{
+#pasteClipboardPopup {
     width: 470px;
     height: 240px;
 }
 
-#pasteClipboardPopupDesc
-{
+#pasteClipboardPopupDesc {
     font-weight: bold;
 }
 
-#pasteClipboardPopupText
-{
+#pasteClipboardPopupText {
     width: 425px;
     height: 150px;
     margin-bottom: 5px;
@@ -769,7 +741,6 @@ label,
     z-index: 100;
     /* fix touchscreen on Edge (disabled by default and using pointer events instead of touch) by emulating mouse events */
     touch-action: none;
-    background: #9053c7;
 }
 
 /* remote session display: canvas (HTML5) */
@@ -777,71 +748,62 @@ label,
 canvas {
     position: absolute;
     z-index: 100;
-    left: 0px;
-    top: 0px;
-    background: #9053c7;
 }
 
 /* remote session display: divs (HTML4) */
 
-.imageDiv
-{
-	position: absolute;
-	background-repeat: no-repeat;
-	overflow: hidden;
-	z-index: 100;
+.imageDiv {
+    position: absolute;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    z-index: 100;
 }
 
 /* remote session helpers */
 
-#cacheDiv
-{
-    visibility: hidden;
-	display: none;
-}
-
-#statDiv
-{
-    visibility: hidden;
-	display: none;
-	font-size: 10px;
-	background-color: black;
-	color: lightgrey;
-	z-index: 200;
-}
-
-#debugDiv
-{
+#cacheDiv {
     visibility: hidden;
     display: none;
-	font-size: 12px;
-	background-color: lightgrey;
+}
+
+#statDiv {
+    visibility: hidden;
+    display: none;
+    font-size: 10px;
+    background-color: black;
+    color: lightgrey;
+    z-index: 200;
+}
+
+#debugDiv {
+    visibility: hidden;
+    display: none;
+    font-size: 12px;
+    background-color: lightgrey;
     color: black;
-	z-index: 200;
+    z-index: 200;
 }
 
-#msgDiv
-{
-	position: absolute;
-	visibility: hidden;
+#msgDiv {
+    position: absolute;
+    visibility: hidden;
     display: none;
-	font-size: 18px;
-	font-weight: bold;
+    font-size: 18px;
+    font-weight: bold;
     overflow: hidden;
-	background-color: red;
-	color: white;
-	z-index: 200;
+    background-color: red;
+    color: white;
+    z-index: 200;
 }
 
-#kbhDiv
-{
-	position: absolute;
-	visibility: hidden;
-	display: none;
-	font-size: 18px;
-	font-weight: bold;
-	text-align: left;
-	background-color: #FAF8CC;
-	color: black;
-	z-index: 200;
+#kbhDiv {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+    background-color: #FAF8CC;
+    color: black;
+    z-index: 200;
 }

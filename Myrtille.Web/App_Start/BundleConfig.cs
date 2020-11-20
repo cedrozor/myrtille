@@ -43,6 +43,9 @@ namespace Myrtille.Web
             bundles.Add(new Bundle("~/js/xterm/xterm.js").Include("~/js/xterm/xterm.js"));
             bundles.Add(new Bundle("~/js/xterm/addons/fit/fit.js").Include("~/js/xterm/addons/fit/fit.js"));
             bundles.Add(new Bundle("~/js/audio/audiowebsocket.js").Include("~/js/audio/audiowebsocket.js"));
+            bundles.Add(new Bundle("~/js/jquery.js").Include("~/js/jquery.js"));
+            bundles.Add(new Bundle("~/js/js-tilt.js").Include("~/js/js-tilt.js"));
+
 
             // styles
 
