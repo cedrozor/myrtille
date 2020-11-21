@@ -65,5 +65,30 @@ namespace Myrtille.Web
                 throw;
             }
         }
+
+        public List<string> GetUserFolderFiles(Guid remoteSessionId, string userDomain, string userName, string userPassword, string folderGuid)
+        {
+            try
+            {
+                return Channel.GetUserFolderFiles(remoteSessionId, userDomain, userName, userPassword, folderGuid);
+            }
+            catch (Exception exc)
+            {
+                Trace.TraceError("Failed to list file(s) from user {0} specified folder, remote session {1} ({2})", userName, remoteSessionId, exc);
+                throw;
+            }
+        }
+        public Stream DownloadFileFromUserFolder(Guid remoteSessionId, string userDomain, string userName, string userPassword, string folderGuid, string fileName)
+        {
+            try
+            {
+                return Channel.DownloadFileFromUserFolder(remoteSessionId, userDomain, userName, userPassword, folderGuid, fileName);
+            }
+            catch (Exception exc)
+            {
+                Trace.TraceError("Failed to download file {0} from user {1} specified folder, remote session {2} ({3})", fileName, userName, remoteSessionId, exc);
+                throw;
+            }
+        }
     }
 }

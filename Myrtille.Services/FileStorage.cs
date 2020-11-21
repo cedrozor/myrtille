@@ -111,5 +111,62 @@ namespace Myrtille.Services
 
             return fileStream;
         }
+
+
+        //Adding any folder file download
+        public List<string> GetUserFolderFiles(
+            Guid remoteSessionId,
+            string userDomain,
+            string userName,
+            string userPassword,
+            string folderGuid)
+        {
+            var specifiedFolder = AccountHelper.GetUserFolderFiles(userDomain, userName, userPassword, folderGuid);
+
+            try
+            {
+                var fileNames = Directory.GetFiles(specifiedFolder);
+                for (var i = 0; i < fileNames.Length; i++)
+                {
+                    fileNames[i] = Path.GetFileName(fileNames[i]);
+                }
+                return new List<string>(fileNames);
+            }
+            catch (Exception exc)
+            {
+                Trace.TraceError("Failed to retrieve file(s) from user {0} specified folder {1}, remote session {2} ({3})", userName, specifiedFolder, remoteSessionId, exc);
+                throw;
+            }
+        }
+
+        public Stream DownloadFileFromUserFolder(
+            Guid remoteSessionId,
+            string userDomain,
+            string userName,
+            string userPassword,
+            string folderGuid,
+            string fileName)
+        {
+            var specifiedFolder = AccountHelper.GetUserFolderFiles(userDomain, userName, userPassword, folderGuid);
+
+            Stream fileStream = null;
+
+            try
+            {
+                fileStream = File.Open(Path.Combine(specifiedFolder, fileName), FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+            catch (Exception exc)
+            {
+                Trace.TraceError("Failed to download file {0} from user {1} specified folder {2}, remote session {3} ({4})", fileName, userName, specifiedFolder, remoteSessionId, exc);
+                throw;
+            }
+
+            Trace.TraceInformation("Downloaded file {0} from user {1} specified folder {2}, remote session {3}", fileName, userName, specifiedFolder, remoteSessionId);
+
+            return fileStream;
+        }
+
+
+
     }
 }

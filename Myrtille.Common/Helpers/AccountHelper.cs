@@ -401,6 +401,7 @@ namespace Myrtille.Helpers
 
         private static Guid KNOWNFOLDER_GUID_DOCUMENTS = new Guid("{FDD39AD0-238F-46AF-ADB4-6C85480369C7}");
 
+
         // from shlobj.h
         private enum KnownFolderFlags : uint
         {
@@ -550,6 +551,9 @@ namespace Myrtille.Helpers
                                     // ensure the user doesn't have exclusive rights on it (otherwise myrtille won't be able to access it)
                                     IntPtr outPath;
                                     var result = SHGetKnownFolderPath(KNOWNFOLDER_GUID_DOCUMENTS, (uint)KnownFolderFlags.DontVerify, token, out outPath);
+                                    Trace.TraceInformation("Found known GUID: {0}", KNOWNFOLDER_GUID_DOCUMENTS.ToString());
+                                    Trace.TraceInformation("Found result: {0}", result.ToString());
+                                    Trace.TraceInformation("Found opPath: {0}", outPath.ToString());
                                     if (result == 0)
                                     {
                                         return Marshal.PtrToStringUni(outPath);
@@ -578,6 +582,119 @@ namespace Myrtille.Helpers
                 }
             }
         }
+
+
+        /// <summary>
+        /// retrieve an user mentioned folder; also validates the user credentials to prevent unauthorized access to this folder
+        /// </summary>
+        /// <param name="userDomain"></param>
+        /// <param name="userName"></param>
+        /// <param name="userPassword"></param>
+        /// <param name="folderGuid"></param>
+        /// <returns>documents directory</returns>
+        public static string GetUserFolderFiles(
+            string userDomain,
+            string userName,
+            string userPassword,
+            string folderGuid)
+        {
+            var token = IntPtr.Zero;
+
+            try
+            {
+                // logon the user, domain (if defined) or local otherwise
+                // myrtille must be running on a machine which is part of the domain for it to work
+                if (LogonUser(userName, string.IsNullOrEmpty(userDomain) ? Environment.MachineName : userDomain, userPassword, string.IsNullOrEmpty(userDomain) ? (int)LogonType.LOGON32_LOGON_INTERACTIVE : (int)LogonType.LOGON32_LOGON_NETWORK, (int)LogonProvider.LOGON32_PROVIDER_DEFAULT, ref token))
+                {
+                    string serverName = null;
+                    if (!string.IsNullOrEmpty(userDomain))
+                    {
+                        var context = new DirectoryContext(DirectoryContextType.Domain, userDomain, userName, userPassword);
+                        var controller = Domain.GetDomain(context).FindDomainController();
+                        serverName = controller.Name;
+                    }
+
+                    IntPtr bufPtr;
+                    if (NetUserGetInfo(serverName, userName, 4, out bufPtr) == NET_API_STATUS.NERR_Success)
+                    {
+                        var userInfo = new USER_INFO_4();
+                        userInfo = (USER_INFO_4)Marshal.PtrToStructure(bufPtr, typeof(USER_INFO_4));
+
+                        var profileInfo = new ProfileInfo
+                        {
+                            dwSize = Marshal.SizeOf(typeof(ProfileInfo)),
+                            dwFlags = (int)ProfileInfoFlags.PI_NOUI,
+                            lpServerName = string.IsNullOrEmpty(userDomain) ? Environment.MachineName : serverName.Split(new[] { "." }, StringSplitOptions.None)[0],
+                            lpUserName = string.IsNullOrEmpty(userDomain) ? userName : string.Format(@"{0}\{1}", userDomain, userName),
+                            lpProfilePath = userInfo.usri4_profile
+                        };
+
+                        // load the user profile (roaming if a domain is defined, local otherwise), in order to have it mounted into the registry hive (HKEY_CURRENT_USER)
+                        // the user must have logged on at least once for windows to create its profile (this is forcibly done as myrtille requires an active remote session for the user to enable file transfer)
+                        if (LoadUserProfile(token, ref profileInfo))
+                        {
+                            if (profileInfo.hProfile != IntPtr.Zero)
+                            {
+                                try
+                                {
+                                    // retrieve the user specified folder guid, possibly redirected by a GPO to a network share (read/write accessible to domain users)
+                                    // ensure the user doesn't have exclusive rights on it (otherwise myrtille won't be able to access it)
+                                    IntPtr outPath;
+
+                                    //try
+                                    //{
+                                    var KNOWNFOLDER_GUID_ANY = new Guid(folderGuid);
+                                    Trace.TraceInformation("Found GUID: {0} of {1}", KNOWNFOLDER_GUID_ANY.ToString(), folderGuid.ToString());
+                                    var result = SHGetKnownFolderPath(KNOWNFOLDER_GUID_ANY, (uint)KnownFolderFlags.DontVerify, token, out outPath);
+                                    Trace.TraceInformation("Found opPath: {0}", outPath.ToString());
+                                    Trace.TraceInformation("Found result: {0}", result.ToString());
+                                    if (result == 0)
+                                    {
+                                        return Marshal.PtrToStringUni(outPath);
+                                    }
+                                    else
+                                    {
+                                        return Marshal.PtrToStringUni(outPath);
+                                    }
+                                    //}
+                                    //catch (Exception excp)
+                                    //{
+                                    //    Trace.TraceError("Failed to retrieve user {0} specified folder ({1})", userName, excp);
+                                    //    var result = SHGetKnownFolderPath((new Guid("C:\\Users\\rahul\\Desktop")), (uint)KnownFolderFlags.DontVerify, token, out outPath);
+                                    //    Trace.TraceInformation("Found result: {0}", result);
+                                    //    if (result == 0)
+                                    //    {
+                                    //        return Marshal.PtrToStringUni(outPath);
+                                    //    }
+                                    //    throw excp;
+                                    //}
+
+
+                                }
+                                finally
+                                {
+                                    UnloadUserProfile(token, profileInfo.hProfile);
+                                }
+                            }
+                        }
+                    }
+                }
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+            catch (Exception exc)
+            {
+                Trace.TraceError("Failed to retrieve user {0} specified folder ({1})", userName, exc);
+                throw;
+            }
+            finally
+            {
+                if (token != IntPtr.Zero)
+                {
+                    CloseHandle(token);
+                }
+            }
+        }
+
 
         /// <summary>
         /// retrieve an user home folder; also validates the user credentials to prevent unauthorized access to this folder

@@ -40,6 +40,11 @@
                 Download file: <select runat="server" id="fileToDownloadSelect" onchange="onFileToDownloadChange(this);"/>
                 <input type="button" runat="server" id="downloadFileButton" value="Download" disabled="disabled" onserverclick="DownloadFileButtonClick"/><br/>
                 <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
+                <br />
+                <span id="specfiedFileStoragePopupDesc">Files into Specified folder</span><hr/>
+                Download file: <select runat="server" id="specifiedFileToDownloadSelect" onchange="onSpecifiedFileToDownloadChange(this);"/>
+                <input type="button" runat="server" id="specifiedDownloadFileButton" value="Download" disabled="disabled" onserverclick="SpecifiedDownloadFileButtonClick"/><br/>
+                <input type="button" id="specifiedClosePopupButton" value="Close" onclick="parent.closePopup();"/>
             </div>
             
         </form>
@@ -76,7 +81,15 @@
                 }
             }
 
-		</script>
+            // download file from user specified folder
+            function onSpecifiedFileToDownloadChange(fileToDownloadText) {
+                var downloadSpecifiedFileButton = document.getElementById('<%=specifiedDownloadFileButton.ClientID%>');
+                if (downloadSpecifiedFileButton != null) {
+                    downloadSpecifiedFileButton.disabled = fileToDownloadText.value == '';
+                }
+            }
+
+        </script>
 
 	</body>
 

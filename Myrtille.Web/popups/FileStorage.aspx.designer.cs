@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Myrtille.Web {
-    
-    
-    public partial class FileStorage {
-        
+namespace Myrtille.Web
+{
+
+
+    public partial class FileStorage
+    {
+
         /// <summary>
         /// fileToUploadText control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputFile fileToUploadText;
-        
+
         /// <summary>
         /// uploadFileButton control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton uploadFileButton;
-        
+
         /// <summary>
         /// fileToDownloadSelect control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlSelect fileToDownloadSelect;
-        
+
         /// <summary>
         /// downloadFileButton control.
         /// </summary>
@@ -47,5 +49,23 @@ namespace Myrtille.Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton downloadFileButton;
+
+        /// <summary>
+        /// specifiedFileToDownloadSelect control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlSelect specifiedFileToDownloadSelect;
+
+        /// <summary>
+        /// specifiedDownloadFileButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputButton specifiedDownloadFileButton;
     }
 }

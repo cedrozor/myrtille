@@ -75,5 +75,16 @@ namespace Myrtille.Services.Contracts
             string userName,
             string userPassword,
             string fileName);
+
+        /// list the file(s) into the given user specified folder
+        /// </summary>
+        [OperationContract]
+        List<string> GetUserFolderFiles(Guid remoteSessionId, string userDomain, string userName, string userPassword, string folderGuid);
+
+        /// <summary>
+        /// download a file from the given user specified folder
+        /// </summary>
+        [OperationContract]
+        Stream DownloadFileFromUserFolder(Guid remoteSessionId, string userDomain, string userName, string userPassword, string folderGuid, string fileName);
     }
 }

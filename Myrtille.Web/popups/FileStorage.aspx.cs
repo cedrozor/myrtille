@@ -20,8 +20,10 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Web.UI;
+using System.Web.Configuration;
 using Myrtille.Helpers;
 using Myrtille.Services.Contracts;
+using System.Configuration;
 
 namespace Myrtille.Web
 {
@@ -42,6 +44,7 @@ namespace Myrtille.Web
             // retrieve the active remote session
             try
             {
+                var stringTest = ConfigurationManager.AppSettings["SpecificFolderGUID"];
                 if (Session[HttpSessionStateVariables.RemoteSession.ToString()] == null)
                     throw new NullReferenceException();
 
@@ -79,6 +82,46 @@ namespace Myrtille.Web
                         System.Diagnostics.Trace.TraceError("Failed to retrieve the user documents ({0})", exc);
                     }
                 }
+
+
+                // if a domain is specified, the roaming user profile is loaded from the Active Directory
+                // file storage is synchronized with the user "Specified GUID" folder (will use folder redirection if defined)
+                // user credentials will be checked prior to any file operation
+                // if possible, use SSL to communicate with the service
+                if (_remoteSession.State == RemoteSessionState.Connected &&
+                    Session.SessionID.Equals(_remoteSession.OwnerSessionID) &&
+                    _remoteSession.HostType != HostType.SSH &&
+                    _remoteSession.AllowFileTransfer &&
+                    (_remoteSession.ServerAddress.ToLower() == "localhost" || _remoteSession.ServerAddress == "127.0.0.1" || _remoteSession.ServerAddress == "[::1]" || _remoteSession.ServerAddress == Request.Url.Host || !string.IsNullOrEmpty(_remoteSession.UserDomain)) &&
+                    !string.IsNullOrEmpty(_remoteSession.UserName) && !string.IsNullOrEmpty(_remoteSession.UserPassword) &&
+                    string.IsNullOrEmpty(_remoteSession.VMGuid) &&
+                    ConfigurationManager.AppSettings["SpecificFolderGUID"] != null)
+                {
+                    try
+                    {
+                        var _folderGuid = ConfigurationManager.AppSettings["SpecificFolderGUID"];
+                        System.Diagnostics.Trace.WriteLine(_folderGuid);
+                        var files = _fileStorageClient.GetUserFolderFiles(
+                            _remoteSession.Id,
+                            _remoteSession.UserDomain,
+                            _remoteSession.UserName,
+                            _remoteSession.UserPassword,
+                            _folderGuid
+                            );
+
+                        if (files.Count > 0)
+                        {
+                            specifiedFileToDownloadSelect.DataSource = files;
+                            specifiedFileToDownloadSelect.DataBind();
+                            specifiedDownloadFileButton.Disabled = false;
+                        }
+                    }
+                    catch (Exception exc)
+                    {
+                        System.Diagnostics.Trace.TraceError("Failed to retrieve the user documents ({0})", exc);
+                    }
+                }
+
             }
             catch (Exception exc)
             {
@@ -159,6 +202,45 @@ namespace Myrtille.Web
                         fileToDownloadSelect.Value);
 
                     FileHelper.DownloadFile(Response, fileStream, fileToDownloadSelect.Value, true);
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                // occurs because the response is ended after sending the file content
+            }
+            catch (Exception exc)
+            {
+                System.Diagnostics.Trace.TraceError("Failed to download file ({0})", exc);
+            }
+        }
+
+
+        /// <summary>
+        /// download a file from the user Specified folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void SpecifiedDownloadFileButtonClick(
+            object sender,
+            EventArgs e)
+        {
+            try
+            {
+                if (_fileStorageClient == null)
+                    return;
+
+                if (!string.IsNullOrEmpty(specifiedFileToDownloadSelect.Value))
+                {
+                    var _folderGuid = ConfigurationManager.AppSettings["SpecificFolderGUID"];
+                    var fileStream = _fileStorageClient.DownloadFileFromUserFolder(
+                        _remoteSession.Id,
+                        _remoteSession.UserDomain,
+                        _remoteSession.UserName,
+                        _remoteSession.UserPassword,
+                        _folderGuid,
+                        specifiedFileToDownloadSelect.Value);
+
+                    FileHelper.DownloadFile(Response, fileStream, specifiedFileToDownloadSelect.Value, true);
                 }
             }
             catch (ThreadAbortException)
