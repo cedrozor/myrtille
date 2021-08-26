@@ -16,6 +16,8 @@
     limitations under the License.
 */
 
+using System;
+
 namespace Myrtille.Web
 {
     public enum ImageEncoding
@@ -33,7 +35,7 @@ namespace Myrtille.Web
         JPEG = 2,
         WEBP = 3
     }
-
+    [Serializable]
     public class RemoteSessionImage
     {
         public int Idx;

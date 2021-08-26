@@ -435,6 +435,13 @@ function processMessage(text)
 
             // connected session
             case messageTypeEnum.Connected:
+                console.log('RDP Connected');
+                document.getElementById("demo").innerHTML = "C O N N E C T E D";
+
+                var list = document.getElementsByTagName("circle");
+                for (let x of list) {
+                    x.style.display = "none";
+                }
                 // if running myrtille into an iframe, register the iframe url (into a cookie)
                 // this is necessary to prevent a new http session from being generated when reloading the page, due to the missing http session id into the iframe url (!)
                 // multiple iframes (on the same page), like multiple connections/tabs, requires cookieless="UseUri" for sessionState into web.config
@@ -449,6 +456,13 @@ function processMessage(text)
 
             // disconnected session
             case messageTypeEnum.Disconnected:
+                console.log("Disconnected");
+                document.getElementById("demo").innerHTML = "D I S C O N N E C T E D !";
+                var list = document.getElementsByTagName("circle");
+                for (let x of list) {
+                    x.style.display = "none";
+                }
+
                 // if running myrtille into an iframe, unregister the iframe url
                 if (parent != null && window.name != '')
                 {
@@ -866,7 +880,10 @@ function handleRemoteSessionExit(exitCode)
 
         default:
             alert('The remote connection failed or was closed unexpectedly');
+
     }
+    console.log("Exit anomaly")
+    //document.location.href = "/Myrtille/ErrorPage.aspx";
 }
 
 var pdf = null;
