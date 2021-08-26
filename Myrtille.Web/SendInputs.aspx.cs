@@ -106,7 +106,8 @@ namespace Myrtille.Web
                                 remoteSession.ClientHeight,
                                 remoteSession.AllowRemoteClipboard,
                                 remoteSession.AllowPrintDownload,
-                                remoteSession.AllowAudioPlayback);
+                                remoteSession.AllowAudioPlayback,
+                                remoteSession.LoadBalanceInfo);
                         }
                         catch (Exception exc)
                         {

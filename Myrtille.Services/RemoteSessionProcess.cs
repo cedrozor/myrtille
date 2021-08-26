@@ -120,7 +120,8 @@ namespace Myrtille.Services
             int clientHeight,
             bool allowRemoteClipboard,
             bool allowPrintDownload,
-            bool allowAudioPlayback)
+            bool allowAudioPlayback,
+            string loadBalanceInfo)
         {
             Trace.TraceInformation("Connecting remote session {0}, type {1}, security {2}, server (:port) {3}, vm {4}, domain {5}, user {6}, program {7}",
                 remoteSessionId,
@@ -353,7 +354,8 @@ namespace Myrtille.Services
                         (allowRemoteClipboard ? " +" : " -") + "clipboard" +                                                        // clipboard support
                         (securityProtocol != SecurityProtocol.auto ? " /sec:" + securityProtocol.ToString() : string.Empty) +       // security protocol
                         (allowAudioPlayback ? " /sound" : string.Empty) +                                                           // sound support
-                        " /audio-mode:" + (allowAudioPlayback ? "0" : "2");                                                         // audio mode (0: redirect, 1: play on server, 2: do not play)
+                        " /audio-mode:" + (allowAudioPlayback ? "0" : "2") +                                                        // audio mode (0: redirect, 1: play on server, 2: do not play)
+                        (!string.IsNullOrEmpty(loadBalanceInfo) ? " /load-balance-info:\"" + loadBalanceInfo +"\"" : string.Empty);
                 }
 
                 #endregion

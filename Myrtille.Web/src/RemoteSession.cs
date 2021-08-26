@@ -69,6 +69,7 @@ namespace Myrtille.Web
         public bool Reconnect;
         public bool ConnectionService;
         public string ClipboardText;                    // clipboard text
+        public string LoadBalanceInfo;
 
         public RemoteSession(
             Guid id,
@@ -93,7 +94,8 @@ namespace Myrtille.Web
             int maxActiveGuests,
             string ownerSessionID,
             string ownerClientKey,
-            bool connectionService)
+            bool connectionService,
+            string loadBalanceInfoValue)
         {
             Id = id;
             State = RemoteSessionState.NotConnected;
@@ -120,6 +122,7 @@ namespace Myrtille.Web
             OwnerSessionID = ownerSessionID;
             OwnerClientKey = ownerClientKey;
             ConnectionService = connectionService;
+            LoadBalanceInfo = loadBalanceInfoValue;
 
             // default capture API config
             ScreenshotIntervalSecs = 60;
