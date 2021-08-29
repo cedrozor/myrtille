@@ -86,6 +86,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Capture\Picture.cs" />
+    <Compile Include="Capture\PictureSaver.cs" />
+    <Compile Include="Capture\Video.cs" />
     <Compile Include="Helpers\CertificateHelper.cs" />
     <Compile Include="Helpers\ClientIPHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />

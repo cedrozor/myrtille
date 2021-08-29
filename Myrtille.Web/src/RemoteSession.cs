@@ -95,7 +95,12 @@ namespace Myrtille.Web
             string ownerClientKey,
             bool connectionService)
         {
-            Id = id;
+
+
+            if (clientWidth % 2 != 0) clientWidth++;
+            if (clientHeight % 2 != 0) clientHeight++;
+
+                Id = id;
             State = RemoteSessionState.NotConnected;
             HostName = hostName;
             HostType = hostType;

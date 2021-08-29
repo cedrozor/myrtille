@@ -250,7 +250,6 @@
     <Compile Include="src\Handlers\RemoteSessionEventSourceHandler.cs" />
     <Compile Include="src\RemoteSessionClient.cs" />
     <Compile Include="src\Services\DisconnectionService.cs" />
-    <Compile Include="src\Services\Imager.cs" />
     <Compile Include="src\Services\SharingService.cs" />
     <Compile Include="src\Services\CaptureService.cs" />
     <Compile Include="src\Clients\ConnectionClient.cs" />

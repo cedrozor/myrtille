@@ -35,6 +35,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Myrtille.Common.Capture;
 
 namespace Myrtille.Web
 {
@@ -739,7 +740,7 @@ namespace Myrtille.Web
 
 
 
-                var imageForSave = new RemoteSessionImage
+                var imageForSave = new SessionPicture
                 {
                     //Idx = BitConverter.ToInt32(imgInfo, 0),
                     Idx = _imageIdx == int.MaxValue ? 1 : ++_imageIdx,
@@ -747,14 +748,15 @@ namespace Myrtille.Web
                     PosY = BitConverter.ToInt32(imgInfo, 8),
                     Width = BitConverter.ToInt32(imgInfo, 12),
                     Height = BitConverter.ToInt32(imgInfo, 16),
-                    Format = (ImageFormat)BitConverter.ToInt32(imgInfo, 20),
+                    Format = (PictureFormat)BitConverter.ToInt32(imgInfo, 20),
                     Quality = BitConverter.ToInt32(imgInfo, 24),
                     Fullscreen = BitConverter.ToInt32(imgInfo, 28) == 1,
                     Data = new byte[data.Length - 36]
                 };
 
                 Array.Copy(data, 36, imageForSave.Data, 0, data.Length - 36);
-                Imager.InQueueForSave(imageForSave, RemoteSession.Id, DateTime.Now.AddMilliseconds(_imageCacheDuration));
+
+                PictureSaver.InQueueForSave(imageForSave, RemoteSession.Id, DateTime.Now.AddMilliseconds(_imageCacheDuration));
 
                 _cache.Insert(
                     "remoteSessionImage_" + RemoteSession.Id + "_" + image.Idx,

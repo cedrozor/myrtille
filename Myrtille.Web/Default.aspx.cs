@@ -934,6 +934,7 @@ namespace Myrtille.Web
             {
                 Application.Lock();
 
+                width.Value = width.Value;
                 // create the remote session
                 RemoteSession = new RemoteSession(
                     connectionId,

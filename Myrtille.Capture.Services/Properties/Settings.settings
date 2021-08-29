@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VideoSavingService.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ImageLogPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\Recivedlog</Value>
+    </Setting>
+    <Setting Name="VideosavePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\Videolog</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
