@@ -656,3 +656,48 @@ canvas
 	color: black;
 	z-index: 200;
 }
+
+
+/*Status watermark*/
+
+button {
+    z-index: 10;
+}
+
+svg {
+    position: absolute;
+    opacity: 1;
+}
+
+circle:nth-of-type(1) {
+    fill: #ffffff;
+}
+
+circle:nth-of-type(2) {
+    fill: #fcd837;
+}
+
+circle:nth-of-type(3) {
+    fill: #f9a11f;
+}
+
+circle:nth-of-type(4) {
+    fill: #f27c21;
+}
+
+#clackers {
+    /*   border: 1px solid white; */
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    opacity: 0.5;
+    z-index: 99;
+    color: white;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
+body {
+    background: #231f20;
+}

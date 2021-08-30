@@ -126,6 +126,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="ErrorPage.aspx.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorPage.aspx.designer.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="handlers\LongPollingHandler.ashx.cs">
       <DependentUpon>LongPollingHandler.ashx</DependentUpon>
     </Compile>
@@ -298,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\xterm.css" />
+    <Content Include="ErrorPage.aspx" />
     <Content Include="handlers\EventSourceHandler.ashx" />
     <Content Include="favicon.ico" />
     <Content Include="GetHash.aspx" />
@@ -438,9 +446,6 @@
     <Content Include="js\user\mouse.js" />
     <Content Include="PrintDocument.aspx" />
     <Content Include="SendInputs.aspx" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="log\README" />
     <Content Include="Myrtille.Web.Install.ps1" />
     <Content Include="Myrtille.Web.Uninstall.ps1" />
@@ -496,21 +501,17 @@
     </None>
     <Content Include="handlers\SocketHandler.ashx" />
     <Content Include="handlers\AudioSocketHandler.ashx" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web.Base.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
     </None>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

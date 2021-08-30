@@ -31,6 +31,8 @@ using System.Web.UI.WebControls;
 using Myrtille.Helpers;
 using Myrtille.Services.Contracts;
 using Myrtille.Web.Properties;
+using System.Xml.Serialization;
+using Myrtille.Common.Tocken;
 
 namespace Myrtille.Web
 {
@@ -89,7 +91,7 @@ namespace Myrtille.Web
             // session sharing
             if (!bool.TryParse(ConfigurationManager.AppSettings["AllowSessionSharing"], out _allowSessionSharing))
             {
-                _allowSessionSharing = true;
+                _allowSessionSharing = false;
             }
 
             // audio playback
@@ -202,6 +204,7 @@ namespace Myrtille.Web
                 try
                 {
                     _enterpriseSession = (EnterpriseSession)Session[HttpSessionStateVariables.EnterpriseSession.ToString()];
+                    
                 }
                 catch (Exception exc)
                 {
@@ -234,10 +237,12 @@ namespace Myrtille.Web
                             // redirect to login page
                             if (!string.IsNullOrEmpty(_loginUrl))
                             {
-                                script += string.Format("window.location.href = '{0}';", _loginUrl);
+                                //script += string.Format("window.location.href = '{0}';", _loginUrl);
                             }
 
-                            ClientScript.RegisterClientScriptBlock(GetType(), Guid.NewGuid().ToString(), script, true);
+                            //ClientScript.RegisterClientScriptBlock(GetType(), Guid.NewGuid().ToString(), script, true);
+                            if(RemoteSession.ExitCode!=0)
+                            Response.Redirect($"ErrorPage.aspx?ExitCode={RemoteSession.ExitCode}", true);
                         }
 
                         // cleanup
@@ -317,6 +322,275 @@ namespace Myrtille.Web
             // disable the browser cache; in addition to a "noCache" dummy param, with current time, on long-polling and xhr requests
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Cache.SetNoStore();
+
+            if (!string.IsNullOrEmpty(Request.QueryString["Token"]))
+            {
+                string Token = Request.QueryString["Token"];
+
+                XmlSerializer serializer = new XmlSerializer(typeof(RemoteSessionInfo));
+                //Token = HttpUtility.UrlDecode(HttpUtility.UrlEncode(Token));
+                Token = Token.Replace(' ', '+');
+                var Decrypted = FormGenerator.Decrypt(Token, "sdwefdsvrgdcfew");
+
+                Decrypted = Decrypted.Replace("\\r\\n", "\r\n");
+                StringReader reader = new StringReader(Decrypted);
+                var Info = serializer.Deserialize(reader) as RemoteSessionInfo;
+
+                Connect(Info);
+                // txtSearchTerm.Text = searchTerm;
+                // DoSearch(searchTerm);
+            }
+        }
+
+
+        protected void Connect(RemoteSessionInfo info)
+        {
+
+
+            ////// the display size is required to start a remote session
+            ////// if missing, the client will provide it automatically
+            ////if (string.IsNullOrEmpty(width.Value) || string.IsNullOrEmpty(height.Value))
+            ////{
+            ////    return;
+            ////}
+
+            // connect
+            if (ConnectPredefinedRemoteServer(info))
+            {
+                // in enterprise mode from login, a new http session id was already generated (no need to do it each time an host is connected!)
+                // in standard mode or enterprise mode from url, a new http session id must be generated
+                ////if (_enterpriseSession == null || Request["SI"] != null)
+                ////{
+                ////    // session fixation protection
+                ////    if (_httpSessionUseUri)
+                ////    {
+                ////        // generate a new http session id
+                ////        RemoteSession.OwnerSessionID = HttpSessionHelper.RegenerateSessionId();
+                ////    }
+                ////}
+                RemoteSession.OwnerSessionID = HttpSessionHelper.RegenerateSessionId();
+                try
+                {
+                    // standard mode: switch to http get (standard login) or remove the connection params from url (auto-connect / start program from url)
+                    // enterprise mode: remove the host id from url
+                    Response.Redirect("~/", true);
+                }
+                catch (ThreadAbortException)
+                {
+                    // occurs because the response is ended after redirect
+                }
+            }
+            // connection failed from the hosts list or from a one time session url
+            else if (_enterpriseSession != null && Request["SD"] != null)
+            {
+                try
+                {
+                    // remove the host id from url
+                    Response.Redirect("~/", true);
+                }
+                catch (ThreadAbortException)
+                {
+                    // occurs because the response is ended after redirect
+                }
+            }
+            else
+            {
+            }
+
+        }
+
+
+        /// <summary>
+        /// connect predefined remote server
+        /// </summary>
+        /// <remarks>
+        /// authentication is delegated to the remote server or connection broker (if applicable)
+        /// </remarks>
+        private bool ConnectPredefinedRemoteServer(RemoteSessionInfo info)
+        {
+            // connection parameters
+            string loginHostName = null;
+            var loginHostType = HostType.RDP;
+            var loginProtocol = SecurityProtocol.auto;
+            var loginServer = info.ServerAddress;
+            var loginVMGuid = "";
+            var loginVMAddress = "";
+            var loginVMEnhancedMode = false;
+            var loginDomain = "";
+            var loginUser = info.UserName;
+            var loginPassword = info.UserPassword;
+            var startProgram = "";
+
+            // allowed features
+            var allowRemoteClipboard = _allowRemoteClipboard;
+            var allowFileTransfer = _allowFileTransfer;
+            var allowPrintDownload = _allowPrintDownload;
+            var allowSessionSharing = _allowSessionSharing;
+            var allowAudioPlayback = _allowAudioPlayback;
+
+            // sharing parameters
+            int maxActiveGuests = int.MaxValue;
+
+            var connectionId = Guid.NewGuid();
+
+            // connect an host from the hosts list or from a one time session url
+            if (_enterpriseSession != null && (!string.IsNullOrEmpty(Request["SD"])))
+            {
+                long hostId;
+                if (!long.TryParse(Request["SD"], out hostId))
+                {
+                    hostId = 0;
+                }
+
+                try
+                {
+                    // retrieve the host connection details
+                    var connection = _enterpriseClient.GetSessionConnectionDetails(_enterpriseSession.SessionID, hostId, _enterpriseSession.SessionKey);
+                    if (connection == null)
+                    {
+                        System.Diagnostics.Trace.TraceInformation("Unable to retrieve host {0} connection details (invalid host or one time session url already used?)", hostId);
+                        return false;
+                    }
+
+                    loginHostName = connection.HostName;
+                    loginHostType = connection.HostType;
+                    loginProtocol = connection.Protocol;
+                    loginServer = !string.IsNullOrEmpty(connection.HostAddress) ? connection.HostAddress : connection.HostName;
+                    loginVMGuid = connection.VMGuid;
+                    loginVMEnhancedMode = connection.VMEnhancedMode;
+                    loginDomain = connection.Domain;
+                    loginUser = connection.Username;
+                    loginPassword = CryptoHelper.RDP_Decrypt(connection.Password);
+                    startProgram = connection.StartRemoteProgram;
+                }
+                catch (Exception exc)
+                {
+                    System.Diagnostics.Trace.TraceError("Failed to retrieve host {0} connection details ({1})", hostId, exc);
+                    return false;
+                }
+            }
+            // by using a connection service on a backend (connection API), the connection details can be hidden from querystring and mapped to a connection identifier
+            else if (!string.IsNullOrEmpty(Request["cid"]))
+            {
+                if (!Guid.TryParse(Request["cid"], out connectionId))
+                {
+                    System.Diagnostics.Trace.TraceInformation("Invalid connection id {0}", Request["cid"]);
+                    return false;
+                }
+
+                try
+                {
+                    // retrieve the connection details
+                    var connection = _connectionClient.GetConnectionInfo(connectionId);
+                    if (connection == null)
+                    {
+                        System.Diagnostics.Trace.TraceInformation("Unable to retrieve connection info {0}", connectionId);
+                        return false;
+                    }
+
+                    // ensure the user is allowed to connect the host
+                    if (!_connectionClient.IsUserAllowedToConnectHost(connection.User.Domain, connection.User.UserName, connection.Host.IPAddress, connection.VM != null ? connection.VM.Guid : Guid.Empty))
+                    {
+                        System.Diagnostics.Trace.TraceInformation("User: domain={0}, name={1} is not allowed to connect host {2}", connection.User.Domain, connection.User.UserName, connection.Host.IPAddress);
+                        return false;
+                    }
+
+                    loginHostType = connection.Host.HostType;
+                    loginProtocol = connection.Host.SecurityProtocol;
+                    loginServer = connection.Host.IPAddress;
+                    loginVMGuid = connection.VM != null ? connection.VM.Guid.ToString() : string.Empty;
+                    loginVMAddress = connection.VM != null ? connection.VM.IPAddress : string.Empty;
+                    loginVMEnhancedMode = connection.VM != null ? connection.VM.EnhancedMode : false;
+                    loginDomain = connection.User.Domain;
+                    loginUser = connection.User.UserName;
+                    loginPassword = connection.User.Password;
+                    startProgram = connection.StartProgram;
+
+                    allowRemoteClipboard = allowRemoteClipboard && connection.AllowRemoteClipboard;
+                    allowFileTransfer = allowFileTransfer && connection.AllowFileTransfer;
+                    allowPrintDownload = allowPrintDownload && connection.AllowPrintDownload;
+                    allowSessionSharing = allowSessionSharing && connection.MaxActiveGuests > 0;
+                    allowAudioPlayback = allowAudioPlayback && connection.AllowAudioPlayback;
+
+                    maxActiveGuests = connection.MaxActiveGuests;
+                }
+                catch (Exception exc)
+                {
+                    System.Diagnostics.Trace.TraceError("Failed to retrieve connection info {0} ({1})", connectionId, exc);
+                    return false;
+                }
+            }
+
+
+            // remove any active remote session (disconnected?)
+            if (RemoteSession != null)
+            {
+                // unset the remote session for the current http session
+                Session[HttpSessionStateVariables.RemoteSession.ToString()] = null;
+                RemoteSession = null;
+            }
+
+            // create a new remote session
+            try
+            {
+                Application.Lock();
+
+                // create the remote session
+                RemoteSession = new RemoteSession(
+                    connectionId,
+                    loginHostName,
+                    loginHostType,
+                    loginProtocol,
+                    loginServer,
+                    loginVMGuid,
+                    loginVMAddress,
+                    loginVMEnhancedMode,
+                    !string.IsNullOrEmpty(loginDomain) ? loginDomain : AccountHelper.GetDomain(loginUser, loginPassword),
+                    AccountHelper.GetUserName(loginUser),
+                    loginPassword,
+                    info.ClientWidth,//int.Parse(width.Value),
+                    info.ClientHeight,//int.Parse(height.Value),
+                    startProgram,
+                    allowRemoteClipboard,
+                    allowFileTransfer,
+                    allowPrintDownload,
+                    allowSessionSharing,
+                    allowAudioPlayback,
+                    maxActiveGuests,
+                    Session.SessionID,
+                    "hajjar",//(string)Session[HttpSessionStateVariables.ClientKey.ToString()],
+                    false//Request["cid"] != null
+                );
+
+                // bind the remote session to the current http session
+                Session[HttpSessionStateVariables.RemoteSession.ToString()] = RemoteSession;
+
+                // register the remote session at the application level
+                var remoteSessions = (IDictionary<Guid, RemoteSession>)Application[HttpApplicationStateVariables.RemoteSessions.ToString()];
+                remoteSessions.Add(RemoteSession.Id, RemoteSession);
+            }
+            catch (Exception exc)
+            {
+                System.Diagnostics.Trace.TraceError("Failed to create remote session ({0})", exc);
+                RemoteSession = null;
+            }
+            finally
+            {
+                Application.UnLock();
+            }
+
+            // connect it
+            if (RemoteSession != null)
+            {
+                RemoteSession.State = RemoteSessionState.Connecting;
+            }
+            else
+            {
+                connectError.InnerText = "Failed to create remote session!";
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -467,7 +741,8 @@ namespace Myrtille.Web
                 }
 
                 // connect
-                if (ConnectRemoteServer())
+                var Connected = ConnectRemoteServer();
+                if (Connected)
                 {
                     // in enterprise mode from login, a new http session id was already generated (no need to do it each time an host is connected!)
                     // in standard mode or enterprise mode from url, a new http session id must be generated
@@ -507,6 +782,16 @@ namespace Myrtille.Web
             }
         }
 
+        private void localLogTest(string msg)
+        {
+            using(System.IO.StreamWriter sw = new StreamWriter(@"D:\Log\MyLog.log", true))
+            {
+                sw.WriteLine("-----------------------------------------");
+                sw.WriteLine(msg);
+                sw.WriteLine("-----------------------------------------");
+            }
+        }
+
         /// <summary>
         /// connect the remote server
         /// </summary>
@@ -515,6 +800,7 @@ namespace Myrtille.Web
         /// </remarks>
         private bool ConnectRemoteServer()
         {
+            localLogTest("Im Here");
             // connection parameters
             string loginHostName = null;
             var loginHostType = (HostType)Convert.ToInt32(hostType.Value);
@@ -555,6 +841,7 @@ namespace Myrtille.Web
                     var connection = _enterpriseClient.GetSessionConnectionDetails(_enterpriseSession.SessionID, hostId, _enterpriseSession.SessionKey);
                     if (connection == null)
                     {
+                        localLogTest("Unable to retrieve host {0} connection details (invalid host or one time session url already used?)");
                         System.Diagnostics.Trace.TraceInformation("Unable to retrieve host {0} connection details (invalid host or one time session url already used?)", hostId);
                         return false;
                     }
@@ -572,6 +859,7 @@ namespace Myrtille.Web
                 }
                 catch (Exception exc)
                 {
+                    localLogTest($"Failed to retrieve host {hostId} connection details ({exc})");
                     System.Diagnostics.Trace.TraceError("Failed to retrieve host {0} connection details ({1})", hostId, exc);
                     return false;
                 }
@@ -646,6 +934,7 @@ namespace Myrtille.Web
             {
                 Application.Lock();
 
+                width.Value = width.Value;
                 // create the remote session
                 RemoteSession = new RemoteSession(
                     connectionId,
@@ -703,6 +992,8 @@ namespace Myrtille.Web
 
             return true;
         }
+
+
 
         #region enterprise mode
 

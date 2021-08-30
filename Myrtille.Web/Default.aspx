@@ -79,6 +79,44 @@
         <%=(RemoteSession != null && !string.IsNullOrEmpty(RemoteSession.VMGuid) && !RemoteSession.VMEnhancedMode).ToString().ToLower()%>);">
 
         <!-- custom UI: all elements below, including the logo, are customizable into Default.css -->
+        <!-- connect Status -->
+	       <svg width="300" height="120" id="clackers">
+    <!-- Left arc path -->
+    <svg>
+      <path id="arc-left-up" fill="none" d="M 90 90 A 90 90 0 0 1 0 0"/>
+    </svg>
+    <!-- Right arc path -->
+    <svg>
+      <path id="arc-right-up" fill="none" d="M 100 90 A 90 90 0 0 0 190 0"/>
+    </svg>
+
+    <text id="demo" x="150" y="50" fill="#ffffff" font-family="Helvetica Neue,Helvetica,Arial" font-size="18"
+          text-anchor="middle">
+      L O A D I N G
+    </text>
+    <circle cx="15" cy="15" r="15">
+      <!-- I used a python script to calculate the keyPoints and keyTimes based on a quadratic function. -->
+      <animateMotion dur="1.5s" repeatCount="indefinite"
+        calcMode="linear"
+
+        keyPoints="0.0;0.19;0.36;0.51;0.64;0.75;0.84;0.91;0.96;0.99;1.0;0.99;0.96;0.91;0.84;0.75;0.64;0.51;0.36;0.19;0.0;0.0;0.05;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0"
+        keyTimes="0.0;0.025;0.05;0.075;0.1;0.125;0.15;0.175;0.2;0.225;0.25;0.275;0.3;0.325;0.35;0.375;0.4;0.425;0.45;0.475;0.5;0.525;0.55;0.575;0.6;0.625;0.65;0.675;0.7;0.725;0.75;0.775;0.8;0.825;0.85;0.875;0.9;0.925;0.95;0.975;1.0">
+        <mpath xlink:href="#arc-left-up"/>
+      </animateMotion>
+    </circle>
+    <circle cx="135" cy="105" r="15" />
+    <circle cx="165" cy="105" r="15" />
+    <circle cx="95" cy="15" r="15">
+      <animateMotion dur="1.5s" repeatCount="indefinite"
+        calcMode="linear"
+        keyPoints="0.0;0.0;0.05;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0.0;0.19;0.36;0.51;0.64;0.75;0.84;0.91;0.96;0.99;1.0;0.99;0.96;0.91;0.84;0.75;0.64;0.51;0.36;0.19;0.0"
+        keyTimes="0.0;0.025;0.05;0.075;0.1;0.125;0.15;0.175;0.2;0.225;0.25;0.275;0.3;0.325;0.35;0.375;0.4;0.425;0.45;0.475;0.5;0.525;0.55;0.575;0.6;0.625;0.65;0.675;0.7;0.725;0.75;0.775;0.8;0.825;0.85;0.875;0.9;0.925;0.95;0.975;1.0">
+        <mpath xlink:href="#arc-right-up"/>
+      </animateMotion>
+    </circle>
+  </svg>
+
+
 
         <form method="post" runat="server" id="mainForm">
 
@@ -275,7 +313,7 @@
                 <input type="button" runat="server" id="reconnect" value="Reconnect OFF" onclick="toggleReconnectSession();" title="reconnect the remote session to the browser size" disabled="disabled"/>
 
                 <!-- device keyboard. on devices without a physical keyboard, forces the device virtual keyboard to pop up, then allow to send text (a text target must be focused) -->
-                <input type="button" runat="server" id="keyboard" value="Text" onclick="openPopup('virtualKeyboardPopup', 'VirtualKeyboard.aspx', false);" title="send some text into the remote session" disabled="disabled"/>
+				<input type="button" runat="server" id="keyboard" value="Text" onclick="openPopup('virtualKeyboardPopup', 'VirtualKeyboard.aspx', false);" title="send some text into the remote session" disabled="disabled"/>
 
                 <!-- on-screen keyboard. on devices without a physical keyboard, display an on-screen keyboard, then allow to send characters (a text target must be focused) -->
                 <input type="button" runat="server" id="osk" value="Keyboard" onclick="openPopup('onScreenKeyboardPopup', 'onScreenKeyboard.aspx', false);" title="on-screen keyboard" disabled="disabled"/>
@@ -344,20 +382,17 @@
 
             // auto-connect / start program from url
             // if the display resolution isn't set, the remote session isn't able to start; redirect with the client resolution
-            if (window.location.href.indexOf('&connect=') != -1 && (window.location.href.indexOf('&width=') == -1 || window.location.href.indexOf('&height=') == -1))
-            {
+            if (window.location.href.indexOf('&connect=') != -1 && (window.location.href.indexOf('&width=') == -1 || window.location.href.indexOf('&height=') == -1)) {
                 var width = document.getElementById('<%=width.ClientID%>').value;
                 var height = document.getElementById('<%=height.ClientID%>').value;
 
                 var redirectUrl = window.location.href;
 
-                if (window.location.href.indexOf('&width=') == -1)
-                {
+                if (window.location.href.indexOf('&width=') == -1) {
                     redirectUrl += '&width=' + width;
                 }
 
-                if (window.location.href.indexOf('&height=') == -1)
-                {
+                if (window.location.href.indexOf('&height=') == -1) {
                     redirectUrl += '&height=' + height;
                 }
 
@@ -366,10 +401,8 @@
                 window.location.href = redirectUrl;
             }
 
-            function initDisplay()
-            {
-                try
-                {
+            function initDisplay() {
+                try {
                     var display = new Display();
 
                     // detect the browser width & height
@@ -379,11 +412,9 @@
                     if (<%=(RemoteSession != null && (RemoteSession.State == RemoteSessionState.Connecting || RemoteSession.State == RemoteSessionState.Connected)).ToString(CultureInfo.InvariantCulture).ToLower()%>)
                     {
                         // the toolbar is enabled (web.config)
-                        if (document.getElementById('<%=toolbar.ClientID%>') != null)
-                        {
+                        if (document.getElementById('<%=toolbar.ClientID%>') != null) {
                             // resume the saved toolbar state
-                            if (getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'toolbar'))
-                            {
+                            if (getToggleCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'toolbar')) {
                                 toggleToolbar();
                             }
 
@@ -397,31 +428,26 @@
                         }
                     }
                 }
-                catch (exc)
-                {
+                catch (exc) {
                     alert('myrtille initDisplay error: ' + exc.message);
                 }
             }
 
-            function onHostTypeChange(hostType)
-            {
+            function onHostTypeChange(hostType) {
                 var securityProtocolDiv = document.getElementById('securityProtocolDiv');
-                if (securityProtocolDiv != null)
-                {
+                if (securityProtocolDiv != null) {
                     securityProtocolDiv.style.visibility = (hostType.selectedIndex == 0 || hostType.selectedIndex == 1 ? 'visible' : 'hidden');
                     securityProtocolDiv.style.display = (hostType.selectedIndex == 0 || hostType.selectedIndex == 1 ? 'block' : 'none');
                 }
 
                 var vmDiv = document.getElementById('vmDiv');
-                if (vmDiv != null)
-                {
+                if (vmDiv != null) {
                     vmDiv.style.visibility = (hostType.selectedIndex == 1 ? 'visible' : 'hidden');
                     vmDiv.style.display = (hostType.selectedIndex == 1 ? 'block' : 'none');
                 }
             }
 
-            function setClientResolution(display)
-            {
+            function setClientResolution(display) {
                 // browser size. default 1024x768
                 var width = display.getBrowserWidth() - display.getHorizontalOffset();
                 var height = display.getBrowserHeight() - display.getVerticalOffset();
@@ -432,17 +458,14 @@
                 document.getElementById('<%=height.ClientID%>').value = height;
             }
 
-            function disableControl(controlId)
-            {
+            function disableControl(controlId) {
                 var control = document.getElementById(controlId);
-                if (control != null)
-                {
+                if (control != null) {
                     control.disabled = true;
                 }
             }
 
-            function disableToolbar()
-            {
+            function disableToolbar() {
                 disableControl('stat');
                 disableControl('debug');
                 disableControl('browser');
@@ -460,20 +483,17 @@
                 disableControl('<%=imageQuality.ClientID%>');
             }
 
-            function toggleToolbar()
-            {
+            function toggleToolbar() {
                 var toolbar = document.getElementById('<%=toolbar.ClientID%>');
 
                 if (toolbar == null)
                     return;
 
-	            if (toolbar.style.visibility == 'visible')
-                {
+                if (toolbar.style.visibility == 'visible') {
                     toolbar.style.visibility = 'hidden';
                     toolbar.style.display = 'none';
                 }
-                else
-                {
+                else {
                     toolbar.style.visibility = 'visible';
                     toolbar.style.display = 'block';
                 }
@@ -481,8 +501,7 @@
                 setCookie((parent != null && window.name != '' ? window.name + '_' : '') + 'toolbar', toolbar.style.visibility == 'visible' ? 1 : 0);
             }
 
-            function getToggleCookie(name)
-            {
+            function getToggleCookie(name) {
                 if (<%=(RemoteSession == null).ToString().ToLower()%>)
                     return false;
 
@@ -493,20 +512,17 @@
                 return (value == '1' ? true : false);
             }
 
-            function onDragMove(event)
-            {
+            function onDragMove(event) {
                 var target = event.target,
-                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+                    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                    y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-                if ('webkitTransform' in target.style || 'transform' in target.style)
-                {
+                if ('webkitTransform' in target.style || 'transform' in target.style) {
                     target.style.webkitTransform =
                         target.style.transform =
                         'translate(' + x + 'px, ' + y + 'px)';
                 }
-                else
-                {
+                else {
                     target.style.left = x + 'px';
                     target.style.top = y + 'px';
                 }

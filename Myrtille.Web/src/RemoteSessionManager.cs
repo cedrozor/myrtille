@@ -31,16 +31,24 @@ using System.Web.SessionState;
 using Myrtille.Helpers;
 using Myrtille.Services.Contracts;
 
+using System.IO;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using Myrtille.Common.Capture;
+
 namespace Myrtille.Web
 {
     public class RemoteSessionManager : IDisposable
     {
+   
         #region Init
 
         public RemoteSession RemoteSession { get; private set; }
 
         public RemoteSessionManager(RemoteSession remoteSession)
         {
+           // Savevideo();
             try
             {
                 RemoteSession = remoteSession;
@@ -730,7 +738,26 @@ namespace Myrtille.Web
 
                 Array.Copy(data, 36, image.Data, 0, data.Length - 36);
 
-                // cache the image, even if using websocket (used to retrieve the mouse cursor on IE)
+
+
+                var imageForSave = new SessionPicture
+                {
+                    //Idx = BitConverter.ToInt32(imgInfo, 0),
+                    Idx = _imageIdx == int.MaxValue ? 1 : ++_imageIdx,
+                    PosX = BitConverter.ToInt32(imgInfo, 4),
+                    PosY = BitConverter.ToInt32(imgInfo, 8),
+                    Width = BitConverter.ToInt32(imgInfo, 12),
+                    Height = BitConverter.ToInt32(imgInfo, 16),
+                    Format = (PictureFormat)BitConverter.ToInt32(imgInfo, 20),
+                    Quality = BitConverter.ToInt32(imgInfo, 24),
+                    Fullscreen = BitConverter.ToInt32(imgInfo, 28) == 1,
+                    Data = new byte[data.Length - 36]
+                };
+
+                Array.Copy(data, 36, imageForSave.Data, 0, data.Length - 36);
+
+                PictureSaver.InQueueForSave(imageForSave, RemoteSession.Id, DateTime.Now.AddMilliseconds(_imageCacheDuration));
+
                 _cache.Insert(
                     "remoteSessionImage_" + RemoteSession.Id + "_" + image.Idx,
                     image,
