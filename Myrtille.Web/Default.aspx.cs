@@ -527,7 +527,7 @@ namespace Myrtille.Web
             var loginUser = user.Value;
             var loginPassword = string.IsNullOrEmpty(passwordHash.Value) ? password.Value : CryptoHelper.RDP_Decrypt(passwordHash.Value);
             var startProgram = program.Value;
-            var loadBalanceInfoValue = loadBalanceInfo.Value;
+            var loadBalanceInfoValue = loadBalanceInfo?.Value;
 
             // allowed features
             var allowRemoteClipboard = _allowRemoteClipboard;
@@ -621,6 +621,8 @@ namespace Myrtille.Web
                     allowAudioPlayback = allowAudioPlayback && connection.AllowAudioPlayback;
 
                     maxActiveGuests = connection.MaxActiveGuests;
+
+                    loadBalanceInfoValue = connection.LoadBalanceInfo;
                 }
                 catch (Exception exc)
                 {

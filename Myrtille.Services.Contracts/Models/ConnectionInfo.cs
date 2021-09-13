@@ -36,5 +36,6 @@ namespace Myrtille.Services.Contracts
         /// </summary>
         public string StartProgram { get; set; }
         public string GatewayUrl { get; set; }
+        public string LoadBalanceInfo { get; set; }
     }
 }
