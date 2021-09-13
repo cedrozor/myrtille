@@ -355,7 +355,7 @@ namespace Myrtille.Services
                         (securityProtocol != SecurityProtocol.auto ? " /sec:" + securityProtocol.ToString() : string.Empty) +       // security protocol
                         (allowAudioPlayback ? " /sound" : string.Empty) +                                                           // sound support
                         " /audio-mode:" + (allowAudioPlayback ? "0" : "2") +                                                        // audio mode (0: redirect, 1: play on server, 2: do not play)
-                        (!string.IsNullOrEmpty(loadBalanceInfo) ? " /load-balance-info:\"" + loadBalanceInfo +"\"" : string.Empty);
+                        (!string.IsNullOrEmpty(loadBalanceInfo) ? " /load-balance-info:\"" + loadBalanceInfo +"\"" : string.Empty); // load balance info from RDS-file
                 }
 
                 #endregion
