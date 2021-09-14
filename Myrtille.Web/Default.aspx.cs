@@ -36,7 +36,7 @@ namespace Myrtille.Web
 {
     public partial class Default : Page
     {
-        private MFAAuthenticationClient _mfaAuthClient =  new MFAAuthenticationClient();
+        private MFAAuthenticationClient _mfaAuthClient = new MFAAuthenticationClient();
         private EnterpriseClient _enterpriseClient = new EnterpriseClient();
         private ConnectionClient _connectionClient = new ConnectionClient(Settings.Default.ConnectionServiceUrl);
 
@@ -527,6 +527,7 @@ namespace Myrtille.Web
             var loginUser = user.Value;
             var loginPassword = string.IsNullOrEmpty(passwordHash.Value) ? password.Value : CryptoHelper.RDP_Decrypt(passwordHash.Value);
             var startProgram = program.Value;
+            var loadBalanceInfoValue = loadBalanceInfo?.Value;
 
             // allowed features
             var allowRemoteClipboard = _allowRemoteClipboard;
@@ -620,6 +621,8 @@ namespace Myrtille.Web
                     allowAudioPlayback = allowAudioPlayback && connection.AllowAudioPlayback;
 
                     maxActiveGuests = connection.MaxActiveGuests;
+
+                    loadBalanceInfoValue = connection.LoadBalanceInfo;
                 }
                 catch (Exception exc)
                 {
@@ -670,7 +673,8 @@ namespace Myrtille.Web
                     maxActiveGuests,
                     Session.SessionID,
                     (string)Session[HttpSessionStateVariables.ClientKey.ToString()],
-                    Request["cid"] != null
+                    Request["cid"] != null,
+                    loadBalanceInfoValue
                 );
 
                 // bind the remote session to the current http session

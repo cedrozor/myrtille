@@ -41,7 +41,8 @@ namespace Myrtille.Services.Contracts
             int clientHeight,
             bool allowRemoteClipboard,
             bool allowPrintDownload,
-            bool allowAudioPlayback);
+            bool allowAudioPlayback,
+            string loadBalanceInfo);
 
         /// <summary>
         /// stop the host client process

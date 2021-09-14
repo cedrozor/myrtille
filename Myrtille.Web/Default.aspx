@@ -177,6 +177,11 @@
                     <label id="programLabel" for="program">Program to run (optional)</label>
                     <input type="text" runat="server" id="program" title="executable path, name and parameters (double quotes must be escaped) (optional)"/>
                 </div>
+                
+                <div class="inputDiv" runat="server" Visible="False">
+                    <label id="loadBalanceInfoLabel" for="loadBalanceInfo">Load Balancer Info</label>
+                    <input type="text" runat="server" id="loadBalanceInfo"/>
+                </div>
 
                 <!-- connect -->
                 <input type="submit" runat="server" id="connect" value="Connect!" onserverclick="ConnectButtonClick" title="open session"/>
