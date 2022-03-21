@@ -250,6 +250,7 @@ label,
 #scale,
 #reconnect,
 #keyboard,
+#vmKeyboardLayout,
 #osk,
 #clipboard,
 #files,
@@ -257,8 +258,7 @@ label,
 #mrc,
 #vswipe,
 #share,
-#disconnect
-{
+#disconnect {
     float: left;
     width: 110px;
 }
@@ -453,6 +453,13 @@ label,
 #sessionUrl
 {
     width: 370px;
+}
+
+/* VM keyboard layout popup */
+#vmKeyboardLayoutPopup
+{
+    width: 200px;
+    height: 100px;
 }
 
 /* share session popup */

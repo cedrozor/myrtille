@@ -157,6 +157,9 @@ function Config(
     // user
     var mouseMoveSamplingRate = 100;                                // sampling the mouse moves (%) may help to reduce the server load in applications that trigger a lot of updates (i.e.: imaging applications); possible values: 5, 10, 20, 25, 50, 100 (lower = higher drop rate)
 
+    // keyboard
+    var vmKeyboardLayout = "en-us";
+
     /*************************************************************************************************************************************************************************************************/
     /*** Properties                                                                                                                                                                                ***/
     /*************************************************************************************************************************************************************************************************/
@@ -253,5 +256,11 @@ function Config(
     
     // mouse
     this.getMouseMoveSamplingRate = function() { return mouseMoveSamplingRate; };
-    this.setMouseMoveSamplingRate = function(rate) { mouseMoveSamplingRate = rate; };
+    this.setMouseMoveSamplingRate = function (rate) { mouseMoveSamplingRate = rate; };
+
+    this.getVmKeyboardLayout = function () { return vmKeyboardLayout; }
+    this.setVmKeyboardLayout = function (layout) {
+        vmKeyboardLayout = layout;
+        document.getElementById('vmKeyboardLayout').value = 'VM Keys (' + vmKeyboardLayout + ')';
+    }
 }

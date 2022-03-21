@@ -680,8 +680,8 @@ this.sendText = function(text)
                 if (charCode == 10)     // LF
                     charCode = 13;      // CR
 
-                keys.push((charCode == 13 ? myrtille.getCommandEnum().SEND_KEY_SCANCODE.text : myrtille.getCommandEnum().SEND_KEY_UNICODE.text) + charCode + '-1');
-                keys.push((charCode == 13 ? myrtille.getCommandEnum().SEND_KEY_SCANCODE.text : myrtille.getCommandEnum().SEND_KEY_UNICODE.text) + charCode + '-0');
+                keys.push((charCode == 13 ? myrtille.getCommandEnum().SEND_KEY_SCANCODE.text : myrtille.getCommandEnum().SEND_KEY_UNICODE.text) + charCode + '_1_' + config.getVmKeyboardLayout());
+                keys.push((charCode == 13 ? myrtille.getCommandEnum().SEND_KEY_SCANCODE.text : myrtille.getCommandEnum().SEND_KEY_UNICODE.text) + charCode + '_0_' + config.getVmKeyboardLayout());
             }
             else
             {
@@ -712,11 +712,10 @@ this.sendKey = function(keyCode, release)
         user.triggerActivity();
 
         var keys = new Array();
-
-        keys.push(myrtille.getCommandEnum().SEND_KEY_SCANCODE.text + keyCode + '-1');
+        keys.push(myrtille.getCommandEnum().SEND_KEY_SCANCODE.text + keyCode + '_1_' + config.getVmKeyboardLayout());
 
         if (release)
-            keys.push(myrtille.getCommandEnum().SEND_KEY_SCANCODE.text + keyCode + '-0');
+            keys.push(myrtille.getCommandEnum().SEND_KEY_SCANCODE.text + keyCode + '_0_' + config.getVmKeyboardLayout());
                 
         network.processUserEvent('keyboard', keys.toString());
     }
@@ -741,10 +740,10 @@ this.sendChar = function(char, release)
 
         var keys = new Array();
 
-        keys.push(myrtille.getCommandEnum().SEND_KEY_UNICODE.text + charCode + '-1');
+        keys.push(myrtille.getCommandEnum().SEND_KEY_UNICODE.text + charCode + '_1_' + + config.getVmKeyboardLayout());
 
         if (release)
-            keys.push(myrtille.getCommandEnum().SEND_KEY_UNICODE.text + charCode + '-0');
+            keys.push(myrtille.getCommandEnum().SEND_KEY_UNICODE.text + charCode + '_0_' + + config.getVmKeyboardLayout());
                 
         network.processUserEvent('keyboard', keys.toString());
     }

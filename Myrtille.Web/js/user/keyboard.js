@@ -329,7 +329,7 @@ function Keyboard(base, config, dialog, display, network, user)
             // a key event is composed of 2 parts: key code and state
             // the key code is prefixed to indicate the server to process it as unicode (character key) or scancode (non character key)
             // the key state is either 1 (down) or 0 (up)
-            var keyEvent = (keyIsChar ? base.getCommandEnum().SEND_KEY_UNICODE.text : base.getCommandEnum().SEND_KEY_SCANCODE.text) + keyCode + '-' + (keyPressed ? '1' : '0');
+            var keyEvent = (keyIsChar ? base.getCommandEnum().SEND_KEY_UNICODE.text : base.getCommandEnum().SEND_KEY_SCANCODE.text) + keyCode + '_' + (keyPressed ? '1' : '0') + '_' + config.getVmKeyboardLayout();
 
             // pass the event to the network
             network.processUserEvent('keyboard', keyEvent);
