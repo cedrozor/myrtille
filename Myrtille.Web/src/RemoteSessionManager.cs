@@ -288,12 +288,20 @@ namespace Myrtille.Web
                         if (RemoteSession.State != RemoteSessionState.Connected)
                             return;
 
-                        var keyCodeAndState = args.Split(new[] { "-" }, StringSplitOptions.None);
+                        var keyCodeAndState = args.Split(new[] { "_" }, StringSplitOptions.None);
 
                         var jsKeyCode = int.Parse(keyCodeAndState[0]);
                         var keyState = keyCodeAndState[1];
+                        var keyboardLayout = "en-us";
+                        if (keyCodeAndState.Length > 2)
+                        {
+                            keyboardLayout = keyCodeAndState[2];
+                            // if layout is not found, default to en-us
+                            if (!JsKeyCodeToRdpScanCodeMapping.MapTable.ContainsKey(keyboardLayout))
+                                keyboardLayout = "en-us";
+                        }
 
-                        var rdpScanCode = JsKeyCodeToRdpScanCodeMapping.MapTable[jsKeyCode] as RdpScanCode;
+                        var rdpScanCode = JsKeyCodeToRdpScanCodeMapping.MapTable[keyboardLayout][jsKeyCode] as RdpScanCode;
                         if (rdpScanCode != null && rdpScanCode.Value != 0)
                         {
                             commandWithArgs = string.Concat((string)RemoteSessionCommandMapping.ToPrefix[command], rdpScanCode.Value + "-" + keyState + "-" + (rdpScanCode.Extend ? "1" : "0"));

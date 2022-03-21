@@ -277,6 +277,9 @@
                 <!-- device keyboard. on devices without a physical keyboard, forces the device virtual keyboard to pop up, then allow to send text (a text target must be focused) -->
                 <input type="button" runat="server" id="keyboard" value="Text" onclick="openPopup('virtualKeyboardPopup', 'VirtualKeyboard.aspx', false);" title="send some text into the remote session" disabled="disabled"/>
 
+                <!-- change the keyboard mapping according to the currently used input keyboard of the VM -->
+                <input type="button" runat="server" id="vmKeyboardLayout" value="VM Keys (en-us)" onclick="openPopup('vmKeyboardLayoutPopup', 'VmKeyboardLayout.aspx', false);" title="VM Keyboard Layout" disabled="disabled"/>
+
                 <!-- on-screen keyboard. on devices without a physical keyboard, display an on-screen keyboard, then allow to send characters (a text target must be focused) -->
                 <input type="button" runat="server" id="osk" value="Keyboard" onclick="openPopup('onScreenKeyboardPopup', 'onScreenKeyboard.aspx', false);" title="on-screen keyboard" disabled="disabled"/>
 
@@ -449,6 +452,7 @@
                 disableControl('<%=scale.ClientID%>');
                 disableControl('<%=reconnect.ClientID%>');
                 disableControl('<%=keyboard.ClientID%>');
+                disableControl('<%=vmKeyboardLayout.ClientID%>');
                 disableControl('<%=osk.ClientID%>');
                 disableControl('<%=clipboard.ClientID%>');
                 disableControl('<%=files.ClientID%>');
@@ -515,7 +519,7 @@
                 target.setAttribute('data-y', y);
             }
 
-		</script>
+        </script>
 
 	</body>
 

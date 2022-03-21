@@ -139,6 +139,13 @@
     <Compile Include="GetHash.aspx.designer.cs">
       <DependentUpon>GetHash.aspx</DependentUpon>
     </Compile>
+    <Compile Include="popups\VmKeyboardLayout.aspx.cs">
+      <DependentUpon>VmKeyboardLayout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="popups\VmKeyboardLayout.aspx.designer.cs">
+      <DependentUpon>VmKeyboardLayout.aspx</DependentUpon>
+    </Compile>
     <Compile Include="popups\PasteClipboard.aspx.cs">
       <DependentUpon>PasteClipboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -416,6 +423,7 @@
     <Content Include="node_modules\simple-keyboard-layouts\build\layouts\uyghur.js" />
     <Content Include="node_modules\simple-keyboard\build\css\index.css" />
     <Content Include="node_modules\simple-keyboard\build\index.js" />
+    <Content Include="popups\VmKeyboardLayout.aspx" />
     <Content Include="popups\PasteClipboard.aspx" />
     <Content Include="popups\CredentialsPrompt.aspx" />
     <Content Include="popups\ShareSession.aspx" />
