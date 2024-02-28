@@ -146,11 +146,6 @@ namespace Myrtille.Web
 
                         SendMessage(new RemoteSessionMessage { Type = MessageType.TerminalOutput, Text = message.Remove(0, 5) });
                     }
-                    // print job
-                    else if (message.StartsWith("printjob|"))
-                    {
-                        SendMessage(new RemoteSessionMessage { Type = MessageType.PrintJob, Text = message.Remove(0, 9) });
-                    }
                 }
                 // image
                 else

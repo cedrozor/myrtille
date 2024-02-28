@@ -25,7 +25,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using Myrtille.Helpers;
-using Myrtille.PdfScribe;
 
 namespace Myrtille.Services
 {
@@ -172,24 +171,6 @@ namespace Myrtille.Services
                 // save config
                 config.Save(configPath);
 
-                // pdf printer
-                if (!string.IsNullOrEmpty(Context.Parameters["PDFPRINTER"]))
-                {
-                    // install Myrtille PDF printer
-                    var scribeInstaller = new PdfScribeInstaller(Context);
-                    var printerDir = Path.Combine(Path.GetFullPath(Context.Parameters["targetdir"]), "bin");
-                    var driversDir = Path.Combine(printerDir, Environment.Is64BitOperatingSystem ? "amd64" : "x86");
-                    if (!scribeInstaller.InstallPdfScribePrinter(driversDir, Path.Combine(printerDir, "Myrtille.Printer.exe"), string.Empty))
-                    {
-                        MessageBox.Show(
-                            ActiveWindow.Active,
-                            "the myrtille virtual pdf printer could not be installed. Please check logs (into the install log folder)",
-                            "Myrtille.Services",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-                    }
-                }
-
                 Context.LogMessage("Installed Myrtille.Services");
             }
             catch (Exception exc)
@@ -252,10 +233,6 @@ namespace Myrtille.Services
                         Path.Combine(Path.GetFullPath(Context.Parameters["targetdir"]), "bin", "Myrtille.Services.Uninstall.ps1"),
                         Path.Combine(Path.GetFullPath(Context.Parameters["targetdir"]), "log", "Myrtille.Services.Uninstall.log")));
                 }
-
-                // uninstall Myrtille PDF printer, if exists
-                var scribeInstaller = new PdfScribeInstaller(Context);
-                scribeInstaller.UninstallPdfScribePrinter();
 
                 Context.LogMessage("Uninstalled Myrtille.Services");
             }
