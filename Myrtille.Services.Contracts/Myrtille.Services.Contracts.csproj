@@ -63,7 +63,6 @@
     <Compile Include="IFileStorage.cs" />
     <Compile Include="IMFAAuthentication.cs" />
     <Compile Include="IApplicationPoolService.cs" />
-    <Compile Include="IPrinterService.cs" />
     <Compile Include="IRemoteSessionProcess.cs" />
     <Compile Include="ISharingService.cs" />
     <Compile Include="Models\Connection.cs" />

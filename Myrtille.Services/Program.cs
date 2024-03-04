@@ -33,7 +33,6 @@ namespace Myrtille.Services
     {
         private static ServiceHost _remoteSessionProcess;
         private static ServiceHost _localFileStorage;
-        private static ServiceHost _printerService;
         private static ServiceHost _mfaAuthentication;
         private static ServiceHost _enterpriseServices;
         private static ServiceHost _applicationPoolService;
@@ -109,7 +108,6 @@ namespace Myrtille.Services
 
                 _remoteSessionProcess = OpenService(typeof(RemoteSessionProcess));
                 _localFileStorage = OpenService(typeof(FileStorage));
-                _printerService = OpenService(typeof(PrinterService));
                 _mfaAuthentication = OpenService(typeof(MFAAuthentication));
                 _enterpriseServices = OpenService(typeof(EnterpriseService));
                 _applicationPoolService = OpenService(typeof(ApplicationPoolService));
@@ -119,7 +117,6 @@ namespace Myrtille.Services
 
                 CloseService(ref _remoteSessionProcess);
                 CloseService(ref _localFileStorage);
-                CloseService(ref _printerService);
                 CloseService(ref _mfaAuthentication);
                 CloseService(ref _enterpriseServices);
                 CloseService(ref _applicationPoolService);
@@ -133,7 +130,6 @@ namespace Myrtille.Services
 
             _remoteSessionProcess = OpenService(typeof(RemoteSessionProcess));
             _localFileStorage = OpenService(typeof(FileStorage));
-            _printerService = OpenService(typeof(PrinterService));
             _mfaAuthentication = OpenService(typeof(MFAAuthentication));
             _enterpriseServices = OpenService(typeof(EnterpriseService));
             _applicationPoolService = OpenService(typeof(ApplicationPoolService));
@@ -143,7 +139,6 @@ namespace Myrtille.Services
 		{
             CloseService(ref _remoteSessionProcess);
             CloseService(ref _localFileStorage);
-            CloseService(ref _printerService);
             CloseService(ref _mfaAuthentication);
             CloseService(ref _enterpriseServices);
             CloseService(ref _applicationPoolService);

@@ -121,7 +121,6 @@
     <Compile Include="FileStorage.cs" />
     <Compile Include="MFAAuthentication.cs" />
     <Compile Include="ApplicationPoolService.cs" />
-    <Compile Include="PrinterService.cs" />
     <Compile Include="Program.cs">
       <SubType>Component</SubType>
     </Compile>

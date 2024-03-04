@@ -216,13 +216,6 @@
     <Compile Include="popups\VirtualKeyboard.aspx.designer.cs">
       <DependentUpon>VirtualKeyboard.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PrintDocument.aspx.cs">
-      <DependentUpon>PrintDocument.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PrintDocument.aspx.designer.cs">
-      <DependentUpon>PrintDocument.aspx</DependentUpon>
-    </Compile>
     <Compile Include="handlers\AudioSocketHandler.ashx.cs">
       <DependentUpon>AudioSocketHandler.ashx</DependentUpon>
     </Compile>
@@ -248,7 +241,6 @@
     <Compile Include="src\Clients\ConnectionClient.cs" />
     <Compile Include="src\Controllers\CaptureController.cs" />
     <Compile Include="src\Clients\EnterpriseClient.cs" />
-    <Compile Include="src\Clients\PrinterClient.cs" />
     <Compile Include="src\Clients\FileStorageClient.cs" />
     <Compile Include="src\Clients\MFAAuthenticationClient.cs" />
     <Compile Include="src\RemoteSession.cs" />
@@ -436,7 +428,6 @@
     <Content Include="GetUpdate.aspx" />
     <Content Include="js\user\keyboard.js" />
     <Content Include="js\user\mouse.js" />
-    <Content Include="PrintDocument.aspx" />
     <Content Include="SendInputs.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
