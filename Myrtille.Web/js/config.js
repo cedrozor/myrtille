@@ -126,7 +126,8 @@ function Config(
     var imageEncoding = imageEncodingEnum.JPEG;                     // image encoding
     var imageQuality = 75;                                          // image quality (%) higher = better; not applicable for PNG (lossless); tweaked dynamically to fit the available bandwidth if using JPEG, AUTO or WEBP encoding.
     var imageQuantity = 100;                                        // image quantity (%) less images = lower cpu and bandwidth usage / faster; more = smoother display (skipping images may result in some display inconsistencies). tweaked dynamically to fit the available bandwidth; possible values: 5, 10, 20, 25, 50, 100 (lower = higher consolidation rate)
-    var imageTweakBandwidthThreshold = 50;                          // tweak the image quality depending on the available bandwidth (%): threshold. see network.js
+    var imageTweakBandwidthLowerThreshold = 50;                     // tweak the image quality & quantity depending on the available bandwidth (%): lower threshold. see network.js
+    var imageTweakBandwidthHigherThreshold = 75;                    // tweak the image quality & quantity depending on the available bandwidth (%): higher threshold. see network.js
     var imageCountOk = 100;                                         // reasonable number of images to display at once; for HTML4 (divs), used to clean the DOM (by requesting a fullscreen update) as too many divs may slow down the browser; not applicable for HTML5 (canvas)
     var imageCountMax = 300;                                        // maximal number of images to display at once; for HTML4 (divs), used to clean the DOM (by reloading the page) as too many divs may slow down the browser; not applicable for HTML5 (canvas)
     var imageMode = imageModeEnum.AUTO;                             // image mode
@@ -144,7 +145,7 @@ function Config(
     var roundtripDurationMax = 0;                                   // roundtrip duration (ms) above which the connection is considered having issues, displaying a warning message to the user. 0 to disable
     var bandwidthCheckInterval = 300000;                            // periodical bandwidth check; used to tweak down the images (quality & quantity) if the available bandwidth gets too low. it relies on a 5MB dummy file download, so this param shouldn't be set on a too short timer (or it will eat the bandwidth it's supposed to test...)
     var networkMode = networkModeEnum.AUTO;                         // network mode
-    var websocketCount = 2;                                         // number of concurrent websockets to send the user inputs and receive the display updates (RDP host only, max 100). splitting the load across multiple websockets can help to mitigate network lag. 1 for duplex websocket. CAUTION! IIS on Windows client OSes (7, 8, 10) is limited to 10 simultaneous connections only - across all http sessions - and will hang after that! use Windows Server editions for production environments
+    var websocketCount = 5;                                         // number of concurrent websockets to send the user inputs and receive the display updates (RDP host only, max 100). splitting the load across multiple websockets can help to mitigate network lag. 1 for duplex websocket. CAUTION! IIS on Windows client OSes (7, 8, 10) is limited to 10 simultaneous connections only - across all http sessions - and will hang after that! use Windows Server editions for production environments
     var httpSessionKeepAliveInterval = 30000;                       // periodical dummy xhr calls (ms) when using websocket, in order to keep the http session alive
     var xmlHttpTimeout = 3000;                                      // xmlhttp requests (xhr) timeout (ms)
     var longPollingDuration = 60000;                                // long-polling requests duration (ms)
@@ -152,7 +153,7 @@ function Config(
     var bufferDelayBase = 0;                                        // minimal buffering duration (ms)
     var bufferDelayEmpty = 10;                                      // buffering duration (ms) when sending empty buffer
     var bufferSize = 128;                                           // max number of buffered items (not size in bytes)
-    var browserPulseInterval = 10000;                               // periodical browser pulse (ms); used server side to detect if the browser window/tab was closed (and possibly disconnect the remote session before the RDS idle timeout occurs; see "OwnerIdleTimeout" into web.config)
+    var browserPulseInterval = 10000;                               // periodical browser pulse (ms); used server side to detect if the browser window/tab was closed (and possibly disconnect the remote session before the RDS idle timeout occurs; see "ClientIdleTimeout" into web.config)
 
     // user
     var mouseMoveSamplingRate = 100;                                // sampling the mouse moves (%) may help to reduce the server load in applications that trigger a lot of updates (i.e.: imaging applications); possible values: 5, 10, 20, 25, 50, 100 (lower = higher drop rate)
@@ -203,7 +204,8 @@ function Config(
     this.setImageQuality = function(quality) { imageQuality = quality; };
     this.getImageQuantity = function() { return imageQuantity; };
     this.setImageQuantity = function(quantity) { imageQuantity = quantity; };
-    this.getImageTweakBandwidthThreshold = function() { return imageTweakBandwidthThreshold; };
+    this.getImageTweakBandwidthLowerThreshold = function() { return imageTweakBandwidthLowerThreshold; };
+    this.getImageTweakBandwidthHigherThreshold = function() { return imageTweakBandwidthHigherThreshold; };
     this.getImageCountOk = function() { return imageCountOk; };
     this.getImageCountMax = function() { return imageCountMax; };
     this.getImageModeEnum = function() { return imageModeEnum; };

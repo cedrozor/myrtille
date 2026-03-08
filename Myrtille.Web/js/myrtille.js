@@ -613,8 +613,6 @@ function changeImageQuality(quality)
         // display settings are applied by the network.js "tweakDisplay" function
         network.setOriginalImageEncoding(config.getImageEncodingEnum().JPEG);
         network.setOriginalImageQuality(quality <= 90 ? quality : 90);
-        network.tweakDisplay(true);
-        network.setImageTweak(false);
     }
     catch (exc)
     {

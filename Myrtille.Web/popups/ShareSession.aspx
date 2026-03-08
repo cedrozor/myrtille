@@ -26,6 +26,7 @@
     <head>
         <title>Myrtille</title>
         <link rel="stylesheet" type="text/css" href="../css/Default.css"/>
+        <script language="javascript" type="text/javascript" src="../js/popup-i18n.js"></script>
 	</head>
 
     <body onload="selectText();">
@@ -34,23 +35,23 @@
             
             <div id="shareSessionPopupInner">
                 <span id="shareSessionPopupTitle">
-                    <strong>Share Session</strong>
+                    <strong data-i18n="shareSessionTitle">Share Session</strong>
                 </span>
                 <br/>
                 <div class="shareSessionPopupInput">
-                    <label id="guestControlLabel" for="guestControl">Grant control</label>
-                    <input type="checkbox" runat="server" id="guestControl" title="provide the ability for the guest to interact with the remote session"/>
+                    <label id="guestControlLabel" for="guestControl" data-i18n="grantControl">Grant control</label>
+                    <input type="checkbox" runat="server" id="guestControl" data-i18n-title="grantControlTitle" title="provide the ability for the guest to interact with the remote session"/>
                 </div>
                 <div class="shareSessionPopupInput">
-                    <h5>Session URL</h5>
-                    <input type="button" runat="server" id="createSessionUrl" value="Create" onserverclick="CreateSessionUrlButtonClick"/>
+                    <h5 data-i18n="sessionUrl">Session URL</h5>
+                    <input type="button" runat="server" id="createSessionUrl" data-i18n-value="create" value="Create" onserverclick="CreateSessionUrlButtonClick"/>
                     <br/>
                     <br/>
                     <textarea runat="server" id="sessionUrl" readonly="readonly" rows="4" cols="50"></textarea>
-                    <span><h5>Copy the URL and use how required; it can only be used once</h5></span>
+                    <span><h5 data-i18n="sessionUrlHint">Copy the URL and use how required; it can only be used once</h5></span>
                 </div>
                 <div class="shareSessionPopupInput">
-                    <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
+                    <input type="button" id="closePopupButton" data-i18n-value="close" value="Close" onclick="parent.closePopup();"/>
                 </div>
             </div>
 
@@ -60,6 +61,7 @@
 
 		    function selectText()
 		    {
+                popupI18n.apply();
 		        var sessionUrl = document.getElementById('sessionUrl');
 		        if (sessionUrl != null && sessionUrl.value != '')
                 {

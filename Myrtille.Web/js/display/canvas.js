@@ -48,7 +48,7 @@ function Canvas(base, config, dialog, display)
                 // set canvas properties (same size as browser if scaling display or original (unscaled) size otherwise)
                 canvasObject.width = config.getBrowserResize() == config.getBrowserResizeEnum().SCALE ? display.getBrowserWidth() : config.getDisplayWidth();
                 canvasObject.height = config.getBrowserResize() == config.getBrowserResizeEnum().SCALE ? display.getBrowserHeight() : config.getDisplayHeight();
-
+                 console.log(config.getBrowserResizeEnum().SCALE);
                 // set a tab index so the canvas can be focused
                 canvasObject.setAttribute('tabindex', 0);
 

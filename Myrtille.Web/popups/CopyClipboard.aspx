@@ -26,6 +26,7 @@
     <head>
         <title>Myrtille</title>
         <link rel="stylesheet" type="text/css" href="../css/Default.css"/>
+        <script language="javascript" type="text/javascript" src="../js/popup-i18n.js"></script>
 	</head>
 
     <body onload="displayText();">
@@ -34,11 +35,11 @@
             
             <div>
                 <span id="copyClipboardPopupDesc">
-                    Copy or hit Ctrl+C (Cmd-C on Mac)
+                    <span data-i18n="copyClipboardDesc">Copy or hit Ctrl+C (Cmd-C on Mac)</span>
                 </span><hr/>
                 <textarea id="copyClipboardPopupText" readonly="readonly" rows="10" cols="50"></textarea><br/>
-                <input type="button" id="copyClipboardButton" value="Copy" onclick="copyClipboard();"/>
-                <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
+                <input type="button" id="copyClipboardButton" data-i18n-value="copy" value="Copy" onclick="copyClipboard();"/>
+                <input type="button" id="closePopupButton" data-i18n-value="close" value="Close" onclick="parent.closePopup();"/>
             </div>
 
         </form>
@@ -47,6 +48,7 @@
 
 		    function displayText()
             {
+                popupI18n.apply();
 		        var copyClipboardPopupText = document.getElementById('copyClipboardPopupText');
 		        if (copyClipboardPopupText != null)
                 {
@@ -73,22 +75,22 @@
                             // working on Edge and every other browsers
                             if (!parent.getMyrtille().getDisplay().isIEBrowser())
                             {
-                                alert('clipboard successfully synchronized');
+                                alert(popupI18n.t('clipboardSyncSuccess'));
                             }
                             else
                             {
-                                alert('IE detected, hit Ctrl+C (Cmd-C on Mac) if you want to synchronize the clipboard');
+                                alert(popupI18n.t('clipboardSyncIe'));
                             }
                         }
                         else
                         {
-                            alert('clipboard was not synchronized (failed to call execCommand API or copy was denied)');
+                            alert(popupI18n.t('clipboardSyncFailed'));
                         }
                     }
                 }
                 catch (exc)
                 {
-                    alert('failed to copy clipboard (' + exc.message + ')');
+                    alert(popupI18n.t('clipboardCopyFailed') + exc.message);
                 }
             }
 
