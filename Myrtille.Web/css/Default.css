@@ -1,269 +1,974 @@
-﻿/*
-    Myrtille: A native HTML4/5 Remote Desktop Protocol client.
+﻿/* 定义全局变量 */
+:root {
+    --link-color: #ecf0f1;
+    --primary-blue: #007bff;
+    --input-border: #ccc;
+    --primary-dark-blue: #0056b3;
+    --text-secondary: #666;
+    --error-red: #dc3545;
+    --black: #000;
+    --button-border: #0099ff;
+    --button-bg-hover: #cbcaca;
+    --toolbar-border: #33b3dd;
+    --toolbar-svg-bg-hover: #dedede;
+    --range-percent:0;
+    --colorbox-blue: #2979ff;
+    --colorbox-green: #43a047;
+    --colorbox-grey: #757575;
+    --colorbox-navy: #3F51B5;
+    --ctf-blue: #30a5ff;
+    --ctf-bg-hover: #dfdfdf;
+    --ctf-bg-active: #f1f1f1;
+    --login-bg: #3f3f3f;
+    --iframe-border: #6e6e6e;
+    --light-border: #dfdfdf;
+    --accent-blue: #30a5ff;
+    --accent-blue-hover: #2196f3;
+    --lightgrey: lightgrey;
+    --msg-bg-red: red;
+    --kbh-bg: #FAF8CC;
+    --shadow-dark: rgba(0, 0, 0, 0.3);
+    --shadow-light: rgba(0, 0, 0, 0.2);
+    --topbar-bg: #33b3dd;
+  }
+  @media screen {
+    body,html{
+        overflow: hidden;
+    height: 100%;
+    position: relative;
 
-    Copyright(c) 2014-2021 Cedric Coste
+    }
+  
+  }
+  @media (max-width:800px){
+    .title{display: none;}
+    #login {
+        position: absolute;
+        top: 35%;
+        left: calc(0.5% ) !important;
+        width: 95% !important;
+        margin-top: -150px;
+        margin-left: 0px !important;
+        width: 450px;
+        height: 300px;
+        padding: 10px 10px 30px 10px;
+    }
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+  }
+  @media (min-width:800px){
+    .keybord{
+        display: none;  
+      }
 
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
-
-/* Windows style UI */
-
-body
-{
-    padding: 0px;
-    margin: 0px;
-    background-color: #34495e;
-    color: #ecf0f1;
+  }
+ 
+  
+  body {
+      background-size: cover;
+      font-family: "Microsoft YaHei", sans-serif;
+      padding: 0;
+      margin: 0;
+  }
+  
+  a {
+      text-decoration: none;
+      color: var(--link-color);
+  }
+  
+  a img {
+      border: 0;
+  }
+  
+  * {
+      font-family: "Segoe UI";
+  }
+  
+  /*********************************************************************
+   *** LOGIN
+   *********************************************************************/
+   .no-select {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Standard */
 }
 
-a
-{
-    text-decoration: none;
-    color: #ecf0f1;
-}
-
-a img
-{
-    border: 0;
-}
-
-*
-{
-    font-family: "Segoe UI";
-}
-
-/*****************************************************************************************************************************************************************************************************/
-/*** LOGIN                                                                                                                                                                                         ***/
-/*****************************************************************************************************************************************************************************************************/
-
-#login
-{
+   #login {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      margin-top: -150px;
+      margin-left: -225px;
+      width: 450px;
+      height: 300px;
+      padding: 10px 10px 30px 10px;
+  }
+  
+  /* 可自定义徽标 */
+  #logo {
+      background-image: url("../img/RemoteDesktop.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 128px;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 20px;
+      border-radius: 8px;
+  }
+  
+  .inputDiv {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+  }
+  
+  /* 标签样式 */
+  .inputDiv label {
+      width: 150px;
+      font-weight: 600;
+      margin-right: 10px;
+  }
+  
+  #mfaProvider {
+      cursor: pointer;
+      color: var(--primary-blue);
+  }
+  
+  #mfaProvider:hover {
+      text-decoration: underline;
+  }
+  
+  select,
+  #hostType,
+  #securityProtocol,
+  #server,
+  #vmGuid,
+  #domain,
+  #user,
+  #password,
+  #mfaPassword,
+  #program {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid var(--input-border);
+      transition: border-color 0.3s linear;
+      font-size: 14px;
+  }
+  
+  select:focus,
+  #hostType:focus,
+  #securityProtocol:focus,
+  #server:focus,
+  #vmGuid:focus,
+  #domain:focus,
+  #user:focus,
+  #password:focus,
+  #mfaPassword:focus,
+  #program:focus {
+      border-color: var(--primary-blue);
+      outline: none;
+  }
+  
+  #vmEnhancedMode {
+      margin-top: 6px;
+      margin-left: 0;
+  }
+  
+  #programLabel,
+  #program {
+      visibility: hidden;
+      display: none;
+  }
+  
+  #connect {
+      background-color: var(--primary-blue);
+      color: #fff; /* 白色保持不变 */
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s linear;
+      align-self: flex-end;
+      width: 100%;
+  }
+  
+  #connect:hover {
+      background-color: var(--primary-dark-blue);
+  }
+  
+  /* 版本信息 */
+  #version {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: inline-block;
+  }
+  
+  #adminDiv {
+      margin-top: 5px;
+      font-size: 12px;
+  }
+  
+  #adminDiv a {
+      color: var(--primary-blue);
+      text-decoration: none;
+  }
+  
+  #adminDiv a:hover {
+      text-decoration: underline;
+  }
+  
+  #errorDiv {
+      margin-top: 10px;
+      text-align: center;
+  }
+  
+  #connectError {
+      color: var(--error-red);
+      font-weight: bold;
+  }
+  
+  /*********************************************************************
+   *** HOSTS
+   *********************************************************************/
+  #hosts {
+      /* if needed */
+  }
+  
+  #hostsControl {
+      /* if needed */
+  }
+  
+  #enterpriseUserInfo {
+      width: 250px;
+  }
+  
+  #newRDPHost,
+  #newSSHHost,
+  #logout {
+      width: 150px;
+  }
+  
+  #hostsList {
+      /* if needed */
+  }
+  
+  .hostDiv {
+      display: inline-block;
+      text-align: center;
+      font-size: 15px;
+  }
+  
+  .hostDiv:hover {
+      background-color: var(--link-color);
+      color: var(--black);
+  }
+  
+  .hostLink,
+  .hostName {
+      cursor: pointer;
+  }
+  
+  .hostName:hover {
+      text-decoration: underline;
+  }
+  input[type="button"] {
+      border-radius: 0;
+      border: 1px solid var(--button-border);
+      background-color: #fff;
+   
+      min-width: 50px;
+      padding: 4px;
+      transition: all .2s linear;
+  }
+  
+  input[type="button"]:active,
+  input[type="button"]:hover {
+      border-radius: 0;
+      color:var(--button-border) ;
+      transition: all .2s linear;
+  }
+  
+  /*********************************************************************
+   *** TOOLBAR
+   *********************************************************************/
+  #toolbarToggle {
+      position: absolute;
+      bottom: 32px;
+      right: 32px;
+      z-index: 300;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border: 3px solid var(--button-border);
+  }
+  
+  #toolbarToggle svg {
+      width: calc(40px - 16px);
+      padding: 8px;
+      height: calc(40px - 16px);
+      background-color: #ffffff; /* 白色保持不变 */
+      transition: all 0.1s linear;
+  }
+   
+ /* water马尔鳄科 */
+ .ripple {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -150px;
-    margin-left: -225px;
-    width: 450px;
-    height: 300px;
-    padding: 10px 10px 30px 10px;
-}
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    transform: scale(0);
+    transform-origin: center center;
+    animation: rippleEffect 0.6s linear;
+  }
 
-/* customizable logo (replace the background image by yours) */
-/* remote desktop logo, credits BlackVariant (Patrick) http://blackvariant.deviantart.com */
-#logo
-{
-    background-image: url("../img/RemoteDesktop.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 128px;
-    width: auto;
-    max-width: 400px;
-    max-height: 128px;
-    margin-bottom: 20px;
-}
+  @keyframes rippleEffect {
+    0% {
+      transform: scale(0);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+  #toolbarToggle svg:hover {
+      transition: all 0.1s linear;
+      color: var(--button-border);
+  }
+  
+  #toolbarToggle svg:active {
+      transition: all 0.1s linear;
+      color: var(--button-border);
+  }
 
-.inputDiv
-{
+  #serverInfo,
+  #userInfo {
+      float: left;
+      width: 110px;
+  }
+  
+  #toolbar input[type="text"] {
+      border-radius: 0;
+      width: 90px!important;
+      border: 1px solid var(--button-border);
+      padding: 4px;
+      display: none;
+  }
+  
+  /* controls */
+  #stat,
+  #debug,
+  #browser,
+  #scale,
+  #reconnect,
+  #keyboard,
+  #osk,
+  #clipboard,
+  #files,
+  #cad,
+  #mrc,
+  #vswipe,
+  #share,
+  #disconnect {
+      float: left;
+      width: 110px;
+  }
+  
+  /* 顶栏(示例风格) */
+  .top-bar {
+      position: relative;
+      background: var(--topbar-bg);
+      height: 60px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      padding: 0 20px;
+      box-sizing: border-box;
+      z-index: 66666;
+  }
+  
+  .top-bar .logo {
+      font-size: 32px;
+      font-style: italic;
+      font-weight: bold;
+  }
+  
+  .top-bar .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      overflow-y: visible;
+      height: 86px;
+      position: absolute;
+      top: 11px;
+      right: -7px;
+      z-index: 233;
+  }
+  
+  .top-bar .actions a {
+      color: #fff;
+      text-decoration: none;
+      margin-right: 20px;
+  }
+  
+  /* 颜色 */
+  .color-boxes {
+      display: inline-flex;
+      gap: 24px;
+      margin-right: 20px;
+  }
+  
+  .color-box {
+      width: 21px;
+      height: 21px;
+      border: 1px solid rgba(255,255,255,0.6);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s linear;
+      text-align: center;
+  }
+  .color-box.selected::after{
+    content: "✔";
     display: inline-block;
-}
+    transform: translateY(-1px);
 
-label,
-#mfaProvider
-{
-    float: left;
-    width: 200px;
-    margin-top: 2px;
-}
+  }
+px
+  .color-box.selected{
+      
+     transition: all 0.2s linear;
+  }
+  .blue   { background: var(--colorbox-blue); }
+  .green  { background: var(--colorbox-green); }
+  .grey   { background: var(--colorbox-grey); }
+  .navy   { background: var(--colorbox-navy); }
+  
+  /* 最外层包裹(去掉margin) */
+  #mainForm {
+      min-height: calc(100% - 60px);
+      height: calc(100% - 60px);
+      max-height: calc(100% - 60px);
+      margin: 0;
+      padding: 0;
+  }
+  
+  .ctf {
+      background-color: #ffffff; /* 白色保持不变 */
+      color: var(--ctf-blue) !important;
+      display: block;
+      padding: 8px 10px;
+      transition: all 0.2s linear;
+  }
+  
+  .ctf:hover {
+      transition: all 0.3s linear;
+      background-color: var(--ctf-bg-hover);
+      color: var(--ctf-blue) !important;
+  }
+  
+  .ctf:active {
+      transition: all 1s linear;
+      background-color: var(--ctf-bg-active);
+      color: var(--ctf-blue);
+  }
+  
+  /* 让 #login 作为居中弹框(模拟对话框) */
+  .title::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -35vh;
+      width: 70vh;
+      height: 1px;
+      background-color: #ffffff70;
+      box-shadow: inset;
+      background: rgba(255, 255, 255, 0);
+      background: radial-gradient(circle, rgb(255 255 255 / 45%) 0%, rgba(51, 179, 221, 0) 63%, rgba(51, 179, 221, 0) 100%);
+  }
+  
+  .title {
+      color: #fff;
+      position: absolute;
+      left: 50%;
+      font-size: large;
+  }
+  
+  #login {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      height: min-content;
+      width: 440px;
+      background: var(--login-bg);
+      box-shadow: 0 4px 12px var(--shadow-dark);
+      padding: 8px;
+      border: 1px solid var(--black);
+  }
+  
+  #dragDiv {
+      width: fit-content !important;
+      height: fit-content !important;
+      position: absolute;
+      z-index: 9999;
+      display: none; /* 默认隐藏 */
+      box-shadow: 0 2px 5px var(--shadow-dark);
+      border-radius: 0 !important;
+  }
+  
+  #dragDiv {
+      position: absolute;
+      overflow: hidden;
+      left: 50px;
+      top: 50px;
+      z-index: 400;
+      visibility: hidden;
+      display: none;
+      touch-action: none;
+  }
+  
+  #dragDiv {
+      position: absolute;
+      background: var(--login-bg) !important;
+      box-shadow: 0 4px 12px var(--shadow-dark);
+      padding: 8px;
+      padding-top: 0;
+      border: 1px solid var(--black);
+  }
+  
+  #dragDiv iframe {
+      border: 1px solid var(--iframe-border);
+      padding: 18px;
+      background: #fff;
+ 
+  }
+  
+  .login-card-inner {
+      border: 1px solid var(--iframe-border);
+      padding: 18px;
+      background: #fff;
+      height: calc(100% - 2px);
+  }
+  
+  #login h2 {
+      margin-top: 0;
+      font-size: 20px;
+      border-bottom: 1px solid var(--light-border);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+  }
+  
+  #login .inputDiv {
+      margin-bottom: 15px;
+  }
+  
+  #login .inputDiv label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+  }
+  
+  #login .inputDiv input[type="text"],
+  #login .inputDiv input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--input-border);
+      box-sizing: border-box;
+  }
+  
+  #connect {
+      background: var(--accent-blue);
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+  }
+  
+  #connect:hover {
+      background: var(--accent-blue-hover);
+  }
+  
+  #errorDiv {
+      color: var(--msg-bg-red);
+      font-weight: bold;
+      margin-top: 10px;
+  }
+  
+  #version, #adminDiv {
+      margin-top: 10px;
+      font-size: 12px;
+      text-align: right;
+  }
+  
+  /*********************************************************************
+   *** HOSTS（续）
+   *********************************************************************/
+  #hosts {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 6px;
+      width: 80%;
+      margin: 80px auto;
+      padding: 20px;
+  }
+  
+  #hostsControl {
+      text-align: right;
+      margin-bottom: 20px;
+  }
+  
+  #hostsControl input[type=button] {
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin-left: 10px;
+      cursor: pointer;
+  }
+  
+  .hostDiv {
+      display: inline-block;
+      width: 160px;
+      text-align: center;
+      margin: 10px;
+  }
+  
+  .hostDiv img {
+      border-radius: 4px;
+      box-shadow: 0 1px 3px var(--shadow-light);
+  }
+  
+  /*********************************************************************
+   *** TOOLBAR（续）
+   *********************************************************************/
+  #toolbarToggle img {
+      cursor: pointer;
+  }
+  
+  #toolbar {
+    
+      position: absolute;
+      padding-top: 12px;
+      overflow: auto;
+      display: inline-block;
+      z-index: 222;
+      padding: 10px;
+      left: 0;
+      top: 27%;
+      width: 137px;
+      margin-left: 0;
+      border-radius: 0px 4px 4px 0px;
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      background-color: #ffffffb3;
+      padding-top: 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      border-left: none;
+  }
+  
+  #toolbar input[type=text] {
+      margin-right: 5px;
 
-#mfaProvider
-{
-    cursor: pointer;
-}
+      padding: 4px 8px;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+  }
+  
+  #toolbar input[type=button],
+  #toolbar input[type=range] {
+      margin-right: 6px;
+      margin-bottom: 6px;
+      border: none !important;            
+      border-radius: 4px !important;  
+  }
+  
+  #statDiv, #debugDiv {
+      margin-top: 10px;
+      padding: 8px;
+      background: #f9f9f9;
+      border: 1px solid var(--light-border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-size: 0.9em;
+  }
+  
+  #display-mid {
+      height: calc(100dvh - 60px);
+      background-color: #4d4d4d;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+  }
+  #display-mid.login-visible{
 
-#mfaProvider:hover
-{
-    text-decoration: underline;
-}
+    background-image:url("../img/background.webp") ;
+    background-size: cover;           
+  background-position: center;     
+  background-repeat: no-repeat;     
+  width: 100vw;                     
+                     
 
-#hostType,
-#securityProtocol
-{
-    width: 204px;
-    margin-top: 2px;
-}
-
-#server,
-#vmGuid,
-#domain,
-#user,
-#password,
-#mfaPassword,
-#program
-{
-    width: 200px;
-    margin-top: 2px;
-}
-
-#vmEnhancedMode
-{
-    margin-top: 6px;
-    margin-left: 0px;
-}
-
-/* program to run is better defined into an URL, but can be enabled into the login screen */
-#programLabel,
-#program
-{
-    visibility: hidden;
-    display: none;
-}
-
-#connect
-{
-    width: 204px;
-    margin-top: 2px;
-    margin-left: 200px;
-    display: inline-block;
-}
-
-#version
-{
-    font-size: 10px;
-    display: inline-block;
-}
-
-#adminDiv
-{
-    margin-top: 5px;
-    font-size: 12px;
-    text-decoration: underline;
-}
-
-#errorDiv
-{
-    margin-left: 200px;
-}
-
-#connectError
-{
-    color: #ff0000;
-}
-
-/*****************************************************************************************************************************************************************************************************/
-/*** HOSTS                                                                                                                                                                                         ***/
-/*****************************************************************************************************************************************************************************************************/
-
-#hosts
-{
-    /* if needed */
-}
-
-#hostsControl
-{
-    /* if needed */
-}
-
-#enterpriseUserInfo
-{
-    width: 250px;
-}
-
-#newRDPHost,
-#newSSHHost,
-#logout
-{
-    width: 150px;
-}
-
-#hostsList
-{
-    /* if needed */
-}
-
-.hostDiv
-{
-    display: inline-block;
-    text-align: center;
-    font-size: 15px;
-}
-
-.hostDiv:hover
-{
-    background-color: #ecf0f1;
-    color: #000;
-}
-
-.hostLink,
-.hostName
-{
-    cursor: pointer;
-}
-
-.hostName:hover
-{
-    text-decoration: underline;
-}
-
-/*****************************************************************************************************************************************************************************************************/
-/*** TOOLBAR                                                                                                                                                                                       ***/
-/*****************************************************************************************************************************************************************************************************/
-
-#toolbarToggle
-{
-    position: absolute;
-    border: 1px solid #ddd;
-    background-color: #F4F4F4;
-    z-index: 200;
-}
-
-#toolbar
-{
-    position: absolute;
-    left: 23px;
-    overflow: auto;
-    display: inline-block;
-    z-index: 200;
-}
-
-/* connection */
-#serverInfo,
-#userInfo
-{
-    float: left;
-    width: 150px;
-}
-
-/* controls */
-#stat,
-#debug,
-#browser,
-#scale,
-#reconnect,
-#keyboard,
-#osk,
-#clipboard,
-#files,
-#cad,
-#mrc,
-#vswipe,
-#share,
-#disconnect
-{
-    float: left;
-    width: 110px;
-}
-
-/*****************************************************************************************************************************************************************************************************/
+  }
+  #dragHandle {
+      background: var(--login-bg) !important;
+      color: #fff;
+      padding:  8px 0 !important;
+      cursor: move;
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      flex-direction: row-reverse;
+  }
+  
+  /*********************************************************************
+   *** POPUPS
+   *********************************************************************/
+  #bgfDiv {
+      position: absolute;
+      visibility: hidden;
+      display: none;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      filter: alpha(opacity=70);
+      opacity: 0.70;
+      -moz-opacity: 0.7;
+      background-color: var(--black);
+      z-index: 300;
+  }
+  
+  /* 各弹窗基本尺寸设置（省略部分宽高、内边距等样式） */
+  /* 示例：host popup */
+  #editHostPopup,
+  #editHostPopupInner {
+      width: 420px;
+      height: 450px;
+  }
+  
+  #editHostPopupInner {
+      color: var(--black);
+      background: #fff;
+  }
+  
+  #editHostPopupTitle {
+      padding-top: 20px;
+      padding-left: 10px;
+  }
+  
+  .editHostPopupInput {
+      padding-left: 10px;
+  }
+  
+  /* credential popup */
+  #editCredentialPopup,
+  #editCredentialPopupInner {
+      width: 400px;
+      height: 250px;
+  }
+  
+  #editCredentialPopupInner {
+      color: var(--black);
+      background: #fff;
+  }
+  
+  #editCredentialsPopupTitle {
+      padding-top: 20px;
+      padding-left: 10px;
+  }
+  
+  .editCredentialPopupInput {
+      padding-left: 10px;
+  }
+  
+  /* host session popup */
+  #editHostSessionPopup,
+  #editHostSessionPopupInner {
+      width: 400px;
+      height: 500px;
+  }
+  
+  #editHostSessionPopupInner {
+      color: var(--black);
+      background: #fff;
+  }
+  
+  #editHostSessionPopupTitle {
+      padding-top: 20px;
+      padding-left: 10px;
+  }
+  
+  .editHostSessionPopupInput {
+      padding-left: 10px;
+  }
+  
+  #sessionUrl {
+      width: 370px;
+  }
+  
+  /* share session popup */
+  #shareSessionPopup,
+  #shareSessionPopupInner {
+      width: 400px;
+      height: 370px;
+  }
+  
+  #shareSessionPopupInner {
+      color: var(--black);
+      background: #fff;
+  }
+  
+  #shareSessionPopupTitle {
+      padding-top: 20px;
+      padding-left: 10px;
+  }
+  
+  .shareSessionPopupInput {
+      padding-left: 10px;
+  }
+  
+  #guestControlLabel {
+      padding-top: 10px;
+      width: 100px;
+  }
+  
+  #guestControl {
+      margin-top: 17px;
+  }
+  
+  /* change password popup */
+  #changePasswordPopup,
+  #changePasswordPopupInner {
+      width: 400px;
+      height: 330px;
+  }
+  
+  #changePasswordPopupInner {
+      color: var(--black);
+      background: #fff;
+  }
+  
+  #changePasswordPopupTitle {
+      padding-top: 20px;
+      padding-left: 10px;
+  }
+  
+  .changePasswordMessage {
+      padding-left: 10px;
+  }
+  
+  .changePasswordPopupInput {
+      padding-left: 10px;
+  }
+  
+  #changeError {
+      padding-left: 10px;
+      font-size: 10pt;
+      color: var(--msg-bg-red);
+      width: 380px;
+  }
+  
+  /* copy clipboard popup */
+  #copyClipboardPopup {
+      width: 470px;
+      height: 240px;
+  }
+  
+  #copyClipboardPopupDesc {
+ 
+  }
+  
+  #copyClipboardPopupText {
+      width: 425px;
+      height: 150px;
+      margin-bottom: 5px;
+  }
+  
+  /* paste clipboard popup */
+  #pasteClipboardPopup {
+      width: 470px;
+      height: 240px;
+  }
+  
+  #pasteClipboardPopupDesc {
+      
+  }
+  
+  #pasteClipboardPopupText {
+      width: 425px;
+      height: 150px;
+      margin-bottom: 5px;
+  }
+  
+  /*********************************************************************
+   *** HELPERS
+   *********************************************************************/
+  #displayDiv {
+      width: fit-content;
+      height: fit-content;
+      z-index: 100;
+      touch-action: none;
+  }
+  
+  canvas {
+      z-index: 100;
+  }
+  
+  .imageDiv {
+      position: absolute;
+      background-repeat: no-repeat;
+      overflow: hidden;
+      z-index: 100;
+  }
+  
+  #cacheDiv {
+      visibility: hidden;
+      display: none;
+  }
+  
+  #statDiv {
+      visibility: hidden;
+      display: none;
+      font-size: 10px;
+      background-color: var(--black);
+      color: var(--lightgrey);
+      z-index: 200;
+  }
+  
+  #debugDiv {
+      visibility: hidden;
+      display: none;
+      font-size: 12px;
+      background-color: var(--lightgrey);
+      color: var(--black);
+      z-index: 200;
+  }
+  
+  #msgDiv {
+      position: absolute;
+      visibility: hidden;
+      display: none;
+      font-size: 18px;
+      font-weight: bold;
+      overflow: hidden;
+      background-color: var(--msg-bg-red);
+      color: #fff;
+      z-index: 200;
+  }
+  
+  #kbhDiv {
+      position: absolute;
+      visibility: hidden;
+      display: none;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: left;
+      background-color: var(--kbh-bg);
+      color: var(--black);
+      z-index: 200;
+  }
+  /*****************************************************************************************************************************************************************************************************/
 /*** POPUPS                                                                                                                                                                                        ***/
 /*****************************************************************************************************************************************************************************************************/
 
@@ -287,24 +992,8 @@ label,
 
 /* draggable popups */
 
-#dragDiv
-{
-    position: absolute;
-    overflow: hidden;
-    left: 50px;
-    top: 50px;
-    background-color: white;
-    z-index: 400;
-    visibility: hidden;
-    display: none;
-    touch-action: none;
-}
 
-#dragHandle
-{
-    height: 20px;
-    background-color: silver;
-}
+
 
 /* virtual keyboard popup */
 
@@ -316,7 +1005,7 @@ label,
 
 #virtualKeyboardPopupDesc
 {
-    font-weight: bold;
+ 
 }
 
 #virtualKeyboardPopupText
@@ -327,11 +1016,33 @@ label,
 }
 
 /* on-screen keyboard popup */
+#dragHandle .closebtn{
+    user-select: none;
+    color: #ffffff;
+    transition: all 0.2s linear;
+    background-color: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    line-height: 24px;
+    
+}
 
+#dragHandle .closebtn:hover,#dragHandle .closebtn:active{
+    background-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    transition: all 0.2 linear;
+}
+#dragDiv:has(#onScreenKeyboardPopup){
+    opacity: 100%;
+}
 #onScreenKeyboardPopup
 {
-    width: 500px;
-    height: 300px;
+    background-color: #ffffff;
+    width: 700px;
+    height: 256px;
+    padding: 0px !important;
 }
 
 /* show dialog popup */
@@ -344,7 +1055,7 @@ label,
 
 #showDialogPopupDesc
 {
-    font-weight: bold;
+ 
 }
 
 #showDialogPopupText
@@ -364,7 +1075,7 @@ label,
 
 #fileStoragePopupDesc
 {
-    font-weight: bold;
+ 
 }
 
 #fileToDownloadSelect
@@ -464,6 +1175,7 @@ label,
     height: 370px;
 }
 
+
 #shareSessionPopupInner
 {
     color: #000;
@@ -541,7 +1253,7 @@ label,
 
 #copyClipboardPopupDesc
 {
-    font-weight: bold;
+
 }
 
 #copyClipboardPopupText
@@ -561,7 +1273,7 @@ label,
 
 #pasteClipboardPopupDesc
 {
-    font-weight: bold;
+   
 }
 
 #pasteClipboardPopupText
@@ -570,89 +1282,320 @@ label,
     height: 150px;
     margin-bottom: 5px;
 }
+textarea{
+    display: flex
+    ;
+        width: 100%;
+        
+        border: 1px solid #dcdcdc;
+        border-radius: 3px;
+         background-color: #fff;
+        font: 14px / calc( 14px + 8px ) PingFang SC, Microsoft YaHei, Arial Regular;
+        color: rgba(0, 0, 0, 0.9);
+        resize: vertical;
+        outline: none;
+     
+        box-sizing: border-box;
+       transition: all .2s linear;
+       
+}
+textarea:hover{
+    border-color: #0052d9;
+}
+textarea:focus{
+    border-color: #0052d9;
+    box-shadow: 0 0 0 2px #d9e1ff;
+}
+button,a{font:PingFang SC, Microsoft YaHei, Arial Regular}
+hr{height:1px;border:none;border-top:1px dashed #dfdfdf;}
+input[type="range"] {
+    -webkit-appearance: none; 
+              
+    height: 2px;             
+    margin: 15px 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  
+  
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    background: #e7e7e79a; 
+    border-radius: 2px;
+    position: relative;
+  }
+  
+ 
+  input[type="range"]::-webkit-slider-runnable-track {
+    background: linear-gradient(
+      to right,
+      #0052d9 0%,
+      #0052d9 calc(var(--range-percent) * 1%),
+      #e7e7e7 calc(var(--range-percent) * 1%),
+      #e7e7e7 100%
+    );
+  }
+  
 
-/*****************************************************************************************************************************************************************************************************/
-/*** HELPERS                                                                                                                                                                                       ***/
-/*****************************************************************************************************************************************************************************************************/
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: 2px solid #0052d9;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    position: relative;
+    margin-top: -6px; 
+  }
+  
 
-/* remote session display */
-
-#displayDiv
-{
-    position: absolute;
-    z-index: 100;
-    /* fix touchscreen on Edge (disabled by default and using pointer events instead of touch) by emulating mouse events */
-    touch-action: none;
+input[type="range"]::-webkit-slider-thumb:hover,
+input[type="range"]:focus::-webkit-slider-thumb {
+  border-color: #003caa;
+  box-shadow: 0 0 0 4px rgba(0, 82, 217, 0.15);
 }
 
-/* remote session display: canvas (HTML5) */
-
-canvas
-{
-	position: absolute;
-    z-index: 100;
-}
-
-/* remote session display: divs (HTML4) */
-
-.imageDiv
-{
-	position: absolute;
-	background-repeat: no-repeat;
-	overflow: hidden;
-	z-index: 100;
-}
-
-/* remote session helpers */
-
-#cacheDiv
-{
-    visibility: hidden;
-	display: none;
-}
-
-#statDiv
-{
-    visibility: hidden;
-	display: none;
-	font-size: 10px;
-	background-color: black;
-	color: lightgrey;
-	z-index: 200;
-}
-
-#debugDiv
-{
-    visibility: hidden;
+.mobile-keyboard-trigger {
     display: none;
-	font-size: 12px;
-	background-color: lightgrey;
-    color: black;
-	z-index: 200;
+    width: 32px;
+    height: 32px;
+    padding: 0 !important;
+    min-width: 32px;
+    min-height: 32px;
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.92);
+    color: var(--ctf-blue);
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
-#msgDiv
-{
-	position: absolute;
-	visibility: hidden;
-    display: none;
-	font-size: 18px;
-	font-weight: bold;
-    overflow: hidden;
-	background-color: red;
-	color: white;
-	z-index: 200;
+.mobile-keyboard-trigger svg {
+    display: block;
 }
 
-#kbhDiv
-{
-	position: absolute;
-	visibility: hidden;
-	display: none;
-	font-size: 18px;
-	font-weight: bold;
-	text-align: left;
-	background-color: #FAF8CC;
-	color: black;
-	z-index: 200;
+@media (max-width: 800px), (hover: none) and (pointer: coarse) {
+    .mobile-keyboard-trigger {
+        display: inline-block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 3;
+    }
+
+    .top-bar .actions .color-boxes {
+        display: none !important;
+    }
+
+    .top-bar .actions {
+        right: 10px;
+    }
+
+    .top-bar .actions .ctf {
+        margin-right: 0;
+        padding: 6px 8px;
+        min-height: 32px;
+        font-size: 12px;
+    }
+}
+
+#mobileKeyboardInput {
+    position: fixed;
+    left: 8px;
+    bottom: 8px;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    opacity: 0.01;
+    border: 0;
+    outline: none;
+    resize: none;
+    pointer-events: none;
+    z-index: -1;
+}
+
+#mobileKeyboardInput {
+    position: fixed;
+    left: 8px;
+    bottom: 8px;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    opacity: 0.01;
+    border: 0;
+    outline: none;
+    resize: none;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@media (max-width: 800px), (hover: none) and (pointer: coarse) {
+    .mobile-keyboard-trigger {
+        display: inline-flex !important;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 3;
+    }
+
+    .top-bar .actions .color-boxes {
+        display: none !important;
+    }
+
+    .top-bar .actions {
+        right: 10px;
+    }
+
+    .top-bar .actions .ctf {
+        margin-right: 0;
+        padding: 6px 8px;
+        min-height: 32px;
+        font-size: 12px;
+    }
+}
+
+/* light Ant Design style refresh without changing component size */
+#toolbarToggle {
+    border: 1px solid #d9d9d9;
+    background: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease, transform .2s ease;
+}
+
+#toolbarToggle:hover {
+    border-color: #4096ff;
+    box-shadow: 0 4px 12px rgba(22, 119, 255, 0.18);
+    transform: translateY(-1px);
+}
+
+#toolbarToggle:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(22, 119, 255, 0.14);
+}
+
+#toolbarToggle svg {
+    border-radius: 6px;
+    background: transparent;
+    color: #1677ff;
+    transition: color .2s ease;
+}
+
+.ctf,
+.mobile-keyboard-trigger,
+#toolbar input[type=button],
+#hostsControl input[type=button],
+#connect,
+#dragHandle .closebtn {
+    border: 1px solid #d9d9d9 !important;
+    background: #ffffff;
+    color: rgba(0, 0, 0, 0.88);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+    transition: all .2s ease;
+}
+
+.ctf:hover,
+.mobile-keyboard-trigger:hover,
+#toolbar input[type=button]:hover,
+#hostsControl input[type=button]:hover,
+#connect:hover,
+#dragHandle .closebtn:hover {
+    border-color: #4096ff !important;
+    color: #1677ff !important;
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.08);
+}
+
+.ctf:active,
+.mobile-keyboard-trigger:active,
+#toolbar input[type=button]:active,
+#hostsControl input[type=button]:active,
+#connect:active,
+#dragHandle .closebtn:active {
+    border-color: #0958d9 !important;
+    color: #0958d9 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+#connect,
+#hostsControl input[type=button] {
+    background: #1677ff;
+    border-color: #1677ff !important;
+    color: #fff !important;
+}
+
+#connect:hover,
+#hostsControl input[type=button]:hover {
+    background: #4096ff;
+    border-color: #4096ff !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.12);
+}
+
+#toolbar input[type=button]:disabled {
+    color: rgba(0, 0, 0, 0.25) !important;
+    background: #f5f5f5 !important;
+    border-color: #d9d9d9 !important;
+    box-shadow: none;
+}
+
+input[type="range"] {
+    --range-percent: 0;
+    height: 4px;
+    margin: 15px 0;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(
+      to right,
+      #1677ff 0%,
+      #1677ff calc(var(--range-percent) * 1%),
+      #f0f0f0 calc(var(--range-percent) * 1%),
+      #f0f0f0 100%
+    );
+}
+
+input[type="range"]::-moz-range-track {
+    height: 4px;
+    border-radius: 999px;
+    background: #f0f0f0;
+}
+
+input[type="range"]::-moz-range-progress {
+    height: 4px;
+    border-radius: 999px;
+    background: #1677ff;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    border: 2px solid #1677ff;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #1677ff;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+input[type="range"]:hover::-webkit-slider-thumb,
+input[type="range"]:focus::-webkit-slider-thumb {
+    transform: scale(1.05);
+    border-color: #4096ff;
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.14);
 }

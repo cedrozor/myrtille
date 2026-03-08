@@ -103,7 +103,9 @@ function User(base, config, dialog, display, network)
                     var reconnect = document.getElementById('reconnect');
                     if (reconnect != null)
                     {
-                        reconnect.value = config.getDefaultResize() == config.getBrowserResizeEnum().RECONNECT ? 'Reconnect ON' : 'Reconnect OFF';
+                        reconnect.value = window.myrtilleI18n
+                            ? window.myrtilleI18n.formatToggleLabel('reconnectLabel', config.getDefaultResize() == config.getBrowserResizeEnum().RECONNECT)
+                            : (config.getDefaultResize() == config.getBrowserResizeEnum().RECONNECT ? 'Reconnect: On' : 'Reconnect: Off');
                     }
                 }
 
@@ -159,7 +161,10 @@ function User(base, config, dialog, display, network)
         try
         {
             rightClickButton = button;
-            rightClickButton.value = rightClickButton.value == 'Right-Click OFF' ? 'Right-Click ON' : 'Right-Click OFF';
+            var isOff = rightClickButton.value.indexOf('Off') !== -1 || rightClickButton.value.indexOf('关闭') !== -1;
+            rightClickButton.value = window.myrtilleI18n
+                ? window.myrtilleI18n.formatToggleLabel('mrcLabel', isOff)
+                : (isOff ? 'Right Click: On' : 'Right Click: Off');
             //dialog.showDebug('toggling ' + rightClickButton.value);
         }
         catch (exc)
@@ -174,12 +179,14 @@ function User(base, config, dialog, display, network)
         {
             if (display.isIEBrowser())
             {
-                alert('this experimental feature is disabled on IE/Edge');
+                alert(window.myrtilleI18n ? window.myrtilleI18n.getTranslation('vswipeDisabledOnIe') : 'This experimental feature is disabled on IE/Edge');
                 return;
             }
 
             verticalSwipeEnabled = !verticalSwipeEnabled;
-            button.value = verticalSwipeEnabled ? 'VSwipe ON' : 'VSwipe OFF';
+            button.value = window.myrtilleI18n
+                ? window.myrtilleI18n.formatToggleLabel('vswipeLabel', verticalSwipeEnabled)
+                : (verticalSwipeEnabled ? 'Swipe: On' : 'Swipe: Off');
             //dialog.showDebug('toggling ' + button.value);
         }
         catch (exc)
@@ -232,16 +239,8 @@ function User(base, config, dialog, display, network)
 
             adaptiveFullscreenTimeout = window.setTimeout(function()
             {
-                if (!network.getImageTweak())
-                {
-                    //dialog.showDebug('adaptive fullscreen update');
-                    network.send(base.getCommandEnum().REQUEST_FULLSCREEN_UPDATE.text + 'adaptive');
-                }
-                else
-                {
-                    network.tweakDisplay(true);
-                    network.setImageTweak(false);
-                }
+                //dialog.showDebug('adaptive fullscreen update');
+                network.send(base.getCommandEnum().REQUEST_FULLSCREEN_UPDATE.text + 'adaptive');
             },
             config.getAdaptiveFullscreenTimeout());
         }

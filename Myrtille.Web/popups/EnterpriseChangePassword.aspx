@@ -26,6 +26,7 @@
     <head>
         <title>Myrtille</title>
         <link rel="stylesheet" type="text/css" href="../css/Default.css"/>
+        <script language="javascript" type="text/javascript" src="../js/popup-i18n.js"></script>
 	</head>
 
     <body onload="onChangeSuccess();">
@@ -34,33 +35,33 @@
             
             <div id="changePasswordPopupInner">
                 <span id="changePasswordPopupTitle">
-                    <strong>Change Password</strong>
+                    <strong data-i18n="changePassword">Change Password</strong>
                 </span>
                 <br/>
-                <p class="changePasswordMessage">Your password has expired and must be changed</p>
+                <p class="changePasswordMessage" data-i18n="changePasswordMessage">Your password has expired and must be changed</p>
                
                 <div class="changePasswordPopupInput">
-                    <h5><label id="userNameLabel" for="hostName">User name</label></h5>
-                    <input type="text" runat="server" id="userName" title="user name" readonly="readonly" />
+                    <h5><label id="userNameLabel" for="hostName" data-i18n="userName">User name</label></h5>
+                    <input type="text" runat="server" id="userName" data-i18n-title="userNameTitle" title="user name" readonly="readonly" />
                 </div>
                 <div class="changePasswordPopupInput">
-                    <h5><label id="oldPasswordLabel" for="oldPassword">Old Password</label></h5>
-                    <input type="password" runat="server" id="oldPassword" title="Old Password" />
+                    <h5><label id="oldPasswordLabel" for="oldPassword" data-i18n="oldPassword">Old Password</label></h5>
+                    <input type="password" runat="server" id="oldPassword" data-i18n-title="oldPasswordTitle" title="Old Password" />
                 </div>
                 <div class="changePasswordPopupInput">
-                    <h5><label id="newPasswordLabel" for="newPassword">New Password</label></h5>
-                    <input type="password" runat="server" id="newPassword" title="new password"/>
+                    <h5><label id="newPasswordLabel" for="newPassword" data-i18n="newPassword">New Password</label></h5>
+                    <input type="password" runat="server" id="newPassword" data-i18n-title="newPasswordTitle" title="new password"/>
                 </div>
                 <div class="changePasswordPopupInput">
-                    <h5><label id="confirmPasswordLabel" for="confirmPassword">Confirm Password</label></h5>
-                    <input type="password" runat="server" id="confirmPassword" title="confirm password"/>
+                    <h5><label id="confirmPasswordLabel" for="confirmPassword" data-i18n="confirmPassword">Confirm Password</label></h5>
+                    <input type="password" runat="server" id="confirmPassword" data-i18n-title="confirmPasswordTitle" title="confirm password"/>
                 </div>
                 <label runat="server" id="changeError" class="changeError"></label>
                 <br/>
                 <br />
                 <div class="changePasswordPopupInput">
-                    <input type="submit" runat="server" id="changePassword" value="Change Password" onserverclick="ChangePasswordButtonClick"/>
-                    <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
+                    <input type="submit" runat="server" id="changePassword" data-i18n-value="changePassword" value="Change Password" onserverclick="ChangePasswordButtonClick"/>
+                    <input type="button" id="closePopupButton" data-i18n-value="close" value="Close" onclick="parent.closePopup();"/>
                 </div>
             </div>
 
@@ -71,6 +72,7 @@
             // change password success
             function onChangeSuccess()
             {
+                popupI18n.apply();
                 var idx = window.location.search.indexOf('change=success');
                 if (idx != -1)
                 {

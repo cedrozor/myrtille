@@ -27,6 +27,7 @@
         <title>Myrtille</title>
         <link rel="stylesheet" type="text/css" href="../css/Default.css"/>
         <script language="javascript" type="text/javascript" src="../js/tools/convert.js"></script>
+        <script language="javascript" type="text/javascript" src="../js/popup-i18n.js"></script>
 	</head>
 
     <body onload="focusText();">
@@ -35,12 +36,12 @@
             
             <div>
                 <span id="pasteClipboardPopupDesc">
-                    Type or paste some text then click send
+                    <span data-i18n="pasteClipboardDesc">Type or paste some text then click send</span>
                 </span><hr/>
                 <textarea id="pasteClipboardPopupText" rows="10" cols="50"></textarea><br/>
                 <!--<input type="button" id="pasteClipboardButton" value="Paste" onclick="pasteClipboard();"/>-->
-                <input type="button" id="sendClipboardButton" value="Send" onclick="sendClipboard();"/>
-                <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
+                <input type="button" id="sendClipboardButton" data-i18n-value="send" value="Send" onclick="sendClipboard();"/>
+                <input type="button" id="closePopupButton" data-i18n-value="close" value="Close" onclick="parent.closePopup();"/>
             </div>
 
         </form>
@@ -49,6 +50,7 @@
 
 		    function focusText()
             {
+                popupI18n.apply();
 		        var pasteClipboardPopupText = document.getElementById('pasteClipboardPopupText');
 		        if (pasteClipboardPopupText != null)
                 {
@@ -102,22 +104,22 @@
                             // working on Edge and every other browsers
                             if (!parent.getMyrtille().getDisplay().isIEBrowser())
                             {
-                                alert('clipboard successfully synchronized');
+                                alert(popupI18n.t('clipboardSyncSuccess'));
                             }
                             else
                             {
-                                alert('IE detected, hit Ctrl+C (Cmd-C on Mac) if you want to synchronize the clipboard');
+                                alert(popupI18n.t('clipboardSyncIe'));
                             }
                         }
                         else
                         {
-                            alert('clipboard was not synchronized (failed to call execCommand API or copy was denied)');
+                            alert(popupI18n.t('clipboardSyncFailed'));
                         }
                     }
                 }
                 catch (exc)
                 {
-                    alert('failed to send clipboard (' + exc.message + ')');
+                    alert(popupI18n.t('clipboardSendFailed') + exc.message);
                 }
             }
 

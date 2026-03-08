@@ -26,6 +26,7 @@
     <head>
         <title>Myrtille</title>
         <link rel="stylesheet" type="text/css" href="../css/Default.css"/>
+        <script language="javascript" type="text/javascript" src="../js/popup-i18n.js"></script>
 	</head>
 
     <body onload="onFileToUploadSuccess();">
@@ -34,12 +35,12 @@
             
             <!-- upload/download file(s). only enabled if the connected server is localhost or if a domain is specified (so file(s) can be accessed within the remote session) -->
             <div>
-                <span id="fileStoragePopupDesc">Files into "My documents" folder</span><hr/>
-                Upload file: <input type="file" runat="server" id="fileToUploadText" onchange="onFileToUploadChange(this);"/>
-                <input type="button" runat="server" id="uploadFileButton" value="Upload" disabled="disabled" onserverclick="UploadFileButtonClick"/><br/>
-                Download file: <select runat="server" id="fileToDownloadSelect" onchange="onFileToDownloadChange(this);"/>
-                <input type="button" runat="server" id="downloadFileButton" value="Download" disabled="disabled" onserverclick="DownloadFileButtonClick"/><br/>
-                <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
+                <span id="fileStoragePopupDesc" data-i18n="fileStorageDesc">Files into "My documents" folder</span><hr/>
+                <span data-i18n="uploadFile">Upload file:</span> <input type="file" runat="server" id="fileToUploadText" onchange="onFileToUploadChange(this);"/>
+                <input type="button" runat="server" id="uploadFileButton" data-i18n-value="upload" value="Upload" disabled="disabled" onserverclick="UploadFileButtonClick"/><br/>
+                <span data-i18n="downloadFile">Download file:</span> <select runat="server" id="fileToDownloadSelect" onchange="onFileToDownloadChange(this);"/>
+                <input type="button" runat="server" id="downloadFileButton" data-i18n-value="download" value="Download" disabled="disabled" onserverclick="DownloadFileButtonClick"/><br/>
+                <input type="button" id="closePopupButton" data-i18n-value="close" value="Close" onclick="parent.closePopup();"/>
             </div>
             
         </form>
@@ -69,10 +70,11 @@
             // upload file success
             function onFileToUploadSuccess()
             {
+                popupI18n.apply();
                 var idx = window.location.search.indexOf('upload=success');
                 if (idx != -1)
                 {
-                    alert('file was uploaded successfully');
+                    alert(popupI18n.t('fileUploadSuccess'));
                 }
             }
 

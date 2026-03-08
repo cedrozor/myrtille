@@ -24,6 +24,7 @@ function Display(base, config, dialog)
 {
     // display div
     var displayDiv = document.getElementById('displayDiv');
+    var med = document.getElementById('display-mid');
     this.getDisplayDiv = function() { return displayDiv; }
     this.getHorizontalOffset = function() { return displayDiv.offsetLeft; };
     this.getVerticalOffset = function() { return displayDiv.offsetTop; };

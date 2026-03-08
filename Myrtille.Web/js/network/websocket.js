@@ -38,7 +38,7 @@ function Websocket(base, config, dialog, display, network)
             var wsImpl = window.WebSocket || window.MozWebSocket;
 
             // using the IIS 8+ websockets support, the websocket server url is the same as http (there is just a protocol scheme change and a specific handler; standard and secured ports are the same)
-            var wsBaseUrl = config.getHttpServerUrl().replace('http', 'ws') + 'handlers/SocketHandler.ashx?binary=' + (config.getImageMode() == config.getImageModeEnum().BINARY ? 'true' : 'false') + '&clientId=' + network.getClientId();
+            var wsBaseUrl = config.getHttpServerUrl().replace('http', 'ws') + 'handlers/SocketHandler.ashx?binary=' + (config.getImageMode() == config.getImageModeEnum().BINARY ? 'true' : 'false');
             var wsUrl;
 
             // 1 websocket up, n down
@@ -226,7 +226,6 @@ function Websocket(base, config, dialog, display, network)
             {
                 // the websocket failed, fallback to long-polling
                 dialog.showDebug('websocket ' + i + ' closed with error code ' + e.code + ' (if you have IIS 8 or greater, ensure the websocket protocol is enabled), falling back to long-polling');
-                closeAll();
                 config.setNetworkMode(config.getNetworkModeEnum().LONGPOLLING);
                 network.init();
             }
@@ -236,26 +235,6 @@ function Websocket(base, config, dialog, display, network)
         catch (exc)
         {
             dialog.showDebug('websocket close error: ' + exc.message);
-        }
-    }
-
-    function closeAll()
-    {
-        try
-        {
-            dialog.showDebug('closing all websockets');
-
-            for (let i = 1; i <= config.getWebsocketCount() - 1; i++)
-            {
-                if (ws[i] != null && ws[i].opened)
-                {
-                    ws[i].connection.close();
-                }
-            }
-        }
-        catch (exc)
-        {
-            dialog.showDebug('websocket closeAll error: ' + exc.message);
         }
     }
 
@@ -304,8 +283,7 @@ function Websocket(base, config, dialog, display, network)
             }
 
             wsSend(
-                network.getClientId() +
-                '&' + (data == null ? '' : encodeURIComponent(data)) +
+                (data == null ? '' : encodeURIComponent(data)) +
                 '&' + display.getImgIdx() +
                 '&' + network.getRoundtripDurationAvg() +
                 '&' + startTime);

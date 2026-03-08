@@ -26,18 +26,19 @@
     <head>
         <title>Myrtille</title>
         <link rel="stylesheet" type="text/css" href="../css/Default.css"/>
+        <script language="javascript" type="text/javascript" src="../js/popup-i18n.js"></script>
 	</head>
 
     <body onload="displayText();">
         
         <form method="get" runat="server">
             
-            <!-- generic dialog box -->
-            <div>
-                <span id="showDialogPopupDesc"></span><hr/>
-                <textarea id="showDialogPopupText" readonly="readonly" rows="10" cols="50"></textarea><br/>
-                <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
-            </div>
+                <!-- generic dialog box -->
+                <div>
+                    <span id="showDialogPopupDesc"></span><hr/>
+                    <textarea id="showDialogPopupText" readonly="readonly" rows="10" cols="50"></textarea><br/>
+                    <input type="button" id="closePopupButton" data-i18n-value="close" value="Close" onclick="parent.closePopup();"/>
+                </div>
 
         </form>
 
@@ -45,6 +46,7 @@
 
 		    function displayText()
 		    {
+                popupI18n.apply();
 		        var showDialogPopupDesc = document.getElementById('showDialogPopupDesc');
 		        if (showDialogPopupDesc != null)
 		        {

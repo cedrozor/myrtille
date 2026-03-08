@@ -26,6 +26,7 @@
     <head>
         <title>Myrtille</title>
         <link rel="stylesheet" type="text/css" href="../css/Default.css"/>
+        <script language="javascript" type="text/javascript" src="../js/popup-i18n.js"></script>
 	</head>
 
     <body onload="focusText();">
@@ -37,12 +38,12 @@
             <!-- it's especially handy on touchscreen devices and can even be run automatically on session start (https://www.cybernetman.com/kb/index.cfm/fuseaction/home.viewArticles/articleId/197) -->
             <div>
                 <span id="virtualKeyboardPopupDesc">
-                    Type or paste some text then click send<br/>
-                    Alternatively, you can use the Windows on screen keyboard (%SystemRoot%\System32\osk.exe) within the session
+                    <span data-i18n="virtualKeyboardDesc">Type or paste some text then click send</span><br/>
+                    <span data-i18n="virtualKeyboardAlt">Alternatively, you can use the Windows on screen keyboard (%SystemRoot%\System32\osk.exe) within the session</span>
                 </span><hr/>
                 <textarea id="virtualKeyboardPopupText" rows="10" cols="50"></textarea><br/>
-                <input type="button" id="sendTextButton" value="Send" onclick="parent.sendText(virtualKeyboardPopupText.value);"/>
-                <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
+                <input type="button" id="sendTextButton" data-i18n-value="send" value="Send" onclick="parent.sendText(virtualKeyboardPopupText.value);"/>
+                <input type="button" id="closePopupButton" data-i18n-value="close" value="Close" onclick="parent.closePopup();"/>
             </div>
 
         </form>
@@ -51,6 +52,7 @@
 
 		    function focusText()
 		    {
+                popupI18n.apply();
 		        var virtualKeyboardPopupText = document.getElementById('virtualKeyboardPopupText');
 		        if (virtualKeyboardPopupText != null)
                 {

@@ -31,6 +31,7 @@
         <link rel="stylesheet" type="text/css" href="<%=BundleTable.Bundles.ResolveBundleUrl("~/node_modules/simple-keyboard/build/css/index.css", true)%>"/>
         <script language="javascript" type="text/javascript" src="<%=BundleTable.Bundles.ResolveBundleUrl("~/node_modules/simple-keyboard/build/index.js", true)%>"></script>
         <script language="javascript" type="text/javascript" src="<%=BundleTable.Bundles.ResolveBundleUrl("~/node_modules/simple-keyboard-layouts/build/index.js", true)%>"></script>
+        <script language="javascript" type="text/javascript" src="../js/popup-i18n.js"></script>
 	</head>
 
     <body>
@@ -40,13 +41,13 @@
                 <div class="simple-keyboard"></div>
                 <div id="keyboardWarning" style="color: red; padding-top: 5px; padding-bottom: 5px;"></div>
                 <select id="keyboardLayout" onchange="changeLayout(this);">
-                    <option value="0" selected="selected">Default</option>
+                    <option value="0" selected="selected" data-i18n="keyboardDefault">Default</option>
                     <option value="1">Arabic</option>
                     <option value="2">Assamese</option>
                     <option value="3">Burmese</option>
-                    <option value="4">Chinese</option>
+                    <option value="4" data-i18n="keyboardChinese">Chinese</option>
                     <option value="5">Czech</option>
-                    <option value="6">English</option>
+                    <option value="6" data-i18n="keyboardEnglish">English</option>
                     <option value="7">Farsi</option>
                     <option value="8">French</option>
                     <option value="9">Georgian</option>
@@ -68,7 +69,7 @@
                     <option value="25">Ukrainian</option>
                     <option value="26">Urdu</option>
                 </select>
-                <input type="button" id="closePopupButton" value="Close" onclick="parent.closePopup();"/>
+                <input type="button" id="closePopupButton" data-i18n-value="close" value="Close" onclick="parent.closePopup();"/>
             </div>
         </form>
 
@@ -76,6 +77,7 @@
 
             let OnScreenKeyboard = window.SimpleKeyboard.default;
             let KeyboardLayouts = window.SimpleKeyboardLayouts.default;
+            popupI18n.apply();
 
             let keyboard = new OnScreenKeyboard({
                 onKeyPress: key => onKeyPress(key)
@@ -102,7 +104,7 @@
 
             if (parent.getMyrtille().getConfig().getVMNotEnhanced())
             {
-                document.getElementById('keyboardWarning').innerText = 'Ensure the keyboard layout is en-US (qwerty) in the remote session';
+                document.getElementById('keyboardWarning').innerText = popupI18n.t('keyboardWarning');
             }
 
             let keycode = new Array();

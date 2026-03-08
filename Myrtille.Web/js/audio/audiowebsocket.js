@@ -37,7 +37,7 @@ function AudioWebsocket(base, config, dialog, display, network)
                 config.setAudioBitrate(320);
             }
 
-            var wsUrl = config.getHttpServerUrl().replace('http', 'ws') + 'handlers/AudioSocketHandler.ashx?binary=true&clientId=' + network.getClientId();
+            var wsUrl = config.getHttpServerUrl().replace('http', 'ws') + 'handlers/AudioSocketHandler.ashx?binary=true';
 
             //dialog.showDebug('audio websocket server url: ' + wsUrl);
 

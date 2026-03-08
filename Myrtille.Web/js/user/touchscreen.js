@@ -24,17 +24,7 @@ function Touchscreen(base, config, dialog, display, network, user)
 {
     this.init = function()
     {
-        try
-        {
-            user.addListener('touchmove', function(e) { touchMove(e); }, user.getPassiveEventListeners() ? { passive: true } : false);
-            user.addListener('touchstart', function(e) { touchTap(e, 1); }, user.getPassiveEventListeners() ? { passive: true } : false);
-            user.addListener('touchend', function(e) { touchTap(e, 0); }, user.getPassiveEventListeners() ? { passive: true } : false);
-        }
-        catch (exc)
-        {
-            dialog.showDebug('touchscreen init error: ' + exc.message);
-            throw exc;
-        }
+     
     };
 
     function processEvent(e)
